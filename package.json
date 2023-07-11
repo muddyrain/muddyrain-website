@@ -34,6 +34,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.6",
     "@commitlint/config-conventional": "^17.6.6",
-    "cz-customizable": "^7.0.0"
+    "cz-customizable": "^7.0.0",
+    "less": "^4.1.3"
   }
 }

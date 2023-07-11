@@ -1,10 +1,12 @@
+'use client';
+import Image from 'next/image';
 import Link from 'next/link';
-
+import { Loading } from '../../components/Loading';
+import { useEffect } from 'react';
 export default function Home() {
   return (
-    <div className='text-2xl'>
-      <span></span>
-      <Link href={'/detail'}>跳转详情</Link>
+    <div>
+      <Link href={'/detail'}>详情</Link>
     </div>
   );
 }

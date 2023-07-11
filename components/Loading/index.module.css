@@ -1,0 +1,14 @@
+.cube_item {
+  animation: infinite ease-in-out cubeGridScaleDelay;
+}
+@keyframes cubeGridScaleDelay {
+  0%,
+  70%,
+  to {
+    transform: scaleZ(1);
+  }
+
+  35% {
+    transform: scale3D(0, 0, 1);
+  }
+}
