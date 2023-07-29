@@ -1,12 +1,10 @@
-'use client';
-import Image from 'next/image';
 import Link from 'next/link';
-import { Loading } from '../../components/Loading';
-import { useEffect } from 'react';
+import { Loading } from '../components/Loading';
 export default function Home() {
   return (
-    <div>
-      <Link href={'/detail'}>详情</Link>
+    <div className='w-20 h-20 bg-red-400'>
+      <Link href={'/detail'}>跳转详情</Link>
+      <Loading />
     </div>
   );
 }

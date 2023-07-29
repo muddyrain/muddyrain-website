@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 export const Background: FC = () => {
   return (
-    <div className='fixed h-full w-full blur-[9rem] overflow-hidden top-[-10rem] pointer-events-none select-none'>
+    <div className='fixed w-full h-full blur-[9rem]  top-[-10rem] pointer-events-none select-none'>
       <div className='absolute top-[50vh] left-[calc((100vw-1200px)/2-24rem)]'>
         <div className='w-[20rem] h-[20rem] bg-[#009FFF] rounded-full translate-y-[12rem]'></div>
       </div>
