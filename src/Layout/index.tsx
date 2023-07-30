@@ -1,9 +1,11 @@
 'use client';
 import { Background } from './background';
 import { Header } from './header';
-import { FC } from 'react';
+import { FC, Suspense } from 'react';
 import '@/styles/index.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Footer } from './footer';
+import { useRouter } from 'next/router';
 
 const theme = createTheme({
   palette: {
@@ -18,12 +20,14 @@ const theme = createTheme({
 
 export const Layout: FC<{
   children?: React.ReactNode;
-}> = ({ children }) => {
+  isHome?: boolean;
+}> = ({ children, isHome = false }) => {
   return (
     <ThemeProvider theme={theme}>
-      <Header />
+      <Header isHome={isHome} />
       <Background />
-      {children}
+      <Suspense fallback={<p>Loading feed...</p>}>{children}</Suspense>
+      <Footer />
     </ThemeProvider>
   );
 };
