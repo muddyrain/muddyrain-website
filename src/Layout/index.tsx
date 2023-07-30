@@ -6,6 +6,8 @@ import '@/styles/index.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Footer } from './footer';
 import { useRouter } from 'next/router';
+import { LAYOUT_SCROLLBAR_CLASSES } from '@/constant/classes';
+import { useLayoutStore } from '@/store/useLayoutStore';
 
 const theme = createTheme({
   palette: {
@@ -22,12 +24,19 @@ export const Layout: FC<{
   children?: React.ReactNode;
   isHome?: boolean;
 }> = ({ children, isHome = false }) => {
+  const isShowLogin = useLayoutStore(state => state.isShowLogin);
   return (
     <ThemeProvider theme={theme}>
-      <Header isHome={isHome} />
-      <Background />
-      <Suspense fallback={<p>Loading feed...</p>}>{children}</Suspense>
-      <Footer />
+      <div
+        className={`h-screen ${
+          isShowLogin ? 'overflow-hidden' : 'overflow-y-auto'
+        } ${LAYOUT_SCROLLBAR_CLASSES}`}
+      >
+        <Header isHome={isHome} />
+        <Background />
+        <Suspense fallback={<p>Loading feed...</p>}>{children}</Suspense>
+        <Footer />
+      </div>
     </ThemeProvider>
   );
 };

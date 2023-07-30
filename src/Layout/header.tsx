@@ -3,6 +3,8 @@ import { IconButton, Button, Stack, Chip, Icon } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
+import { Login } from '@/components';
+import { useLayoutStore } from '@/store/useLayoutStore';
 
 const naves = [
   {
@@ -26,8 +28,10 @@ export const Header: FC<{
   isHome: boolean;
 }> = ({ isHome }) => {
   const router = useRouter();
+  const setShowLogin = useLayoutStore(state => state.setShowLogin);
+  const isShowLogin = useLayoutStore(state => state.isShowLogin);
   return (
-    <div className='flex items-center bg-background z-20 sticky top-0 h-16 shadow-md justify-between px-4'>
+    <div className='flex items-center bg-white z-20 sticky top-0 h-16 shadow-md justify-between px-4'>
       {/* Logo */}
       <IconButton color='primary'>M</IconButton>
       {/* nav */}
@@ -64,10 +68,13 @@ export const Header: FC<{
         <Chip
           label='Login'
           color='info'
-          onClick={() => {}}
+          onClick={() => {
+            setShowLogin(true);
+          }}
           variant='outlined'
         />
       </Stack>
+      {isShowLogin && <Login />}
     </div>
   );
 };
