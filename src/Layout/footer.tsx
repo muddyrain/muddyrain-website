@@ -14,12 +14,12 @@ export const Footer: FC = () => {
   return (
     <Stack
       spacing={1}
-      className='flex flex-col items-center bg-background pt-10 pb-12 justify-center'
+      className='flex flex-col items-center pt-10 pb-12 justify-center'
     >
-      <Typography variant='h5'>Sign Up For Our Official Website!</Typography>
+      <Typography variant='h5'>加入我们的学习吧！</Typography>
       <Typography variant='body2' color='text.secondary'>
-        Subscribe to us to always stay in touch with us and get the latest news
-        about our company and all of our activities!
+        任何时候我也不会满足，越是读书，就越是深刻的感到不满足，越是感到自己的知识贫乏。——
+        马克思
       </Typography>
       <Stack spacing={1} direction={'row'} className='pt-2'>
         <IconButton>

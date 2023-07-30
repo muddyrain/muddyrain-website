@@ -12,12 +12,16 @@ const naves = [
     href: '/',
   },
   {
-    label: '图画',
-    href: '/picture',
+    label: '好文',
+    href: '/articles',
   },
   {
     label: '碎语',
     href: '/words',
+  },
+  {
+    label: '图画',
+    href: '/picture',
   },
   {
     label: '留言板',
@@ -31,7 +35,7 @@ export const Header: FC<{
   const setShowLogin = useLayoutStore(state => state.setShowLogin);
   const isShowLogin = useLayoutStore(state => state.isShowLogin);
   return (
-    <div className='flex items-center bg-white z-20 sticky top-0 h-16 shadow-md justify-between px-4'>
+    <div className='flex items-center bg-white z-20 sticky top-0 py-2 shadow-md justify-between px-4'>
       {/* Logo */}
       <IconButton color='primary'>M</IconButton>
       {/* nav */}
@@ -60,13 +64,13 @@ export const Header: FC<{
           <Add />
         </IconButton>
         <Chip
-          label='Sign Up'
+          label='注册'
           color='primary'
           onClick={() => {}}
           variant='outlined'
         />
         <Chip
-          label='Login'
+          label='登录'
           color='info'
           onClick={() => {
             setShowLogin(true);

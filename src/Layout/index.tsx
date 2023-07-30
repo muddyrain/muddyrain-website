@@ -1,7 +1,7 @@
 'use client';
 import { Background } from './background';
 import { Header } from './header';
-import { FC, Suspense } from 'react';
+import React, { FC, Suspense } from 'react';
 import '@/styles/index.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Footer } from './footer';
@@ -17,6 +17,12 @@ const theme = createTheme({
       dark: '#7333ea',
       contrastText: '#f3e8ff',
     },
+    secondary: {
+      main: '#8a919f',
+      light: '8a919f',
+      dark: '#c2c8d1',
+      contrastText: '#f2f3f5',
+    },
   },
 });
 
@@ -28,13 +34,15 @@ export const Layout: FC<{
   return (
     <ThemeProvider theme={theme}>
       <div
-        className={`h-screen ${
+        className={`h-screen flex flex-col ${
           isShowLogin ? 'overflow-hidden' : 'overflow-y-auto'
         } ${LAYOUT_SCROLLBAR_CLASSES}`}
       >
         <Header isHome={isHome} />
         <Background />
-        <Suspense fallback={<p>Loading feed...</p>}>{children}</Suspense>
+        <Suspense fallback={<p>Loading feed...</p>}>
+          <div className='flex-1 bg-zinc-100 flex-shrink-0'>{children}</div>
+        </Suspense>
         <Footer />
       </div>
     </ThemeProvider>
