@@ -1,3 +1,4 @@
+'use client';
 import { FC } from 'react';
 
 export const Background: FC = () => {
