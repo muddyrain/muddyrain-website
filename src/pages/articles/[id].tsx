@@ -1,15 +1,28 @@
 'use client';
 import { Layout } from '@/Layout';
-import { Badge, IconButton, Stack, Typography } from '@mui/material';
+import {
+  Badge,
+  IconButton,
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { useRouter } from 'next/router';
+import styles from './id.module.css';
+import ReactMarkdown from 'react-markdown';
 import {
   Recommend as RecommendIcon,
   Sms as SmsIcon,
   RemoveRedEye as RemoveRedEyeIcon,
 } from '@mui/icons-material';
+import { CodeBlock, CodeThemes, CodeThemesType } from '@/components/CodeBlock';
+import { useState } from 'react';
+import { testMd } from './test';
+
 export default function Page() {
   const router = useRouter();
-  console.log(router);
+  const [theme, setTheme] = useState<CodeThemesType>(CodeThemes.dark);
   return (
     <Layout>
       <Stack direction={'row'} className='w-container mx-auto my-4' spacing={3}>
@@ -27,13 +40,13 @@ export default function Page() {
             </IconButton>
           </Badge>
         </Stack>
-        <Stack className='flex-1 p-8 rounded-lg bg-white'>
+        <Stack className='flex-1 py-12 px-20 rounded-lg bg-white'>
           <Typography variant='h4' className=''>
-            🍍(Pinia)不酸，保甜
+            Javascript 事件循环
           </Typography>
-          <div className='my-4 flex'>
+          <div className='my-4 flex w-full'>
             <Stack direction='row' spacing={2}>
-              <span>前端荣耀</span>
+              <span>Muddyrain</span>
               <span className='text-zinc-400'>2023-03-08 09:50</span>
               <Stack direction={'row'} alignItems={'center'}>
                 <RemoveRedEyeIcon fontSize='small' color='secondary' />
@@ -41,9 +54,17 @@ export default function Page() {
               </Stack>
             </Stack>
           </div>
-          <Typography variant='body1' className='mb-2'>
-            🍍(Pinia)是一个用于Vue 3的状态管理库，它使用了Vue
-            3的新特性Proxy，让我们可以在Vue 3中享受到像Vuex一样的开发体验。
+          <Typography variant='body1' className='mb-2' component='div'>
+            <ReactMarkdown
+              className={`${styles.markdown_container}`}
+              components={{
+                code: props => (
+                  <CodeBlock theme={CodeThemes['materialDark']} {...props} />
+                ),
+              }}
+            >
+              {testMd}
+            </ReactMarkdown>
           </Typography>
         </Stack>
       </Stack>
