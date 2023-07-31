@@ -6,13 +6,26 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { QqOutlined, WechatOutlined } from '@ant-design/icons';
 export const Login: FC = () => {
   const setShowLogin = useLayoutStore(state => state.setShowLogin);
+  const isShowLogin = useLayoutStore(state => state.isShowLogin);
+  useEffect(() => {
+    if (isShowLogin) {
+      gsap.to(state, {
+        scale: 1,
+        opacity: 0.5,
+        duration: 0.3,
+        onUpdate: () => {
+          setState({ ...state });
+        },
+      });
+    }
+  }, [isShowLogin]);
   const [state, setState] = useState({
-    scale: 1,
+    scale: 0,
     opacity: 0.5,
   });
   return (
