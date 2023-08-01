@@ -1,0 +1,7 @@
+.medium-zoom-image--opened {
+  z-index: 99999999;
+}
+
+.medium-zoom--opened .header_container {
+  opacity: 0;
+}

@@ -9,16 +9,15 @@ import {
   Typography,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import styles from './id.module.css';
-import ReactMarkdown from 'react-markdown';
 import {
   Recommend as RecommendIcon,
   Sms as SmsIcon,
   RemoveRedEye as RemoveRedEyeIcon,
 } from '@mui/icons-material';
-import { CodeBlock, CodeThemes, CodeThemesType } from '@/components/CodeBlock';
+import {  CodeThemes, CodeThemesType } from '@/components/CodeBlock';
 import { useState } from 'react';
 import { testMd } from './test';
+import { Viewer } from '@/components';
 
 export default function Page() {
   const router = useRouter();
@@ -55,16 +54,7 @@ export default function Page() {
             </Stack>
           </div>
           <Typography variant='body1' className='mb-2' component='div'>
-            <ReactMarkdown
-              className={`${styles.markdown_container}`}
-              components={{
-                code: props => (
-                  <CodeBlock theme={CodeThemes['materialDark']} {...props} />
-                ),
-              }}
-            >
-              {testMd}
-            </ReactMarkdown>
+           <Viewer value={testMd} />
           </Typography>
         </Stack>
       </Stack>
