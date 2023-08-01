@@ -2,7 +2,7 @@
 import { Background } from './background'
 import { Header } from './header'
 import React, { FC, Suspense } from 'react'
-import '@/styles/index.css'
+import '@/styles/index.scss'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { Footer } from './footer'
 import { useRouter } from 'next/router'

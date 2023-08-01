@@ -13,6 +13,9 @@ export default function Page() {
           onChange={e => {
             setContent(e)
           }}
+          onChangeTheme={theme => {
+            console.log(theme)
+          }}
         ></Editor>
       </div>
     </Layout>
