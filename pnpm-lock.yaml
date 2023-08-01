@@ -36,6 +36,7 @@ specifiers:
   react-material-ui-carousel: ^3.4.2
   react-syntax-highlighter: ^15.5.0
   remark-gfm: ^3.0.1
+  sass: ^1.64.2
   tailwind-scrollbar: ^3.0.4
   tailwindcss: 3.3.2
   typescript: 5.1.6
@@ -48,7 +49,7 @@ dependencies:
   autoprefixer: 10.4.14_postcss@8.4.25
   eslint: 8.44.0
   eslint-config-next: 13.4.9_iqf7tbmerllfqanu4l3d6aqdn4
-  next: 13.4.9_biqbaboplfbrettd7655fr4n2y
+  next: 13.4.9_pavuabztkjdzwqrdc6ow5hg3im
   postcss: 8.4.25
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -81,6 +82,7 @@ devDependencies:
   react-material-ui-carousel: 3.4.2_hkd4rzd6irupxggbe2sf4ybi2i
   react-syntax-highlighter: 15.5.0_react@18.2.0
   remark-gfm: 3.0.1
+  sass: 1.64.2
   tailwind-scrollbar: 3.0.4_tailwindcss@3.3.2
   zustand: 4.3.9_react@18.2.0
 
@@ -2884,6 +2886,9 @@ packages:
     dev: true
     optional: true
 
+  /immutable/4.3.1:
+    resolution: {integrity: sha512-lj9cnmB/kVS0QHsJnYKD1uo3o39nrbKxszjnqS9Fr6NB7bZzW45U6WSGBPKXDL/CvDKqDNPA4r3DoDQ8GTxo2A==}
+
   /import-fresh/3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
     engines: {node: '>=6'}
@@ -3939,7 +3944,7 @@ packages:
     dev: true
     optional: true
 
-  /next/13.4.9_biqbaboplfbrettd7655fr4n2y:
+  /next/13.4.9_pavuabztkjdzwqrdc6ow5hg3im:
     resolution: {integrity: sha512-vtefFm/BWIi/eWOqf1GsmKG3cjKw1k3LjuefKRcL3iiLl3zWzFdPG3as6xtxrGO6gwTzzaO1ktL4oiHt/uvTjA==}
     engines: {node: '>=16.8.0'}
     hasBin: true
@@ -3964,6 +3969,7 @@ packages:
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      sass: 1.64.2
       styled-jsx: 5.1.1_react@18.2.0
       watchpack: 2.4.0
       zod: 3.21.4
@@ -4783,6 +4789,15 @@ packages:
   /safer-buffer/2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: true
+
+  /sass/1.64.2:
+    resolution: {integrity: sha512-TnDlfc+CRnUAgLO9D8cQLFu/GIjJIzJCGkE7o4ekIGQOH7T3GetiRR/PsTWJUHhkzcSPrARkPI+gNWn5alCzDg==}
+    engines: {node: '>=14.0.0'}
+    hasBin: true
+    dependencies:
+      chokidar: 3.5.3
+      immutable: 4.3.1
+      source-map-js: 1.0.2
 
   /sax/1.2.4:
     resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}

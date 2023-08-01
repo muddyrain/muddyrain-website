@@ -21,7 +21,7 @@ export default function Page() {
     <Layout>
       <Stack direction={'row'} className="w-container mx-auto my-4" spacing={3}>
         {/* 操作导航 */}
-        <Stack className="py-10" spacing={2}>
+        <Stack className="py-10 fixed -translate-x-12" spacing={2}>
           {/* 点赞 */}
           <Badge badgeContent={1} color="secondary">
             <IconButton size="large" className="bg-white">

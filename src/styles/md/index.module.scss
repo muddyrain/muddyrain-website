@@ -1,0 +1,10 @@
+.markdown_container {
+  :global{
+    img{
+      max-width: 100%;
+    }
+    .bytemd{
+      height: calc(100vh - 120px)
+    }
+  }
+}

@@ -57,6 +57,7 @@
     "react-material-ui-carousel": "^3.4.2",
     "react-syntax-highlighter": "^15.5.0",
     "remark-gfm": "^3.0.1",
+    "sass": "^1.64.2",
     "tailwind-scrollbar": "^3.0.4",
     "zustand": "^4.3.9"
   }
