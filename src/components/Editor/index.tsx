@@ -55,7 +55,17 @@ export const Editor: FC<{
   value: string
   onChange: (value: string) => void
   onChangeTheme: (value: string) => void
-}> = ({ value, onChange, onChangeTheme }) => {
+}> = ({ value, onChange, onChangeTheme: _onChangeTheme }) => {
+  const onChangeTheme = (theme: string) => {
+    _onChangeTheme(theme)
+    const themeText = `---\ntheme: ${theme}\n---\n`
+    if (value.includes('---\ntheme:')) {
+      const reg = /---\ntheme:.*\n---\n/
+      onChange(value.replace(reg, themeText))
+      return
+    }
+    onChange(themeText + '\n' + value)
+  }
   useEffect(() => {
     changeTheme('juejin', onChangeTheme)
   }, [])
@@ -63,7 +73,18 @@ export const Editor: FC<{
     <div className={`${styles.markdown_container}`}>
       <BytemdEditor
         locale={zh}
-        onChange={onChange}
+        onChange={value => {
+          const reg = /---\ntheme:.*\n---\n/
+          // 获取匹配到的字符串
+          const matchStr = value.match(reg)
+          if (matchStr) {
+            const themeName = matchStr[0]?.split('---\ntheme:')?.[1]?.split('\n---\n')?.[0].trim()
+            if (Object.keys(themes).includes(themeName)) {
+              changeTheme(themeName, onChangeTheme)
+            }
+          }
+          onChange(value)
+        }}
         placeholder="开始写作..."
         plugins={[
           gfm({
