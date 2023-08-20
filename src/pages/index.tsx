@@ -24,8 +24,8 @@ import {
 import Image from 'next/image'
 import Carousel from 'react-material-ui-carousel'
 import { Layout } from '@/Layout'
-import { useState } from 'react'
-import { Article } from '@/components'
+import { Suspense, useState } from 'react'
+import { Article, Loading } from '@/components'
 export default function Page() {
   const list = [
     'https://muddyrain-oss.oss-cn-hangzhou.aliyuncs.com/1.jpg',
@@ -71,13 +71,17 @@ export default function Page() {
         >
           {list.map((item, index) => {
             return (
-              <div className="h-[660px] rounded-lg overflow-hidden relative group" key={index}>
+              <div
+                className="h-[660px] duration-300 rounded-lg overflow-hidden relative group"
+                key={index}
+              >
                 <Image
                   className="w-full h-full  cursor-pointer group-hover:scale-125 duration-500"
                   src={item}
-                  layout="fill"
                   width={0}
+                  loading={'eager'}
                   height={0}
+                  sizes="100%,100%"
                   alt="Picture of the author"
                 />
                 <div className="absolute bottom-10 left-10">
