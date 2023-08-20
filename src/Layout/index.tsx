@@ -8,7 +8,7 @@ import { Footer } from './footer'
 import { useRouter } from 'next/router'
 import { LAYOUT_SCROLLBAR_CLASSES } from '@/constant/classes'
 import { useLayoutStore } from '@/store/useLayoutStore'
-
+import './index.scss'
 const theme = createTheme({
   palette: {
     primary: {
@@ -34,8 +34,8 @@ export const Layout: FC<{
   return (
     <ThemeProvider theme={theme}>
       <div
-        className={`h-screen flex flex-col ${
-          isShowLogin ? 'overflow-hidden' : 'overflow-y-auto'
+        className={`layout_container h-screen flex flex-col ${
+          isShowLogin ? '' : 'overflow-y-auto'
         } ${LAYOUT_SCROLLBAR_CLASSES} overflow-x-hidden`}
       >
         <Header isHome={isHome} />
