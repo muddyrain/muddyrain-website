@@ -11,8 +11,7 @@ import zh from 'bytemd/locales/zh_Hans.json'
 import { BytemdPlugin } from 'bytemd'
 import themes from 'juejin-markdown-themes'
 import { JUEJIN_MARKDOWN_THEME_ID } from '@/constant'
-import { Button, Stack, TextField } from '@mui/material'
-import { CloudUpload as CloudUploadIcon } from '@mui/icons-material'
+import { uploadFile } from '@/api'
 type onChangeThemeType = (theme: string) => void
 const changeTheme = (themeKey: string, onChangeTheme: onChangeThemeType) => {
   const theme = themes[themeKey]
@@ -68,30 +67,12 @@ export const Editor: FC<{
     }
     onChange(themeText + '\n' + value)
   }
-  const [title, setTitle] = useState('')
-  const [titleError, setTitleError] = useState(false)
+
   useEffect(() => {
     changeTheme('juejin', onChangeTheme)
   }, [])
   return (
     <div className={`${styles.markdown_container}`}>
-      <Stack className="mb-2" spacing={1} direction="row">
-        <TextField
-          error={titleError}
-          color="primary"
-          fullWidth
-          onChange={e => {
-            setTitleError(e.target.value.length === 0)
-            setTitle(e.target.value)
-          }}
-          value={title}
-          label="好文标题"
-          size="small"
-        />
-        <Button className="w-24" variant="outlined" startIcon={<CloudUploadIcon />}>
-          发布
-        </Button>
-      </Stack>
       <BytemdEditor
         locale={zh}
         onChange={value => {
@@ -106,9 +87,25 @@ export const Editor: FC<{
           }
           onChange(value)
         }}
-        uploadImages={file => {
-          console.log(file)
-          return new Promise(resolve => {})
+        uploadImages={files => {
+          const promiseList: Promise<any>[] = []
+          return new Promise(resolve => {
+            const imageList: { alt: string; title: string; url: string }[] = []
+            for (const file of files) {
+              promiseList.push(
+                uploadFile(file).then(res => {
+                  imageList.push({
+                    url: res.url as string,
+                    alt: file.name,
+                    title: file.name,
+                  })
+                })
+              )
+            }
+            Promise.all(promiseList).then(() => {
+              resolve(imageList)
+            })
+          })
         }}
         placeholder="开始写作..."
         plugins={[

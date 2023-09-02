@@ -95,9 +95,14 @@ export const Header: FC<{
               }}
             >
               <ListItemIcon className="min-w-max mr-2">
-                <EditNote />
+                <EditNote className="text-md" />
               </ListItemIcon>
-              <ListItemText primary="写文章" />
+              <ListItemText
+                primaryTypographyProps={{
+                  className: 'text-sm',
+                }}
+                primary="写文章"
+              />
             </ListItemButton>
           </List>
         </Popover>

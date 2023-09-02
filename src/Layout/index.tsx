@@ -15,13 +15,11 @@ const theme = createTheme({
       main: '#6060e0',
       light: '#8888e8',
       dark: '#7333ea',
-      contrastText: '#f3e8ff',
     },
     secondary: {
-      main: '#8a919f',
-      light: '8a919f',
-      dark: '#c2c8d1',
-      contrastText: '#f2f3f5',
+      main: '#9a9999',
+      light: '#8a8a8a',
+      dark: '#cccccc',
     },
   },
 })
@@ -29,7 +27,8 @@ const theme = createTheme({
 export const Layout: FC<{
   children?: React.ReactNode
   isHome?: boolean
-}> = ({ children, isHome = false }) => {
+  hiddenFooter?: boolean
+}> = ({ children, isHome = false, hiddenFooter = false }) => {
   const isShowLogin = useLayoutStore(state => state.isShowLogin)
   return (
     <ThemeProvider theme={theme}>
@@ -43,7 +42,7 @@ export const Layout: FC<{
         <Suspense fallback={<p>Loading feed...</p>}>
           <div className="flex-1 bg-zinc-100 flex-shrink-0">{children}</div>
         </Suspense>
-        <Footer />
+        {!hiddenFooter && <Footer />}
       </div>
     </ThemeProvider>
   )
