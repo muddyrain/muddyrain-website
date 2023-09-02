@@ -4,15 +4,17 @@ import '@/styles/md/index.scss'
 import mediumZoom from '@bytemd/plugin-medium-zoom'
 import highlight from '@bytemd/plugin-highlight'
 import frontmatter from '@bytemd/plugin-frontmatter'
-import gfm from '@bytemd/plugin-gfm'
 import { Viewer as BytemdViewer } from '@bytemd/react'
-
+import themes from 'juejin-markdown-themes'
+import { THEME_TYPES } from '@/types'
 export const Viewer: FC<{
   value: string
-}> = ({ value }) => {
+  theme?: THEME_TYPES
+}> = ({ value, theme = 'juejin' }) => {
   return (
-    <div className={`${styles.markdown_container}`}>
-      <BytemdViewer plugins={[gfm(), mediumZoom(), highlight(), frontmatter()]} value={value} />
+    <div className={`${styles.markdown_container}  `}>
+      <style dangerouslySetInnerHTML={{ __html: themes[theme].style }} />
+      <BytemdViewer plugins={[mediumZoom(), highlight({}), frontmatter()]} value={value} />
     </div>
   )
 }

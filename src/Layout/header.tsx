@@ -48,7 +48,7 @@ export const Header: FC<{
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const open = Boolean(anchorEl)
   return (
-    <div className="w-screen flex items-center bg-white z-20 sticky top-0 py-2 shadow-md justify-between px-4 header_container duration-300">
+    <div className="w-full flex items-center bg-white z-20 sticky top-0 py-2 shadow-md justify-between px-4 header_container duration-300">
       {/* Logo */}
       <IconButton color="primary">M</IconButton>
       {/* nav */}

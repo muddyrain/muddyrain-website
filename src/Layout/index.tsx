@@ -15,11 +15,13 @@ const theme = createTheme({
       main: '#6060e0',
       light: '#8888e8',
       dark: '#7333ea',
+      contrastText: '#f3e8ff',
     },
     secondary: {
       main: '#9a9999',
-      light: '#8a8a8a',
+      light: '#8a9999',
       dark: '#cccccc',
+      contrastText: '#f2f3f5',
     },
   },
 })
@@ -32,17 +34,13 @@ export const Layout: FC<{
   const isShowLogin = useLayoutStore(state => state.isShowLogin)
   return (
     <ThemeProvider theme={theme}>
-      <div
-        className={`layout_container h-screen flex flex-col ${
-          isShowLogin ? '' : 'overflow-y-auto'
-        } ${LAYOUT_SCROLLBAR_CLASSES} overflow-x-hidden`}
-      >
+      <div className={`layout_container flex flex-col`}>
         <Header isHome={isHome} />
         <Background />
         <Suspense fallback={<p>Loading feed...</p>}>
           <div className="flex-1 bg-zinc-100 flex-shrink-0">{children}</div>
         </Suspense>
-        {!hiddenFooter && <Footer />}
+        {hiddenFooter && <Footer />}
       </div>
     </ThemeProvider>
   )

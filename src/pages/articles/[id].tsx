@@ -62,7 +62,7 @@ export default function Page() {
             </Stack>
           </div>
           <Typography variant="body1" className="mb-2" component="div">
-            <Viewer value={testMd} />
+            <Viewer theme="fancy" value={testMd} />
           </Typography>
         </Stack>
       </Stack>
