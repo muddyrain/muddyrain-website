@@ -5,7 +5,7 @@ import {
   Search,
 } from '@mui/icons-material'
 import { Stack } from '@mui/material'
-import { FC, use, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 
 export const Slider: FC = () => {
   const menuRef = useRef<HTMLDivElement>(null)
@@ -41,7 +41,7 @@ export const Slider: FC = () => {
   })
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!menuRef.current) return
     const target = menuRef.current.children[currentIndex] as HTMLDivElement
     const boundingClientRect = target.getBoundingClientRect()
