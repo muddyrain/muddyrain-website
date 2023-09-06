@@ -30,15 +30,18 @@ export const Layout: FC<{
   children?: React.ReactNode
   isHome?: boolean
   hiddenFooter?: boolean
-}> = ({ children, isHome = false, hiddenFooter = false }) => {
+  showBackground?: boolean
+}> = ({ children, isHome = false, hiddenFooter = false, showBackground = true }) => {
   const isShowLogin = useLayoutStore(state => state.isShowLogin)
   return (
     <ThemeProvider theme={theme}>
-      <div className={`layout_container flex flex-col`}>
+      <div className={`layout_container w-full h-full flex flex-col`}>
         <Header isHome={isHome} />
         <Background />
         <Suspense fallback={<p>Loading feed...</p>}>
-          <div className="flex-1 bg-zinc-100 flex-shrink-0">{children}</div>
+          <div className={`flex-1 flex-shrink-0 ${showBackground && 'bg-zinc-100'}`}>
+            {children}
+          </div>
         </Suspense>
         {hiddenFooter && <Footer />}
       </div>

@@ -15,6 +15,9 @@ module.exports = {
         container: '1180px',
         wrapper: '1680px',
       },
+      height: {
+        container: '1180px',
+      },
     },
   },
   plugins: [tailwindScrollbar({ nocompatible: true })],

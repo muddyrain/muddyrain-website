@@ -31,6 +31,10 @@ const naves = [
     href: '/words',
   },
   {
+    label: '音乐',
+    href: '/music',
+  },
+  {
     label: '图画',
     href: '/picture',
   },
