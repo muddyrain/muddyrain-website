@@ -13,7 +13,7 @@ export default function Music() {
       <div className="relative w-full h-full">
         <Image alt="bg" className="w-full h-full" src={currentBg} priority />
       </div>
-      <div className="w-[70%] h-[75%] absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]  bg-white/30 drop-shadow-2xl rounded-xl backdrop-blur-xl flex overflow-hidden">
+      <div className="w-[1820px] h-[1120px] absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]  bg-white/30 drop-shadow-2xl rounded-xl backdrop-blur-xl flex overflow-hidden">
         <Slider />
         <Main />
       </div>

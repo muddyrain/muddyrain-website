@@ -3,6 +3,9 @@ import { Search, NotificationsNoneOutlined, ArrowRight, PlayArrow } from '@mui/i
 import { TextField, Avatar } from '@mui/material'
 import Image from 'next/image'
 import { FC } from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+
 export const Main: FC = () => {
   return (
     <div className="flex-1 p-8 bg-white/50 overflow-hidden">
@@ -31,20 +34,29 @@ export const Main: FC = () => {
       </div>
       {/* banner区域 */}
       <div className="flex overflow-x-auto">
-        {Array.from({ length: 12 }).map((item, index) => (
-          <div className="flex py-6 flex-col mr-8" key={index}>
-            <Image
-              width={225}
-              height={225}
-              className="rounded-2xl shadow-md shadow-amber-300"
-              src={testImg}
-              alt="banner"
-            />
-            <div className="mt-3 justify-center flex items-center">
-              <span className="text-lg text-zinc-600 font-sans">Loud · Rihanna</span>
-            </div>
-          </div>
-        ))}
+        <Swiper
+          spaceBetween={40}
+          slidesPerView={'auto'}
+          onSlideChange={() => console.log('slide change')}
+          onSwiper={swiper => console.log(swiper)}
+        >
+          {Array.from({ length: 12 }).map((item, index) => (
+            <SwiperSlide key={index} style={{ width: 225 }}>
+              <div className="flex cursor-pointer w-full h-full py-6 flex-col justify-center items-center">
+                <Image
+                  width={225}
+                  height={225}
+                  className="rounded-2xl shadow-md shadow-amber-300"
+                  src={testImg}
+                  alt="banner"
+                />
+                <div className="mt-3 justify-center flex items-center">
+                  <span className="text-lg text-zinc-600 font-sans">Loud · Rihanna</span>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </div>
   )
