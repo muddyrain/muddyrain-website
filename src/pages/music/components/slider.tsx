@@ -1,7 +1,13 @@
 import {
+  Album,
   Close as CloseIcon,
+  Favorite,
+  Group,
   HorizontalRule as HorizontalRuleIcon,
+  MusicNote,
+  MusicVideo,
   OpenInFull as OpenInFullIcon,
+  Radio,
   Search,
 } from '@mui/icons-material'
 import { Stack } from '@mui/material'
@@ -11,28 +17,28 @@ export const Slider: FC = () => {
   const menuRef = useRef<HTMLDivElement>(null)
   const [menus] = useState([
     {
-      name: 'Explore',
-      icon: <Search />,
+      name: '发现音乐',
+      icon: <MusicNote />,
     },
     {
-      name: 'Genres',
-      icon: <Search />,
+      name: '歌单',
+      icon: <Album />,
     },
     {
-      name: 'Radios',
-      icon: <Search />,
+      name: '播客',
+      icon: <Radio />,
     },
     {
-      name: 'Artists',
-      icon: <Search />,
+      name: '视频',
+      icon: <MusicVideo />,
     },
     {
-      name: 'Albums',
-      icon: <Search />,
+      name: '关注',
+      icon: <Group />,
     },
     {
-      name: 'Settings',
-      icon: <Search />,
+      name: '我的音乐',
+      icon: <Favorite />,
     },
   ])
   const [cloud, setCloud] = useState({
@@ -66,7 +72,9 @@ export const Slider: FC = () => {
       </Stack>
       {/* Menu 导航 */}
       <div className="flex flex-col mt-32">
-        <span className="font-bold text-zinc-500 pl-10 tracking-wider text-lg mb-4">MENU</span>
+        <span className="font-bold text-zinc-500 pl-10 tracking-wider text-lg mb-4 select-none">
+          菜单
+        </span>
         <div className="relative overflow-x-hidden">
           <div ref={menuRef}>
             {menus.map((menu, index) => (
@@ -80,7 +88,7 @@ export const Slider: FC = () => {
                 }`}
               >
                 {menu.icon}
-                <span className="ml-2">{menu.name}</span>
+                <span className="ml-2 select-none">{menu.name}</span>
               </div>
             ))}
           </div>

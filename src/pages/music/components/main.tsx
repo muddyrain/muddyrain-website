@@ -6,57 +6,76 @@ import {
   PlayArrow,
   PlayArrowOutlined,
 } from '@mui/icons-material'
-import { TextField, Avatar } from '@mui/material'
+import { TextField, Avatar, IconButton, Button, Divider } from '@mui/material'
 import Image from 'next/image'
 import { FC } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'overlayscrollbars/overlayscrollbars.css'
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
+import { useMusicStore } from '@/store/useMusicStore'
+import { Title } from './Title'
+import { useClickOutside } from '@/hooks/useClickOutside'
+import { DATA_TRIGGER_KEY, PlayListToggleTrigger } from '@/constant/triggerIds'
 
 export const Main: FC = () => {
+  const [setShowPlayList, isShowPlayList] = useMusicStore(state => [
+    state.setShowPlayList,
+    state.isShowPlayList,
+  ])
+  const playListRef = useClickOutside(e => {
+    const element = e.target as HTMLElement
+    if (element.getAttribute(DATA_TRIGGER_KEY) === PlayListToggleTrigger) return
+    setShowPlayList(false)
+  })
   return (
-    <div className="flex-1 pt-8 px-4 bg-white/40 overflow-hidden flex flex-col">
+    <div className="flex-1 pt-8 px-4 bg-white/40 overflow-hidden flex flex-col relative">
       {/* 头部栏 */}
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Search className="text-4xl text-zinc-600" />
           <TextField
-            className="w-[320px] ml-2 border-b-0"
+            className="w-[320px] ml-2 border-b-0 select-none"
             placeholder="Find and listen to your favorite music..."
             variant="standard"
             name="search_key"
           />
         </div>
         <div className="flex items-center">
-          <NotificationsNoneOutlined className="text-3xl text-zinc-600" />
-          <Avatar className="ml-2">H</Avatar>
+          <IconButton color="primary" size="large">
+            <NotificationsNoneOutlined className="text-3xl text-zinc-600" />
+          </IconButton>
+          <IconButton className="ml-2" color="primary" size="large">
+            <Avatar>H</Avatar>
+          </IconButton>
         </div>
       </div>
       {/* 内容 */}
       <div className="title mt-10 flex items-center">
-        <span className="text-3xl pl-6 font-bold text-blue-950">Featured Albums</span>
+        <Title title="推荐歌单" />
         {/* 播放按钮 */}
-        <div className="rounded-3xl cursor-pointer flex border border-white border-solid shadow-primary/75 shadow-lg items-center ml-8 px-4 py-1 justify-center text-white bg-primary group">
-          <span className="text-lg font-bold font-sans tracking-wider">play</span>
-          <PlayArrow className="text-2xl mt-0.5" />
+        <div className="rounded-3xl cursor-pointer flex border border-white border-solid shadow-primary/75 shadow-lg items-center ml-8 px-4 py-2 justify-center text-white bg-primary group">
+          <span className="text-md font-bold font-sans tracking-wider select-none">播放</span>
+          <PlayArrow className="text-2xl" />
         </div>
       </div>
       {/* banner区域 */}
       <div className="flex overflow-x-auto">
-        <Swiper spaceBetween={10} slidesPerView={'auto'}>
+        <Swiper spaceBetween={10} slidesPerView={'auto'} autoplay>
           {Array.from({ length: 12 }).map((item, index) => (
-            <SwiperSlide key={index} style={{ width: 200 }}>
+            <SwiperSlide key={index} style={{ width: 160 }}>
               <div className="flex cursor-pointer w-full h-full py-6 flex-col justify-center items-center">
                 <Image
-                  width={180}
-                  height={180}
-                  className="rounded-lg shadow-lg shadow-primary/50"
+                  width={150}
+                  height={150}
+                  className="rounded-lg shadow-lg shadow-primary/50 select-none"
                   src={testImg}
                   alt="banner"
                 />
                 <div className="mt-3 justify-center flex items-center">
-                  <span className="text-lg text-zinc-600 font-sans">Loud · Rihanna</span>
+                  <span className="text-md text-zinc-600 font-sans select-none">
+                    Loud · Rihanna {index + 1}
+                  </span>
                 </div>
               </div>
             </SwiperSlide>
@@ -66,29 +85,30 @@ export const Main: FC = () => {
       {/* 日常组合 */}
       <div className="flex-1 flex justify-between overflow-hidden">
         <div className="w-3/5 flex flex-col">
-          <span className="text-3xl pl-6 font-bold text-blue-950">Daily Mix</span>
+          <Title title="推荐歌曲" />
           <div className="flex-1 mt-2 flex flex-col overflow-hidden">
             <OverlayScrollbarsComponent
               element="div"
+              defer
               options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
             >
               <div className={`w-full h-full`}>
                 {Array.from({ length: 20 }).map((item, index) => (
                   <div
-                    className="flex p-2 items-center font-mono text-lg text-zinc-600 cursor-pointer hover:bg-white/30 duration-300 rounded-md"
+                    className="flex p-2 items-center font-mono text-base text-zinc-600 cursor-pointer hover:bg-white/30 duration-300 rounded-md"
                     key={index}
                   >
                     <Image
-                      className="mr-2 rounded-lg"
+                      className="mr-2 rounded-lg select-none"
                       src={testImg}
                       width={45}
                       height={45}
                       alt="daily mix image"
                     />
-                    <span className="flex-1">Mask Off111</span>
-                    <span className="flex-1">Future</span>
-                    <span className="flex-1">Dive</span>
-                    <span className="flex-1">3:54</span>
+                    <span className="flex-1 select-none">Mask Off111</span>
+                    <span className="flex-1 select-none">Future</span>
+                    <span className="flex-1 select-none">Dive</span>
+                    <span className="flex-1 select-none">3:54</span>
                   </div>
                 ))}
               </div>
@@ -96,31 +116,78 @@ export const Main: FC = () => {
           </div>
         </div>
         <div className="w-2/5 flex flex-col">
-          <span className="text-3xl font-bold text-blue-950">Recommended MV</span>
+          <Title title="推荐MV" />
           <div className="flex-1 mt-2 flex flex-col overflow-hidden">
             <OverlayScrollbarsComponent
               element="div"
+              defer
               options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
             >
               <div className="w-full h-full flex flex-wrap pr-2">
                 {Array.from({ length: 20 }).map((item, index) => (
                   <div className="flex flex-col w-[48%] mx-[1%] pb-2" key={index}>
-                    <div className="w-full h-[125px] relative cursor-pointer group">
-                      <Image className="w-full rounded-md" height={125} alt="mv-bg" src={testBG} />
+                    <div className="w-full h-[125px] relative cursor-pointer group ">
+                      <Image
+                        className="w-full rounded-md select-none"
+                        height={125}
+                        alt="mv-bg"
+                        src={testBG}
+                      />
                       <div className="absolute w-full h-full drop-shadow-xl bg-black/10 top-0 p-1 right-0 group-hover:bg-black/0 duration-300">
                         <div className="flex items-center text-sm justify-end text-zinc-100">
                           <PlayArrowOutlined />
-                          <span>239万</span>
+                          <span className="select-none">239万</span>
                         </div>
                       </div>
                     </div>
-                    <span className="mt-1 text-zinc-800">Monster</span>
-                    <span className="text-zinc-500 text-sm">Shawn Mendes / Justin Bieber</span>
+                    <span className="mt-1 text-zinc-800 select-none">Monster</span>
+                    <span className="text-zinc-500 text-sm select-none">
+                      Shawn Mendes / Justin Bieber
+                    </span>
                   </div>
                 ))}
               </div>
             </OverlayScrollbarsComponent>
           </div>
+        </div>
+      </div>
+      {/* 播放列表 */}
+      <div
+        ref={playListRef}
+        className={`absolute ${
+          isShowPlayList ? 'w-[420px]' : 'w-0'
+        } duration-300 top-0 right-0 h-full flex flex-col bg-white/80 drop-shadow-xl z-10`}
+      >
+        <div className="pt-4 px-4">
+          <Title title="播放列表" />
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-zinc-400">总793首</span>
+            <Button variant="text">清空列表</Button>
+          </div>
+        </div>
+        <Divider />
+        <div className="flex-1 flex flex-col overflow-hidden relative">
+          <OverlayScrollbarsComponent
+            element="div"
+            defer
+            options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
+          >
+            <div className="w-full h-full">
+              {Array.from({ length: 40 }).map((item, index) => (
+                <div
+                  className={`flex py-2 px-4 text-sm items-center font-mono odd:bg-zinc-50/75 even:bg-zinc-100/75 cursor-pointer hover:bg-zinc-200 drop-shadow-lg ${
+                    index === 6 && 'text-primary/75'
+                  }`}
+                  key={index}
+                >
+                  {index === 6 && <PlayArrow className="text-sm absolute left-0 text-primary" />}
+                  <span className="flex-[2] select-none">多远都要在一起</span>
+                  <span className="flex-1 select-none">邓紫棋</span>
+                  <span className="mx-2 select-none text-zinc-400">3:54</span>
+                </div>
+              ))}
+            </div>
+          </OverlayScrollbarsComponent>
         </div>
       </div>
     </div>
