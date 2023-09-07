@@ -1,5 +1,11 @@
-import { testImg } from '@/assets'
-import { Search, NotificationsNoneOutlined, ArrowRight, PlayArrow } from '@mui/icons-material'
+import { testBG, testImg } from '@/assets'
+import {
+  Search,
+  NotificationsNoneOutlined,
+  ArrowRight,
+  PlayArrow,
+  PlayArrowOutlined,
+} from '@mui/icons-material'
 import { TextField, Avatar } from '@mui/material'
 import Image from 'next/image'
 import { FC } from 'react'
@@ -45,7 +51,7 @@ export const Main: FC = () => {
                 <Image
                   width={180}
                   height={180}
-                  className="rounded-2xl shadow-md shadow-amber-300"
+                  className="rounded-lg shadow-lg shadow-primary/50"
                   src={testImg}
                   alt="banner"
                 />
@@ -89,8 +95,32 @@ export const Main: FC = () => {
             </OverlayScrollbarsComponent>
           </div>
         </div>
-        <div className="w-2/5 bg-blue-200">
-          <span className="text-3xl font-bold text-blue-950">Playlists</span>
+        <div className="w-2/5 flex flex-col">
+          <span className="text-3xl font-bold text-blue-950">Recommended MV</span>
+          <div className="flex-1 mt-2 flex flex-col overflow-hidden">
+            <OverlayScrollbarsComponent
+              element="div"
+              options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
+            >
+              <div className="w-full h-full flex flex-wrap pr-2">
+                {Array.from({ length: 20 }).map((item, index) => (
+                  <div className="flex flex-col w-[48%] mx-[1%] pb-2" key={index}>
+                    <div className="w-full h-[125px] relative cursor-pointer group">
+                      <Image className="w-full rounded-md" height={125} alt="mv-bg" src={testBG} />
+                      <div className="absolute w-full h-full drop-shadow-xl bg-black/10 top-0 p-1 right-0 group-hover:bg-black/0 duration-300">
+                        <div className="flex items-center text-sm justify-end text-zinc-100">
+                          <PlayArrowOutlined />
+                          <span>239万</span>
+                        </div>
+                      </div>
+                    </div>
+                    <span className="mt-1 text-zinc-800">Monster</span>
+                    <span className="text-zinc-500 text-sm">Shawn Mendes / Justin Bieber</span>
+                  </div>
+                ))}
+              </div>
+            </OverlayScrollbarsComponent>
+          </div>
         </div>
       </div>
     </div>

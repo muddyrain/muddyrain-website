@@ -1,15 +1,18 @@
 import { testImg } from '@/assets'
 import Image from 'next/image'
-import { FC } from 'react'
-import { Left, Right, Like, Pause, Play, ShufflePlayback } from '../icons'
-import { Button, IconButton } from '@mui/material'
+import { FC, useState } from 'react'
+import { IconButton, Slider } from '@mui/material'
+import { VolumeDown, VolumeMute, VolumeUp } from '@mui/icons-material'
 export const Player: FC = () => {
+  const [volume, setVolume] = useState(100)
   return (
-    <div className="h-24 bg-zinc-50/70 flex items-center p-2 relative">
-      <Image src={testImg} alt="album" width={75} height={75} />
-      <div className="ml-2 flex flex-col">
-        <span className="text-xl text-zinc-800">Daydream</span>
-        <span className="text-zinc-400">Tycho</span>
+    <div className="h-24 bg-zinc-50/70 flex items-center justify-between p-2 relative">
+      <div className="flex items-center">
+        <Image src={testImg} alt="album" width={75} height={75} />
+        <div className="ml-2 flex flex-col">
+          <span className="text-xl text-zinc-800">Daydream</span>
+          <span className="text-zinc-400">Tycho</span>
+        </div>
       </div>
       <div className="absolute left-1/2 translate-x-[-50%]">
         {/* 喜欢 */}
@@ -34,6 +37,21 @@ export const Player: FC = () => {
         <IconButton color="secondary" size="large">
           <div className="iconfont icon-random text-zinc-500 text-2xl w-8 h-8" />
         </IconButton>
+      </div>
+      <div className="flex items-center mr-2">
+        <VolumeUp className="text-primary" />
+        {/* <VolumeDown className="text-primary" />
+        <VolumeMute className="text-primary" /> */}
+        <Slider
+          className="w-40 ml-4"
+          aria-label="Volume"
+          size="small"
+          value={volume}
+          valueLabelDisplay="auto"
+          onChange={(_, value) => {
+            setVolume(value as number)
+          }}
+        />
       </div>
     </div>
   )
