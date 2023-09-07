@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { Slider } from './components/slider'
 import { Main } from './components/main'
+import { Player } from './components/player'
 
 export default function Music() {
   const [currentBg, setCurrent] = useState(winterBg1)
@@ -17,9 +18,12 @@ export default function Music() {
           priority
         />
       </div>
-      <div className="w-[1600px] h-[960px] absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]  bg-white/30 drop-shadow-2xl rounded-xl backdrop-blur-xl flex overflow-hidden">
+      <div className="w-[1600px] h-[960px] absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]  drop-shadow-2xl rounded-xl backdrop-blur-md flex overflow-hidden">
         <Slider />
-        <Main />
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <Main />
+          <Player />
+        </div>
       </div>
     </Layout>
   )

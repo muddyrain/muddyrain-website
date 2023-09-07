@@ -51,7 +51,7 @@ export const Slider: FC = () => {
     })
   }, [currentIndex])
   return (
-    <div className="relative w-[240px] border-0 border-r border-zinc-100 border-solid top-0 left-0 h-full p-0">
+    <div className="relative w-[240px] bg-white/60 top-0 left-0 h-full p-0">
       {/* 控制点 */}
       <Stack spacing={1} direction={'row'} className="group absolute top-8 left-8 cursor-pointer">
         <div className="w-4 h-4 flex justify-center items-center bg-red-500 rounded-full">
