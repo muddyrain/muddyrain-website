@@ -1,16 +1,30 @@
 import { testImg } from '@/assets'
 import Image from 'next/image'
-import { FC, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { IconButton, Slider } from '@mui/material'
-
-import { PlaylistPlay, VolumeDown, VolumeMute, VolumeUp } from '@mui/icons-material'
+import {
+  Pause,
+  PlayArrow,
+  PlaylistPlay,
+  VolumeDown,
+  VolumeMute,
+  VolumeUp,
+} from '@mui/icons-material'
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { useMusicStore } from '@/store/useMusicStore'
 import { PlayListToggleTrigger } from '@/constant/triggerIds'
+
 export const Player: FC = () => {
   const [volume, setVolume] = useState(100)
-  const [progress, setProgress] = useState(100)
+  const [progress, setProgress] = useState(0)
+  const [maxProgress, setMaxProgress] = useState(0)
   const [volumeVisible, setVolumeVisible] = useState(false)
+  // const [isPlaying, setIsPlaying] = useState(false)
+  const [playState, setPlayState] = useState<'stopped' | 'paused' | 'playing'>('stopped')
+  const audioContext = useRef<AudioContext | null>(null)
+  const AudioBufferSource = useRef<AudioBufferSourceNode | null>(null)
+  const offsetParam = useRef<AudioParam | null>(null)
+  const requestAnimationFrameId = useRef<number | null>(null)
   const volumeRef = useClickOutside(() => {
     setVolumeVisible(false)
   })
@@ -18,13 +32,85 @@ export const Player: FC = () => {
     state.setShowPlayList,
     state.isShowPlayList,
   ])
+  const loadMusic = () => {
+    // 加载 MP3 文件并解码
+    fetch('/1.mp3')
+      .then(res => res.arrayBuffer())
+      .then(arrayBuffer => {
+        const _audioContext = audioContext.current
+        if (_audioContext) {
+          // 解码二进制数据并播放
+          _audioContext.decodeAudioData(arrayBuffer, function (buffer) {
+            if (!_audioContext) return
+            // 创建 AudioBufferSourceNode 对象
+            const source = _audioContext.createBufferSource()
+            AudioBufferSource.current = source
+            source.buffer = buffer
+            source.connect(_audioContext.destination)
+            setMaxProgress(source.buffer.duration)
+            // 创建时间偏移量参数对象
+            offsetParam.current = source.playbackRate
+          })
+        }
+      })
+  }
+  const listenAudioProgress = () => {
+    requestAnimationFrameId.current = requestAnimationFrame(() => {
+      if (!audioContext.current) return
+      const currentTime = audioContext.current.currentTime
+      setProgress(Math.round(currentTime))
+      listenAudioProgress()
+    })
+  }
+  const stopPlay = () => {
+    if (audioContext.current) {
+      // 暂停播放
+      audioContext.current.suspend()
+      cancelAnimationFrame(requestAnimationFrameId.current!)
+      setPlayState('paused')
+    }
+  }
+  const changePlayState = () => {
+    if (AudioBufferSource.current && audioContext.current) {
+      const source = AudioBufferSource.current
+      const _audioContext = audioContext.current
+      if (playState === 'stopped') {
+        // 监听播放进度
+        const startTime = _audioContext.currentTime
+        source.start(startTime)
+        listenAudioProgress()
+        setPlayState('playing')
+      } else if (playState === 'playing') {
+        // 暂停播放
+        stopPlay()
+      } else if (playState === 'paused') {
+        // 继续播放
+        _audioContext.resume()
+        listenAudioProgress()
+        setPlayState('playing')
+      }
+    }
+  }
+  useEffect(() => {
+    if (!audioContext.current) {
+      audioContext.current = new window.AudioContext()
+    }
+    if (!AudioBufferSource.current) {
+      loadMusic()
+    }
+    return () => {
+      if (audioContext.current) {
+        stopPlay()
+      }
+    }
+  }, [])
   return (
     <div className="h-24 bg-zinc-50/70 flex items-center justify-between p-2 relative">
       <Slider
         className="w-full absolute top-[-12px] left-0"
         aria-label="Volume"
         size="small"
-        max={10000}
+        max={maxProgress}
         value={progress}
         onChange={(_, value) => {
           setProgress(value as number)
@@ -54,9 +140,20 @@ export const Player: FC = () => {
           <div className="iconfont  pr-1 icon-ai-rew-left text-primary text-2xl w-8 h-8" />
         </IconButton>
         {/* 播放 */}
-        <IconButton color="primary" size="large">
-          <div className="w-12 h-12 rounded-full bg-primary border-2 shadow-lg shadow-primary border-white border-solid flex justify-center items-center">
-            <div className="iconfont ml-1 icon-play text-white text-2xl w-8 h-8" />
+        <IconButton
+          color="primary"
+          size="large"
+          onClick={() => {
+            changePlayState()
+          }}
+        >
+          <div className="w-12 h-12 rounded-full bg-primary border-2 shadow-lg shadow-primary text-white border-white border-solid flex justify-center items-center">
+            {/* <div
+              className={`iconfont ml-1 ${
+                playState === 'playing' ? 'icon-pause' : 'icon-play'
+              } text-white text-2xl w-8 h-8`}
+            /> */}
+            {playState === 'playing' ? <Pause /> : <PlayArrow />}
           </div>
         </IconButton>
         {/* 快进 */}
