@@ -1,12 +1,6 @@
 import { testBG, testImg } from '@/assets'
-import {
-  Search,
-  NotificationsNoneOutlined,
-  ArrowRight,
-  PlayArrow,
-  PlayArrowOutlined,
-} from '@mui/icons-material'
-import { TextField, Avatar, IconButton, Button, Divider } from '@mui/material'
+import { PlayArrow, PlayArrowOutlined } from '@mui/icons-material'
+import { Button, Divider } from '@mui/material'
 import Image from 'next/image'
 import { FC } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -30,28 +24,8 @@ export const DiscoverMusic: FC = () => {
   })
   return (
     <>
-      {/* 头部栏 */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <Search className="text-4xl text-zinc-600" />
-          <TextField
-            className="w-[320px] ml-2 border-b-0 select-none"
-            placeholder="Find and listen to your favorite music..."
-            variant="standard"
-            name="search_key"
-          />
-        </div>
-        <div className="flex items-center">
-          <IconButton color="primary" size="large">
-            <NotificationsNoneOutlined className="text-3xl text-zinc-600" />
-          </IconButton>
-          <IconButton className="ml-2" color="primary" size="large">
-            <Avatar>H</Avatar>
-          </IconButton>
-        </div>
-      </div>
       {/* 内容 */}
-      <div className="title mt-10 flex items-center">
+      <div className="title flex items-center">
         <Title title="推荐歌单" />
         {/* 播放按钮 */}
         <div className="rounded-3xl cursor-pointer flex border border-white border-solid shadow-primary/75 shadow-lg items-center ml-8 px-4 py-2 justify-center text-white bg-primary group">
