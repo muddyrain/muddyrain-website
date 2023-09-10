@@ -21,9 +21,7 @@ export const Player: FC = () => {
   const [volumeVisible, setVolumeVisible] = useState(false)
   // const [isPlaying, setIsPlaying] = useState(false)
   const [playState, setPlayState] = useState<'stopped' | 'paused' | 'playing'>('stopped')
-  const audioContext = useRef<AudioContext | null>(null)
-  const AudioBufferSource = useRef<AudioBufferSourceNode | null>(null)
-  const offsetParam = useRef<AudioParam | null>(null)
+  const audioElement = useRef<HTMLAudioElement | null>(null)
   const requestAnimationFrameId = useRef<number | null>(null)
   const volumeRef = useClickOutside(() => {
     setVolumeVisible(false)
@@ -32,74 +30,62 @@ export const Player: FC = () => {
     state.setShowPlayList,
     state.isShowPlayList,
   ])
-  const loadMusic = () => {
-    // 加载 MP3 文件并解码
-    fetch('/1.mp3')
-      .then(res => res.arrayBuffer())
-      .then(arrayBuffer => {
-        const _audioContext = audioContext.current
-        if (_audioContext) {
-          // 解码二进制数据并播放
-          _audioContext.decodeAudioData(arrayBuffer, function (buffer) {
-            if (!_audioContext) return
-            // 创建 AudioBufferSourceNode 对象
-            const source = _audioContext.createBufferSource()
-            AudioBufferSource.current = source
-            source.buffer = buffer
-            source.connect(_audioContext.destination)
-            setMaxProgress(source.buffer.duration)
-            // 创建时间偏移量参数对象
-            offsetParam.current = source.playbackRate
-          })
-        }
-      })
-  }
   const listenAudioProgress = () => {
     requestAnimationFrameId.current = requestAnimationFrame(() => {
-      if (!audioContext.current) return
-      const currentTime = audioContext.current.currentTime
+      if (!audioElement.current) return
+      const currentTime = audioElement.current.currentTime
       setProgress(Math.round(currentTime))
       listenAudioProgress()
     })
   }
   const stopPlay = () => {
-    if (audioContext.current) {
-      // 暂停播放
-      audioContext.current.suspend()
-      cancelAnimationFrame(requestAnimationFrameId.current!)
+    if (audioElement.current) {
+      audioElement.current.pause()
       setPlayState('paused')
+      cancelAnimationFrame(requestAnimationFrameId.current!)
+    }
+  }
+  const startPlay = () => {
+    if (audioElement.current) {
+      const audio = audioElement.current
+      audio.volume = volume / 100
+      audio.src = '/1.mp3'
+      audio.onloadedmetadata = () => {
+        audio.play()
+        setMaxProgress(audio.duration)
+        setPlayState('playing')
+        listenAudioProgress()
+      }
     }
   }
   const changePlayState = () => {
-    if (AudioBufferSource.current && audioContext.current) {
-      const source = AudioBufferSource.current
-      const _audioContext = audioContext.current
+    if (audioElement.current) {
+      const audio = audioElement.current
       if (playState === 'stopped') {
-        // 监听播放进度
-        const startTime = _audioContext.currentTime
-        source.start(startTime)
-        listenAudioProgress()
-        setPlayState('playing')
+        // 开始播放
+        startPlay()
       } else if (playState === 'playing') {
         // 暂停播放
         stopPlay()
       } else if (playState === 'paused') {
         // 继续播放
-        _audioContext.resume()
+        audio.play()
         listenAudioProgress()
         setPlayState('playing')
       }
     }
   }
   useEffect(() => {
-    if (!audioContext.current) {
-      audioContext.current = new window.AudioContext()
+    if (audioElement.current) {
+      audioElement.current.volume = volume / 100
     }
-    if (!AudioBufferSource.current) {
-      loadMusic()
+  }, [volume])
+  useEffect(() => {
+    if (!audioElement.current) {
+      audioElement.current = new window.Audio()
     }
     return () => {
-      if (audioContext.current) {
+      if (audioElement.current) {
         stopPlay()
       }
     }
@@ -113,7 +99,10 @@ export const Player: FC = () => {
         max={maxProgress}
         value={progress}
         onChange={(_, value) => {
-          setProgress(value as number)
+          if (audioElement.current) {
+            audioElement.current.currentTime = value as number
+            setProgress(value as number)
+          }
         }}
       />
       <div className="flex items-center">
@@ -197,7 +186,7 @@ export const Player: FC = () => {
               volumeVisible ? 'h-32' : 'h-0'
             } overflow-hidden duration-300 flex justify-center items-center bg-white rounded-lg left-1/2 translate-x-[-50%] bottom-12`}
           >
-            <div className="p-2 h-full">
+            <div className="py-4 px-2 h-full">
               <Slider
                 className="h-full"
                 aria-label="Volume"
