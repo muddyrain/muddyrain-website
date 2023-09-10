@@ -6,6 +6,7 @@ import { Slider } from './components/slider'
 import { Player } from './components/player'
 import { RouterList } from './router'
 import { Header } from './components/header'
+import { PlayList } from './components/PlayList'
 export default function Music() {
   const [currentBg, setCurrent] = useState(winterBg1)
   const [currentPage, setCurrentPage] = useState('')
@@ -29,9 +30,10 @@ export default function Music() {
               setCurrentPage(url)
             }}
           />
-          <div className="flex-1 p-8 bg-white/40 overflow-hidden flex flex-col relative">
+          <div className="flex-1 p-6 bg-white/40 overflow-hidden flex flex-col relative">
             <Header />
             {CurrentComponent}
+            <PlayList />
           </div>
         </div>
         <Player />

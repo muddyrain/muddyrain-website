@@ -1,11 +1,7 @@
 import { FC, useState } from 'react'
-import {
-  Search,
-  NotificationsNoneOutlined,
-  HighlightOff,
-  NavigateBefore,
-} from '@mui/icons-material'
+import { NotificationsNoneOutlined, NavigateBefore } from '@mui/icons-material'
 import { Avatar, IconButton } from '@mui/material'
+import { Search } from './Search'
 export const Header: FC = () => {
   const [searchValue, setSearchValue] = useState('')
   return (
@@ -17,27 +13,7 @@ export const Header: FC = () => {
             <NavigateBefore className="text-2xl text-zinc-400/60" />
           </IconButton>
           {/* 搜索框 */}
-          <div className="relative flex items-center">
-            <input
-              type="text"
-              placeholder="搜索音乐、歌单、专辑"
-              value={searchValue}
-              onChange={e => setSearchValue(e.target.value)}
-              className="outline-none border w-60 border-solid border-zinc-400/60 text-zinc-500 placeholder:text-zinc-400/80 rounded-md px-8 bg-transparent h-8 text-md"
-            />
-            <Search className="absolute left-2 text-zinc-400/60 text-xl" />
-            {searchValue && (
-              <IconButton
-                className="absolute cursor-pointer  right-1"
-                size="small"
-                onClick={() => {
-                  setSearchValue('')
-                }}
-              >
-                <HighlightOff className="duration-300 text-zinc-400/60 text-xl" />
-              </IconButton>
-            )}
-          </div>
+          <Search inputClassName="w-60" placeholder="搜索音乐、歌单、专辑" />
         </div>
         <div className="flex items-center">
           <IconButton color="primary">
