@@ -1,52 +1,25 @@
 import {
-  Album,
   Close as CloseIcon,
-  Favorite,
-  Group,
   HorizontalRule as HorizontalRuleIcon,
-  MusicNote,
-  MusicVideo,
   OpenInFull as OpenInFullIcon,
-  Radio,
-  Search,
 } from '@mui/icons-material'
 import { Stack } from '@mui/material'
 import { FC, useEffect, useRef, useState } from 'react'
+import { RouterList } from '../router'
+import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
 
-export const Slider: FC = () => {
+export const Slider: FC<{
+  onChange: (url: string) => void
+}> = ({ onChange }) => {
   const menuRef = useRef<HTMLDivElement>(null)
-  const [menus] = useState([
-    {
-      name: '发现音乐',
-      icon: <MusicNote />,
-    },
-    {
-      name: '歌单',
-      icon: <Album />,
-    },
-    {
-      name: '播客',
-      icon: <Radio />,
-    },
-    {
-      name: '视频',
-      icon: <MusicVideo />,
-    },
-    {
-      name: '关注',
-      icon: <Group />,
-    },
-    {
-      name: '我的音乐',
-      icon: <Favorite />,
-    },
-  ])
   const [cloud, setCloud] = useState({
     y: 0,
     height: 0,
   })
   const [currentIndex, setCurrentIndex] = useState(0)
-
+  useEffect(() => {
+    onChange(RouterList[0].url)
+  }, [])
   useEffect(() => {
     if (!menuRef.current) return
     const target = menuRef.current.children[currentIndex] as HTMLDivElement
@@ -71,17 +44,23 @@ export const Slider: FC = () => {
         </div>
       </Stack>
       {/* Menu 导航 */}
-      <div className="flex flex-col mt-32">
+      <div className="flex flex-col h-full pt-32 overflow-hidden">
         <span className="font-bold text-zinc-500 pl-10 tracking-wider text-lg mb-4 select-none">
           菜单
         </span>
-        <div className="relative overflow-x-hidden">
+        <OverlayScrollbarsComponent
+          element="div"
+          defer
+          className="relative"
+          options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
+        >
           <div ref={menuRef}>
-            {menus.map((menu, index) => (
+            {RouterList.map((menu, index) => (
               <div
                 key={index}
                 onClick={e => {
                   setCurrentIndex(index)
+                  onChange(menu.url)
                 }}
                 className={`flex relative duration-300 hover:bg-primary/5 overflow-hidden cursor-pointer items-center py-4 font-bold pl-8 ${
                   index === currentIndex ? 'text-primary bg-primary/5' : 'text-zinc-500'
@@ -92,6 +71,7 @@ export const Slider: FC = () => {
               </div>
             ))}
           </div>
+
           <div
             className="absolute w-4 bg-primary left-[-8px] duration-300 rounded-xl"
             style={{
@@ -99,7 +79,7 @@ export const Slider: FC = () => {
               height: cloud.height,
             }}
           />
-        </div>
+        </OverlayScrollbarsComponent>
       </div>
     </div>
   )
