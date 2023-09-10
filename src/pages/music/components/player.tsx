@@ -137,11 +137,6 @@ export const Player: FC = () => {
           }}
         >
           <div className="w-12 h-12 rounded-full bg-primary border-2 shadow-lg shadow-primary text-white border-white border-solid flex justify-center items-center">
-            {/* <div
-              className={`iconfont ml-1 ${
-                playState === 'playing' ? 'icon-pause' : 'icon-play'
-              } text-white text-2xl w-8 h-8`}
-            /> */}
             {playState === 'playing' ? <Pause /> : <PlayArrow />}
           </div>
         </IconButton>

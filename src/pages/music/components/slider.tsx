@@ -45,7 +45,7 @@ export const Slider: FC<{
       </Stack>
       {/* Menu 导航 */}
       <div className="flex flex-col h-full pt-32 overflow-hidden">
-        <span className="font-bold text-zinc-500 pl-10 tracking-wider text-lg mb-4 select-none">
+        <span className="text-zinc-500 pl-10 tracking-wider text-lg mb-4 font-semibold select-none">
           菜单
         </span>
         <OverlayScrollbarsComponent
@@ -62,7 +62,7 @@ export const Slider: FC<{
                   setCurrentIndex(index)
                   onChange(menu.url)
                 }}
-                className={`flex relative duration-300 hover:bg-primary/5 overflow-hidden cursor-pointer items-center py-4 font-bold pl-8 ${
+                className={`flex relative duration-300 hover:bg-primary/5 overflow-hidden cursor-pointer items-center py-4 pl-8 ${
                   index === currentIndex ? 'text-primary bg-primary/5' : 'text-zinc-500'
                 }`}
               >

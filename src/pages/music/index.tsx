@@ -29,7 +29,7 @@ export default function Music() {
               setCurrentPage(url)
             }}
           />
-          <div className="flex-1 pt-8 px-4 bg-white/40 overflow-hidden flex flex-col relative">
+          <div className="flex-1 p-8 bg-white/40 overflow-hidden flex flex-col relative">
             <Header />
             {CurrentComponent}
           </div>

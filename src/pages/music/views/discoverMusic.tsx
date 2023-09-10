@@ -69,7 +69,7 @@ export const DiscoverMusic: FC = () => {
               <div className={`w-full h-full`}>
                 {Array.from({ length: 20 }).map((item, index) => (
                   <div
-                    className="flex p-2 items-center font-mono text-base text-zinc-600 cursor-pointer hover:bg-white/30 duration-300 rounded-md"
+                    className="flex p-2 items-center text-base text-zinc-600 cursor-pointer hover:bg-white/30 duration-300 rounded-md"
                     key={index}
                   >
                     <Image
@@ -149,7 +149,7 @@ export const DiscoverMusic: FC = () => {
             <div className="w-full h-full">
               {Array.from({ length: 40 }).map((item, index) => (
                 <div
-                  className={`flex py-2 px-4 text-sm items-center font-mono odd:bg-zinc-50/75 even:bg-zinc-100/75 cursor-pointer hover:bg-zinc-200 drop-shadow-lg ${
+                  className={`flex py-2 px-4 text-sm items-center odd:bg-zinc-50/75 even:bg-zinc-100/75 cursor-pointer hover:bg-zinc-200 drop-shadow-lg ${
                     index === 6 && 'text-primary/75'
                   }`}
                   key={index}

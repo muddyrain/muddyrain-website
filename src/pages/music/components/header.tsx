@@ -44,7 +44,7 @@ export const Header: FC = () => {
             <NotificationsNoneOutlined className="text-xl text-zinc-600" />
           </IconButton>
           <IconButton className="ml-2" color="primary" size="small">
-            <Avatar className="w-8 h-8">M</Avatar>
+            <Avatar className="w-8 h-8" />
           </IconButton>
         </div>
       </div>

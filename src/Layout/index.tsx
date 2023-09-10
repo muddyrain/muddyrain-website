@@ -35,7 +35,7 @@ export const Layout: FC<{
   const isShowLogin = useLayoutStore(state => state.isShowLogin)
   return (
     <ThemeProvider theme={theme}>
-      <div className={`layout_container w-full h-full flex flex-col font-mono`}>
+      <div className={`layout_container w-full h-full flex flex-col`}>
         <Header isHome={isHome} />
         <Background />
         <Suspense fallback={<p>Loading feed...</p>}>
