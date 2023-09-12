@@ -6,6 +6,7 @@ import {
   Pause,
   PlayArrow,
   PlaylistPlay,
+  UnfoldMore,
   VolumeDown,
   VolumeMute,
   VolumeUp,
@@ -106,7 +107,16 @@ export const Player: FC = () => {
         }}
       />
       <div className="flex items-center">
-        <Image src={testImg} alt="album" width={75} height={75} />
+        <div className="cursor-pointer w-[75px] h-[75px] rounded-md overflow-hidden relative group">
+          <Image
+            src={testImg}
+            alt="album"
+            className="w-full h-full duration-300 group-hover:blur-sm"
+          />
+          <div className="absolute w-full h-full flex justify-center items-center opacity-0 group-hover:opacity-100 bg-black bg-opacity-100 top-0 group-hover:bg-opacity-30 duration-300 drop-shadow-md left-0 origin-center">
+            <UnfoldMore className="text-white text-4xl" />
+          </div>
+        </div>
         <div className="ml-2 flex flex-col">
           <div className="flex items-center">
             <span className="text-xl text-zinc-800 select-none text-md">Daydream</span>

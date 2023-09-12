@@ -14,7 +14,7 @@ export default function Music() {
     return RouterList.find(item => item.url === currentPage)?.component
   }, [currentPage])
   return (
-    <Layout showBackground={false}>
+    <Layout showBackground={false} showFixedBackground={false}>
       <div className="relative w-full h-full overflow-hidden select-none">
         <Image
           alt="bg"

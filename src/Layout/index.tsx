@@ -5,9 +5,6 @@ import React, { FC, Suspense } from 'react'
 import '@/styles/index.scss'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { Footer } from './footer'
-import { useRouter } from 'next/router'
-import { LAYOUT_SCROLLBAR_CLASSES } from '@/constant/classes'
-import { useLayoutStore } from '@/store/useLayoutStore'
 import './index.scss'
 const theme = createTheme({
   palette: {
@@ -31,13 +28,19 @@ export const Layout: FC<{
   isHome?: boolean
   hiddenFooter?: boolean
   showBackground?: boolean
-}> = ({ children, isHome = false, hiddenFooter = false, showBackground = true }) => {
-  const isShowLogin = useLayoutStore(state => state.isShowLogin)
+  showFixedBackground?: boolean
+}> = ({
+  children,
+  isHome = false,
+  hiddenFooter = false,
+  showBackground = true,
+  showFixedBackground = true,
+}) => {
   return (
     <ThemeProvider theme={theme}>
       <div className={`layout_container w-full h-full flex flex-col`}>
         <Header isHome={isHome} />
-        <Background />
+        {showFixedBackground && <Background />}
         <Suspense fallback={<p>Loading feed...</p>}>
           <div className={`flex-1 flex-shrink-0 relative ${showBackground ? 'bg-zinc-100' : ''}`}>
             {children}

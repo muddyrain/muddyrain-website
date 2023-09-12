@@ -3,7 +3,7 @@ import { FC } from 'react'
 
 export const Background: FC = () => {
   return (
-    <div className="fixed w-screen h-screen blur-[9rem] pointer-events-none select-none">
+    <div className="fixed z-[1] w-screen h-screen blur-[9rem] pointer-events-none select-none">
       <div className="absolute top-[45vh] left-[calc((100vw-1200px)/2-24rem)]">
         <div className="w-[20rem] h-[20rem] bg-[#009FFF] rounded-full translate-y-[12rem]"></div>
       </div>
