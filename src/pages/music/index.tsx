@@ -7,6 +7,7 @@ import { Player } from './components/player'
 import { RouterList } from './router'
 import { Header } from './components/header'
 import { PlayList } from './components/PlayList'
+import { SongDetail } from './components/SongDetail'
 export default function Music() {
   const [currentBg, setCurrent] = useState(winterBg1)
   const [currentPage, setCurrentPage] = useState('')
@@ -24,7 +25,7 @@ export default function Music() {
         />
       </div>
       <div className="w-[1600px] h-[960px] absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]  drop-shadow-2xl rounded-xl backdrop-blur-md flex overflow-hidden flex-col select-none">
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1 overflow-hidden relative">
           <Slider
             onChange={url => {
               setCurrentPage(url)
@@ -35,6 +36,7 @@ export default function Music() {
             {CurrentComponent}
             <PlayList />
           </div>
+          <SongDetail />
         </div>
         <Player />
       </div>

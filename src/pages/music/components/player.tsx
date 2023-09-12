@@ -27,10 +27,14 @@ export const Player: FC = () => {
   const volumeRef = useClickOutside(() => {
     setVolumeVisible(false)
   })
-  const [setShowPlayList, isShowPlayList] = useMusicStore(state => [
-    state.setShowPlayList,
-    state.isShowPlayList,
-  ])
+  const [setShowPlayList, isShowPlayList, isShowSongDetail, setShowSongDetail] = useMusicStore(
+    state => [
+      state.setShowPlayList,
+      state.isShowPlayList,
+      state.isShowSongDetail,
+      state.setShowSongDetail,
+    ]
+  )
   const listenAudioProgress = () => {
     requestAnimationFrameId.current = requestAnimationFrame(() => {
       if (!audioElement.current) return
@@ -107,7 +111,12 @@ export const Player: FC = () => {
         }}
       />
       <div className="flex items-center">
-        <div className="cursor-pointer w-[75px] h-[75px] rounded-md overflow-hidden relative group">
+        <div
+          className="cursor-pointer w-[75px] h-[75px] rounded-md overflow-hidden relative group"
+          onClick={() => {
+            setShowSongDetail(!isShowSongDetail)
+          }}
+        >
           <Image
             src={testImg}
             alt="album"
