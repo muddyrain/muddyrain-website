@@ -1,0 +1,10 @@
+.rect_container {
+  width: 50%;
+  height: 20rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-image: linear-gradient(to right, #dec3ec, #e5add0);
+  -webkit-mask-image: url("./rect.png");
+  -webkit-mask-size: 100% 100%;
+}
