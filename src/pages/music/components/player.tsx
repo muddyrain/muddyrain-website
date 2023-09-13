@@ -20,21 +20,21 @@ export const Player: FC = () => {
   const [progress, setProgress] = useState(0)
   const [maxProgress, setMaxProgress] = useState(0)
   const [volumeVisible, setVolumeVisible] = useState(false)
-  // const [isPlaying, setIsPlaying] = useState(false)
-  const [playState, setPlayState] = useState<'stopped' | 'paused' | 'playing'>('stopped')
   const audioElement = useRef<HTMLAudioElement | null>(null)
   const requestAnimationFrameId = useRef<number | null>(null)
   const volumeRef = useClickOutside(() => {
     setVolumeVisible(false)
   })
-  const [setShowPlayList, isShowPlayList, isShowSongDetail, setShowSongDetail] = useMusicStore(
-    state => [
-      state.setShowPlayList,
-      state.isShowPlayList,
-      state.isShowSongDetail,
-      state.setShowSongDetail,
-    ]
-  )
+  const {
+    setShowPlayList,
+    isShowPlayList,
+    isShowSongDetail,
+    setShowSongDetail,
+    playState,
+    setPlayState,
+  } = useMusicStore(state => ({
+    ...state,
+  }))
   const listenAudioProgress = () => {
     requestAnimationFrameId.current = requestAnimationFrame(() => {
       if (!audioElement.current) return
