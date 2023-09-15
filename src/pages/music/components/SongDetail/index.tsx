@@ -4,13 +4,15 @@ import { Background } from './background'
 import styles from './index.module.scss'
 import { KeyboardArrowDown, KeyboardArrowUp, Pause, PlayArrow } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
+import Image from 'next/image'
+import { testImg } from '@/assets'
 export const SongDetail: FC = () => {
   const { isShowSongDetail, playState, setPlayState } = useMusicStore(state => ({
     ...state,
   }))
   return (
     <div
-      className={`absolute z-10 w-full h-full bg-red-200 duration-300 ${
+      className={`absolute overflow-hidden z-10 w-full h-full bg-red-200 duration-300 ${
         isShowSongDetail ? 'top-0' : 'top-[100%]'
       }`}
     >
@@ -19,7 +21,7 @@ export const SongDetail: FC = () => {
       </div>
       <div className="w-full h-full absolute top-0 left-0 z-10">
         <div className={`${styles.rect_container} flex`}>
-          <div className="flex flex-col w-1/2 justify-center items-center ">
+          <div className="flex flex-col w-1/2 justify-center items-center">
             <IconButton>
               <KeyboardArrowUp className="text-2xl" />
             </IconButton>
@@ -34,7 +36,27 @@ export const SongDetail: FC = () => {
               <KeyboardArrowDown className="text-2xl" />
             </IconButton>
           </div>
-          <div className="flex-1 bg-yellow-200"></div>
+        </div>
+        <div className="w-1/4 absolute flex flex-col items-center justify-center h-full left-1/4">
+          <div
+            className={`w-52 h-52 absolute top-[0] translate-y-[-25%] rounded-full p-4 cursor-pointer`}
+          >
+            <Image src={testImg} className="w-full h-full rounded-full opacity-75" alt="ball_img" />
+          </div>
+          <div
+            className={`w-64 h-64 rounded-full p-4 cursor-pointer bg-gradient-to-br from-pink-400 to-purple-300 ${styles.ball_container}`}
+          >
+            <Image
+              src={testImg}
+              className="w-full h-full rounded-full opacity-75 hover:animate-spin"
+              alt="ball_img"
+            />
+          </div>
+          <div
+            className={`w-52 h-52 absolute top-[100%] translate-y-[-75%] rounded-full p-4 cursor-pointer`}
+          >
+            <Image src={testImg} className="w-full h-full rounded-full opacity-75" alt="ball_img" />
+          </div>
         </div>
       </div>
     </div>

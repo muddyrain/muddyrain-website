@@ -24,7 +24,7 @@ export default function Music() {
           priority
         />
       </div>
-      <div className="w-[1600px] h-[960px] absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]  drop-shadow-2xl rounded-xl backdrop-blur-md flex overflow-hidden flex-col select-none">
+      <div className="w-[1600px] h-[880px] absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]  drop-shadow-2xl rounded-xl backdrop-blur-md flex overflow-hidden flex-col select-none">
         <div className="flex flex-1 overflow-hidden relative">
           <Slider
             onChange={url => {

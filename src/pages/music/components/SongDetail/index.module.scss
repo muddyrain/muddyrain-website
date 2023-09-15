@@ -8,3 +8,7 @@
   -webkit-mask-image: url("./rect.png");
   -webkit-mask-size: 100% 100%;
 }
+
+.ball_container {
+  box-shadow: inset 10px 0px 30px #d19fe8, inset -10px 0px 30px #cea5f1, 0px 0px 10px #cea5f1, 0px 0px 10px #e5add0;
+}
