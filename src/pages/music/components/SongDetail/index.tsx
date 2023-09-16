@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { testImg } from '@/assets'
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
+import { Lyrics } from './lyrics'
 
 export const SongDetail: FC = () => {
   const [currentIndex, setCurrentIndex] = useState(1)
@@ -27,8 +28,9 @@ export const SongDetail: FC = () => {
       <div className="w-full h-full absolute top-0 left-0 bg-white/50 drop-shadow-lg">
         <Background />
       </div>
-      <div className="w-full h-full absolute top-0 left-0 z-10">
+      <div className="w-full h-full absolute top-0 left-0 z-10 flex justify-between">
         <div className={`${styles.rect_container} flex`}>
+          {/* 操作按钮 */}
           <div className="flex flex-col w-1/2 justify-center items-center">
             <IconButton
               onClick={() => {
@@ -61,7 +63,8 @@ export const SongDetail: FC = () => {
             </IconButton>
           </div>
         </div>
-        <div className="w-1/4 group absolute flex flex-col items-center justify-center h-full left-1/4">
+        {/* 唱片专辑 */}
+        <div className="w-1/4 group relative flex flex-col items-center justify-center h-full left-1/4">
           <Swiper
             ref={swiperRef}
             className="w-full mx-auto"
@@ -104,6 +107,10 @@ export const SongDetail: FC = () => {
               )
             })}
           </Swiper>
+        </div>
+        {/* 歌词 */}
+        <div className="w-1/2">
+          <Lyrics />
         </div>
       </div>
     </div>
