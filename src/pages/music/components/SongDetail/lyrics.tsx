@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material'
-import { FC, useEffect, useState } from 'react'
+import { FC, memo, useEffect, useState } from 'react'
 import { parse } from 'clrc'
 type LyricsType = {
   key?: string
@@ -10,7 +10,7 @@ type LyricsType = {
   startMillisecond?: number
   value?: string
 }[]
-export const Lyrics: FC = () => {
+export const Lyrics: FC = memo(() => {
   const [lyrics, setLyrics] = useState<LyricsType>()
   useEffect(() => {
     fetch('/1.lrc')
@@ -21,18 +21,13 @@ export const Lyrics: FC = () => {
       })
   }, [])
   return (
-    <div className="w-full h-full p-[7.5%]">
+    <div className="w-full h-full">
       <Stack spacing={2} className="flex flex-col h-full">
-        <h1 className="text-zinc-600">Young And Beautiful</h1>
-        <Stack className="text-sm text-zinc-400" direction={'row'} spacing={1}>
-          <div>歌手: Lana Del Rey</div>
-          <div>专辑: YoungAnd Beautiful</div>
-        </Stack>
-        <Stack spacing={1} className="flex-1">
+        <Stack spacing={1} className="flex-1 overflow-auto">
           {lyrics?.map((item, index) => {
             if (item?.content) {
               return (
-                <div key={item.key} className="text-center">
+                <div key={index} className="text-center">
                   {item?.content}
                 </div>
               )
@@ -42,4 +37,4 @@ export const Lyrics: FC = () => {
       </Stack>
     </div>
   )
-}
+})

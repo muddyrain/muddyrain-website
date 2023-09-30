@@ -1,14 +1,13 @@
 import { useMusicStore } from '@/store/useMusicStore'
 import { FC, useRef, useState } from 'react'
 import { Background } from './background'
-import styles from './index.module.scss'
-import { KeyboardArrowDown, KeyboardArrowUp, Pause, PlayArrow } from '@mui/icons-material'
-import { IconButton } from '@mui/material'
+import { Stack } from '@mui/material'
 import Image from 'next/image'
-import { testImg } from '@/assets'
+import { CD_TEST, CD_BG } from '../../assets'
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import { Lyrics } from './lyrics'
+import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
 
 export const SongDetail: FC = () => {
   const [currentIndex, setCurrentIndex] = useState(1)
@@ -21,97 +20,69 @@ export const SongDetail: FC = () => {
   }
   return (
     <div
-      className={`absolute overflow-hidden z-10 w-full h-full bg-red-200 duration-300 ${
+      className={`absolute overflow-hidden z-10 w-full h-full bg-indigo-200 duration-300 ${
         isShowSongDetail ? 'top-0' : 'top-[100%]'
       }`}
     >
       <div className="w-full h-full absolute top-0 left-0 bg-white/50 drop-shadow-lg">
         <Background />
       </div>
-      <div className="w-full h-full absolute top-0 left-0 z-10 flex justify-between">
-        <div className={`${styles.rect_container} flex`}>
-          {/* 操作按钮 */}
-          <div className="flex flex-col w-1/2 justify-center items-center">
-            <IconButton
-              onClick={() => {
-                if (currentIndex > 0) {
-                  swiperRef.current?.swiper.slideTo(currentIndex - 1)
-                }
-              }}
-            >
-              <KeyboardArrowUp className="text-[64px]" />
-            </IconButton>
-            <IconButton color="primary">
-              <div className="w-24 h-24 bg-white/30 bg-opacity-50 p-[10px] rounded-full cursor-pointer">
-                <div className="w-full h-full rounded-full bg-white flex justify-center items-center">
-                  {playState === 'playing' ? (
-                    <Pause className="text-4xl" />
-                  ) : (
-                    <PlayArrow className="text-4xl" />
-                  )}
+      <div className="w-full h-full absolute top-0 p-8 left-0 z-10">
+        <OverlayScrollbarsComponent
+          element="div"
+          defer
+          className="w-full h-full"
+          options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
+        >
+          <Stack direction={'row'} className="h-8 " alignItems={'center'} spacing={2}>
+            <h1 className="text-zinc-600 cursor-pointer hover:text-zinc-400 duration-300">
+              Young And Beautiful
+            </h1>
+            <div className="border hover:bg-red-200 duration-300 cursor-pointer border-solid flex items-center justify-center h-6 rounded-md px-2 border-red-500">
+              <span className="text-sm text-red-500">MV</span>
+            </div>
+          </Stack>
+          <Stack className="text-sm mt-4 mb-8 " direction={'row'} spacing={1}>
+            <Stack spacing={1} direction={'row'}>
+              <span className="text-zinc-400">歌手:</span>
+              <span className="text-zinc-600 cursor-pointer hover:text-zinc-400 duration-300">
+                Lana Del Rey
+              </span>
+            </Stack>
+            <Stack spacing={1} direction={'row'}>
+              <span className="text-zinc-400">专辑:</span>
+              <span className="text-zinc-600 cursor-pointer hover:text-zinc-400 duration-300">
+                YoungAnd Beautiful
+              </span>
+            </Stack>
+          </Stack>
+          <div className="w-full h-[480px] flex">
+            <div className="w-1/2 relative">
+              <Image
+                className="h-full w-[480px] rounded-sm object-contain absolute left-0 z-10"
+                alt="cd"
+                src={CD_TEST}
+              />
+              <div className="absolute left-[240px] top-[10px] h-full">
+                <Image
+                  src={CD_BG}
+                  className="w-[460px] h-[460px] animate-spin absolute"
+                  alt="cd-bg"
+                />
+                <div className="w-36 overflow-hidden h-36 left-1/2 rounded-full top-1/2 translate-x-[-50%] translate-y-[-50%] bg-blue-200 absolute z-1">
+                  <Image
+                    className="h-full w-full rounded-sm object-contain absolute left-0 z-10"
+                    alt="cd"
+                    src={CD_TEST}
+                  />
                 </div>
               </div>
-            </IconButton>
-            <IconButton
-              onClick={() => {
-                if (currentIndex < 10) {
-                  swiperRef.current?.swiper.slideTo(currentIndex + 1)
-                }
-              }}
-            >
-              <KeyboardArrowDown className="text-[64px]" />
-            </IconButton>
+            </div>
+            <div className="w-1/2">
+              <Lyrics />
+            </div>
           </div>
-        </div>
-        {/* 唱片专辑 */}
-        <div className="w-1/4 group relative flex flex-col items-center justify-center h-full left-1/4">
-          <Swiper
-            ref={swiperRef}
-            className="w-full mx-auto"
-            slidesPerView={3}
-            initialSlide={currentIndex}
-            centeredSlides={true}
-            direction={'vertical'}
-            onSlideChange={e => {
-              setCurrentIndex(e.activeIndex)
-            }}
-          >
-            {Array.from({ length: 10 }).map((item, index) => {
-              return (
-                <SwiperSlide
-                  className="h-1/3 flex justify-center items-center"
-                  key={index}
-                  virtualIndex={index}
-                >
-                  {({ isActive, isNext, isPrev }) => (
-                    <div className="w-full h-full flex justify-center items-center">
-                      <div
-                        onClick={() => handleClick(index)}
-                        className={`mx-auto rounded-full  cursor-pointer duration-300 ${
-                          isActive ? styles.ball_container : null
-                        } ${
-                          isActive
-                            ? 'w-64 h-64 opacity-100 bg-gradient-to-br p-4 from-pink-400 to-purple-300'
-                            : 'w-40 h-40 opacity-50 bg-gradient-to-br p-1 from-pink-400 to-purple-300'
-                        } ${isNext ? 'translate-y-8' : ''} ${isPrev ? '-translate-y-8' : ''}`}
-                      >
-                        <Image
-                          src={testImg}
-                          className="w-full h-full rounded-full opacity-75"
-                          alt="ball_img"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </SwiperSlide>
-              )
-            })}
-          </Swiper>
-        </div>
-        {/* 歌词 */}
-        <div className="w-1/2">
-          <Lyrics />
-        </div>
+        </OverlayScrollbarsComponent>
       </div>
     </div>
   )
