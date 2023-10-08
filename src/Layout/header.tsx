@@ -38,11 +38,11 @@ const naves = [
   {
     label: '图画',
     href: '/picture',
-    number: 1,
   },
   {
     label: '聊天',
     href: '/chat',
+    number: 1,
   },
 ]
 export const Header: FC<{
