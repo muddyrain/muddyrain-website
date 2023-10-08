@@ -4,9 +4,8 @@ import Image from 'next/image'
 import { FC } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
-import 'overlayscrollbars/overlayscrollbars.css'
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
 import { Title } from '../components/Title'
+import { ScrollView } from '@/components'
 export const DiscoverMusic: FC = () => {
   return (
     <>
@@ -47,11 +46,7 @@ export const DiscoverMusic: FC = () => {
         <div className="w-3/5 flex flex-col">
           <Title title="推荐歌曲" />
           <div className="flex-1 mt-2 flex flex-col overflow-hidden">
-            <OverlayScrollbarsComponent
-              element="div"
-              defer
-              options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
-            >
+            <ScrollView>
               <div className={`w-full h-full`}>
                 {Array.from({ length: 20 }).map((item, index) => (
                   <div
@@ -72,17 +67,13 @@ export const DiscoverMusic: FC = () => {
                   </div>
                 ))}
               </div>
-            </OverlayScrollbarsComponent>
+            </ScrollView>
           </div>
         </div>
         <div className="w-2/5 flex flex-col">
           <Title title="推荐MV" />
           <div className="flex-1 mt-2 flex flex-col overflow-hidden">
-            <OverlayScrollbarsComponent
-              element="div"
-              defer
-              options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
-            >
+            <ScrollView>
               <div className="w-full h-full flex flex-wrap pr-2">
                 {Array.from({ length: 20 }).map((item, index) => (
                   <div className="flex flex-col w-[48%] mx-[1%] pb-2" key={index}>
@@ -107,7 +98,7 @@ export const DiscoverMusic: FC = () => {
                   </div>
                 ))}
               </div>
-            </OverlayScrollbarsComponent>
+            </ScrollView>
           </div>
         </div>
       </div>

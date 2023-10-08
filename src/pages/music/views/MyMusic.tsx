@@ -4,7 +4,7 @@ import { Avatar, Button, IconButton, Stack } from '@mui/material'
 import Image from 'next/image'
 import { FC, useEffect, useState } from 'react'
 import { Search } from '../components/Search'
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
+import { ScrollView } from '@/components'
 
 export const MyMusic: FC = () => {
   const [searchIsFocus, setSearchIsFocus] = useState(false)
@@ -87,12 +87,7 @@ export const MyMusic: FC = () => {
             </div>
           </Stack>
           <div className="flex-1 flex-col flex overflow-hidden">
-            <OverlayScrollbarsComponent
-              element="div"
-              defer
-              className="relative"
-              options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
-            >
+            <ScrollView>
               <div className="w-full h-full">
                 {Array.from({ length: 100 }).map((_, index) => (
                   <Stack
@@ -126,7 +121,7 @@ export const MyMusic: FC = () => {
                   </Stack>
                 ))}
               </div>
-            </OverlayScrollbarsComponent>
+            </ScrollView>
           </div>
         </div>
       </div>

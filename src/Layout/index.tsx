@@ -42,7 +42,11 @@ export const Layout: FC<{
         <Header isHome={isHome} />
         {showFixedBackground && <Background />}
         <Suspense fallback={<p>Loading feed...</p>}>
-          <div className={`flex-1 flex-shrink-0 relative ${showBackground ? 'bg-zinc-100' : ''}`}>
+          <div
+            className={`flex-1 flex-shrink-0 relative flex flex-col ${
+              showBackground ? 'bg-zinc-100' : ''
+            }`}
+          >
             {children}
           </div>
         </Suspense>

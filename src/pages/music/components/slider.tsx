@@ -6,7 +6,7 @@ import {
 import { Stack } from '@mui/material'
 import { FC, useEffect, useRef, useState } from 'react'
 import { RouterList } from '../router'
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
+import { ScrollView } from '@/components'
 
 export const Slider: FC<{
   onChange: (url: string) => void
@@ -48,12 +48,7 @@ export const Slider: FC<{
         <span className="text-zinc-500 pl-10 tracking-wider text-lg mb-4 font-semibold select-none">
           菜单
         </span>
-        <OverlayScrollbarsComponent
-          element="div"
-          defer
-          className="relative"
-          options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
-        >
+        <ScrollView>
           <div ref={menuRef}>
             {RouterList.map((menu, index) => (
               <div
@@ -79,7 +74,7 @@ export const Slider: FC<{
               height: cloud.height,
             }}
           />
-        </OverlayScrollbarsComponent>
+        </ScrollView>
       </div>
     </div>
   )

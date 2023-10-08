@@ -39,8 +39,8 @@ const naves = [
     href: '/picture',
   },
   {
-    label: '留言板',
-    href: '/message',
+    label: '聊天',
+    href: '/chat',
   },
 ]
 export const Header: FC<{

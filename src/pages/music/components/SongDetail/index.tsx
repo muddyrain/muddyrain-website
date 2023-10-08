@@ -7,7 +7,7 @@ import { CD_TEST, CD_BG } from '../../assets'
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import { Lyrics } from './lyrics'
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
+import { ScrollView } from '@/components'
 
 export const SongDetail: FC = () => {
   const [currentIndex, setCurrentIndex] = useState(1)
@@ -27,13 +27,8 @@ export const SongDetail: FC = () => {
       <div className="w-full h-full absolute top-0 left-0 bg-white/50 drop-shadow-lg">
         <Background />
       </div>
-      <div className="w-full h-full absolute top-0 p-8 left-0 z-10">
-        <OverlayScrollbarsComponent
-          element="div"
-          defer
-          className="w-full h-full"
-          options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
-        >
+      <div className="w-full h-full flex flex-col absolute top-0 p-8 left-0 z-10">
+        <ScrollView>
           <Stack direction={'row'} className="h-8 " alignItems={'center'} spacing={2}>
             <h1 className="text-zinc-600 cursor-pointer hover:text-zinc-400 duration-300">
               Young And Beautiful
@@ -82,7 +77,7 @@ export const SongDetail: FC = () => {
               <Lyrics />
             </div>
           </div>
-        </OverlayScrollbarsComponent>
+        </ScrollView>
       </div>
     </div>
   )

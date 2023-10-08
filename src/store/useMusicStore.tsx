@@ -22,7 +22,7 @@ interface StoreProps {
 export const useMusicStore = create<StoreProps>(set => ({
   isShowPlayList: false,
   setShowPlayList: isShow => set({ isShowPlayList: isShow }),
-  isShowSongDetail: true,
+  isShowSongDetail: false,
   setShowSongDetail: isShow => set({ isShowSongDetail: isShow }),
   playState: 'stopped',
   setPlayState: state => set({ playState: state }),

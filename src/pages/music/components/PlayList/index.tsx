@@ -4,8 +4,8 @@ import { useMusicStore } from '@/store/useMusicStore'
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { DATA_TRIGGER_KEY, PlayListToggleTrigger } from '@/constant/triggerIds'
 import { Title } from '../Title'
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
 import { PlayArrow } from '@mui/icons-material'
+import { ScrollView } from '@/components'
 
 export const PlayList: FC = () => {
   const [setShowPlayList, isShowPlayList] = useMusicStore(state => [
@@ -35,11 +35,7 @@ export const PlayList: FC = () => {
         </div>
         <Divider />
         <div className="flex-1 flex flex-col overflow-hidden relative">
-          <OverlayScrollbarsComponent
-            element="div"
-            defer
-            options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
-          >
+          <ScrollView>
             <div className="w-full h-full">
               {Array.from({ length: 40 }).map((item, index) => (
                 <div
@@ -55,7 +51,7 @@ export const PlayList: FC = () => {
                 </div>
               ))}
             </div>
-          </OverlayScrollbarsComponent>
+          </ScrollView>
         </div>
       </div>
     </>
