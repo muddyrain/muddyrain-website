@@ -10,6 +10,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Badge,
 } from '@mui/material'
 import { Add, EditNote } from '@mui/icons-material'
 import { useRouter } from 'next/router'
@@ -37,6 +38,7 @@ const naves = [
   {
     label: '图画',
     href: '/picture',
+    number: 1,
   },
   {
     label: '聊天',
@@ -59,15 +61,16 @@ export const Header: FC<{
       <Stack className="flex-1 mx-40 justify-center" direction="row" spacing={2}>
         {naves.map((nav, index) => {
           return (
-            <Button
-              key={index}
-              color={router?.route === nav.href ? 'primary' : 'inherit'}
-              onClick={() => {
-                location.pathname = nav.href
-              }}
-            >
-              {nav.label}
-            </Button>
+            <Badge badgeContent={nav.number} color="error" key={index}>
+              <Button
+                color={router?.route === nav.href ? 'primary' : 'inherit'}
+                onClick={() => {
+                  location.pathname = nav.href
+                }}
+              >
+                {nav.label}
+              </Button>
+            </Badge>
           )
         })}
       </Stack>

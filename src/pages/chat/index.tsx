@@ -1,9 +1,9 @@
 import { Layout } from '@/Layout'
 import { ScrollView } from '@/components'
 import { useChatStore } from '@/store/useChatStore'
-import { ClearOutlined, Search } from '@mui/icons-material'
+import { ClearOutlined, Search, Settings } from '@mui/icons-material'
 import { Avatar, IconButton } from '@mui/material'
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 
 export default function Page() {
   const [isShow, setIsShow] = useState(false)
@@ -55,8 +55,8 @@ export default function Page() {
               <div className="w-full h-full">
                 {Array.from({ length: 100 }).map((item, index) => (
                   <div
-                    className={`h-20 flex items-center p-3 border-0 border-b border-solid border-zinc-200 last:border-b-0 cursor-pointer duration-300 ${
-                      currentActiveId === index ? 'bg-zinc-100' : 'bg-white'
+                    className={`h-20 flex items-center pr-4 px-3 pl-3 border-0 border-b border-solid border-zinc-200 last:border-b-0 cursor-pointer duration-300 ${
+                      currentActiveId === index ? 'bg-zinc-100 ' : 'bg-white'
                     }`}
                     onClick={() => {
                       setCurrentActiveId(index)
@@ -67,14 +67,10 @@ export default function Page() {
                     <div className="flex-1 overflow-hidden">
                       <div className="flex flex-col w-full h-full">
                         <div className="flex justify-between">
-                          <span className="mr-2">Jennifer Fritz</span>
-                          <span>3:15 PM</span>
+                          <span className="mr-2">琚天雷</span>
+                          <span>3:15</span>
                         </div>
-                        <span className="truncate mt-2">
-                          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Culpa cupiditate
-                          incidunt dicta aliquam inventore placeat iusto pariatur saepe nam,
-                          possimus similique sequi sed odio, quidem omnis nobis eos neque eligendi.
-                        </span>
+                        <span className="truncate mt-2">哈喽，你好吗？</span>
                       </div>
                     </div>
                   </div>
@@ -83,7 +79,32 @@ export default function Page() {
             </ScrollView>
           </div>
         </div>
-        <div className="flex-1 ml-4 bg-white"></div>
+        {/* 主体信息 */}
+        <div className="flex-1 flex flex-col ml-4 bg-white">
+          <div className="h-24 px-8 border-0 border-b border-zinc-200 border-solid flex items-center">
+            {/* 人物信息 */}
+            <div className="flex items-center">
+              <div className="relative w-12 h-12">
+                <Avatar className="w-full h-full" />
+                <div className="w-4 h-4 border-2 border-solid border-white bg-green-400 absolute right-0 top-0 rounded-full" />
+              </div>
+              <div className="flex flex-col ml-2">
+                <div>琚天雷</div>
+                <div className="text-sm">在线</div>
+              </div>
+            </div>
+            {/* 操作 */}
+            <div className="flex-1 flex justify-end">
+              <IconButton>
+                <Settings />
+              </IconButton>
+            </div>
+          </div>
+          <div className="flex-1"></div>
+          <div className="h-36 p-4 border-0 border-t border-zinc-200 border-solid flex items-center">
+            <textarea className="h-full w-full outline-none border-0 text-lg resize-none"></textarea>
+          </div>
+        </div>
       </div>
     </Layout>
   )
