@@ -6,6 +6,7 @@ import '@/styles/index.scss'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { Footer } from './footer'
 import './index.scss'
+import { MessageProvider } from '@/hooks/useMessage'
 const theme = createTheme({
   palette: {
     primary: {
@@ -38,20 +39,22 @@ export const Layout: FC<{
 }) => {
   return (
     <ThemeProvider theme={theme}>
-      <div className={`layout_container w-full h-full flex flex-col`}>
-        <Header isHome={isHome} />
-        {showFixedBackground && <Background />}
-        <Suspense fallback={<p>Loading feed...</p>}>
-          <div
-            className={`flex-1 flex-shrink-0 relative flex flex-col ${
-              showBackground ? 'bg-zinc-100' : ''
-            }`}
-          >
-            {children}
-          </div>
-        </Suspense>
-        {hiddenFooter && <Footer />}
-      </div>
+      <MessageProvider>
+        <div className={`layout_container w-full h-full flex flex-col`}>
+          <Header isHome={isHome} />
+          {showFixedBackground && <Background />}
+          <Suspense fallback={<p>Loading feed...</p>}>
+            <div
+              className={`flex-1 flex-shrink-0 relative flex flex-col ${
+                showBackground ? 'bg-zinc-100' : ''
+              }`}
+            >
+              {children}
+            </div>
+          </Suspense>
+          {hiddenFooter && <Footer />}
+        </div>
+      </MessageProvider>
     </ThemeProvider>
   )
 }
