@@ -12,9 +12,10 @@ import {
   ListItemText,
   Badge,
 } from '@mui/material'
-import { Add, EditNote } from '@mui/icons-material'
+import { AccountCircle, Add, EditNote } from '@mui/icons-material'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { FC, useRef, useState } from 'react'
+import { FC, Suspense, useRef, useState } from 'react'
 import { Login } from '@/components'
 import { useLayoutStore } from '@/store/useLayoutStore'
 
@@ -49,10 +50,11 @@ export const Header: FC<{
   isHome: boolean
 }> = ({ isHome }) => {
   const router = useRouter()
-  const setShowLogin = useLayoutStore(state => state.setShowLogin)
   const isShowLogin = useLayoutStore(state => state.isShowLogin)
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const open = Boolean(anchorEl)
+  const HeaderAction = dynamic(
+    () => import('./components/HeaderAction').then(e => e.HeaderAction),
+    { ssr: false }
+  )
   return (
     <div className="w-full flex items-center bg-white z-20 sticky top-0 py-2 shadow-md justify-between px-4 header_container duration-300">
       {/* Logo */}
@@ -75,54 +77,7 @@ export const Header: FC<{
         })}
       </Stack>
       {/* actions */}
-      <Stack spacing={2} direction="row" alignItems="center">
-        <IconButton
-          color="inherit"
-          onClick={e => {
-            setAnchorEl(e.currentTarget)
-          }}
-        >
-          <Add />
-        </IconButton>
-        <Popover
-          open={open}
-          anchorEl={anchorEl}
-          onClose={() => {
-            setAnchorEl(null)
-          }}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-        >
-          <List className="w-[160px]">
-            <ListItemButton
-              onClick={() => {
-                window.location.href = '/articles/new'
-              }}
-            >
-              <ListItemIcon className="min-w-max mr-2">
-                <EditNote className="text-md" />
-              </ListItemIcon>
-              <ListItemText
-                primaryTypographyProps={{
-                  className: 'text-sm',
-                }}
-                primary="写文章"
-              />
-            </ListItemButton>
-          </List>
-        </Popover>
-        <Chip label="注册" color="primary" onClick={() => {}} variant="outlined" />
-        <Chip
-          label="登录"
-          color="info"
-          onClick={() => {
-            setShowLogin(true)
-          }}
-          variant="outlined"
-        />
-      </Stack>
+      <HeaderAction />
       {isShowLogin && <Login />}
     </div>
   )

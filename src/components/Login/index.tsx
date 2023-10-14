@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from 'react'
 import gsap from 'gsap'
 import { QqOutlined, WechatOutlined } from '@ant-design/icons'
 import { loginApi } from '@/api'
-import { useUserStore } from '@/hooks/userStore'
+import { useUserStore } from '@/store/useUserStore'
 import { useMessage } from '@/hooks/useMessage'
 export const Login: FC = () => {
   const setShowLogin = useLayoutStore(state => state.setShowLogin)

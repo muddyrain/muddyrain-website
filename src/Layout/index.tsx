@@ -1,12 +1,13 @@
 'use client'
 import { Background } from './background'
-import { Header } from './header'
 import React, { FC, Suspense } from 'react'
 import '@/styles/index.scss'
+import { Header } from './header'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { Footer } from './footer'
 import './index.scss'
 import { MessageProvider } from '@/hooks/useMessage'
+
 const theme = createTheme({
   palette: {
     primary: {
