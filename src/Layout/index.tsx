@@ -7,6 +7,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { Footer } from './footer'
 import './index.scss'
 import { MessageProvider } from '@/hooks/useMessage'
+import Head from 'next/head'
+import { PROJECT_NAME } from '@/constant'
 
 const theme = createTheme({
   palette: {
@@ -31,16 +33,28 @@ export const Layout: FC<{
   hiddenFooter?: boolean
   showBackground?: boolean
   showFixedBackground?: boolean
+  title?: string
+  description?: string
+  keywords?: string
 }> = ({
   children,
   isHome = false,
   hiddenFooter = false,
   showBackground = true,
   showFixedBackground = true,
+  title = PROJECT_NAME,
+  description = PROJECT_NAME,
+  keywords = PROJECT_NAME,
+  ...props
 }) => {
   return (
     <ThemeProvider theme={theme}>
       <MessageProvider>
+        <Head>
+          <title>{title}</title>
+          <meta name="description" content={description} />
+          <meta name="keywords" content={keywords} />
+        </Head>
         <div className={`layout_container w-full h-full flex flex-col`}>
           <Header isHome={isHome} />
           {showFixedBackground && <Background />}

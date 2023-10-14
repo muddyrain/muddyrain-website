@@ -4,6 +4,7 @@ import { MTabs, TabItem } from '@/components/MTabs'
 import { Female, Male, Place } from '@mui/icons-material'
 import { Avatar, Box, Breadcrumbs, Button, Chip, Stack, Tab, Tabs, Typography } from '@mui/material'
 import { Trends } from './components'
+import { useRouter } from 'next/router'
 
 export default function Page() {
   const tabsList: TabItem[] = [
@@ -13,6 +14,7 @@ export default function Page() {
     { label: '关注', value: 3 },
     { label: '赞', value: 4 },
   ]
+  const router = useRouter()
   return (
     <Layout>
       <Stack className="w-container flex mx-auto mt-8" direction={'row'} spacing={2}>
@@ -54,7 +56,13 @@ export default function Page() {
                   />
                   <Chip icon={<Place />} label="浙江·杭州" variant="outlined" />
                 </Stack>
-                <Button variant="outlined" size="small">
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => {
+                    router.push('/user/settings')
+                  }}
+                >
                   编辑资料
                 </Button>
               </Stack>

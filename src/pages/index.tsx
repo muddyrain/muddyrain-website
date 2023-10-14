@@ -8,14 +8,10 @@ import {
 import {
   Avatar,
   Button,
-  Card,
-  CardContent,
   FormControlLabel,
   Stack,
   Switch,
   Typography,
-  CardMedia,
-  CardActions,
   List,
   ListItem,
   ListItemAvatar,
@@ -24,8 +20,8 @@ import {
 import Image from 'next/image'
 import Carousel from 'react-material-ui-carousel'
 import { Layout } from '@/Layout'
-import { Suspense, useState } from 'react'
-import { Article, Loading } from '@/components'
+import { useState } from 'react'
+import { Article } from '@/components'
 export default function Page() {
   const list = [
     'https://muddyrain-oss.oss-cn-hangzhou.aliyuncs.com/1.jpg',
