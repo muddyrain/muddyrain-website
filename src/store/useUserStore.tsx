@@ -10,6 +10,7 @@ interface State {
     username?: string
     password?: string
     token?: string
+    id?: number | string
     [key: string]: any
   } | null
   setAccountInfo: (accountInfo: State['accountInfo']) => void
@@ -26,7 +27,7 @@ export const useUserStore = create(
     }),
     {
       name: USER_STORE_KEY,
-      storage: createJSONStorage(() => sessionStorage),
+      storage: createJSONStorage(() => localStorage),
     }
   )
 )

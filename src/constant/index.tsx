@@ -1,4 +1,11 @@
 /**
+ * @file 全局常量
+ */
+/**
+ * 项目名称
+ */
+export const PROJECT_NAME = '前端小记'
+/**
  * 掘金主题ID
  */
 export const JUEJIN_MARKDOWN_THEME_ID = 'juejin-markdown-theme'

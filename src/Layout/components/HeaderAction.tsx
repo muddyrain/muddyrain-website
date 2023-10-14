@@ -12,6 +12,7 @@ import {
   Stack,
 } from '@mui/material'
 import { FC, useMemo, useState } from 'react'
+import { useRouter } from 'next/router'
 
 export const HeaderAction: FC<{}> = () => {
   const [AccountEl, setAccountEl] = useState<HTMLButtonElement | null>(null)
@@ -20,6 +21,7 @@ export const HeaderAction: FC<{}> = () => {
     state.accountInfo,
     state.setAccountInfo,
   ])
+  const router = useRouter()
   const setShowLogin = useLayoutStore(state => state.setShowLogin)
   const isLogged = useMemo(() => {
     return !!accountInfo?.token
@@ -48,7 +50,7 @@ export const HeaderAction: FC<{}> = () => {
         <List className="w-[160px]">
           <ListItemButton
             onClick={() => {
-              window.location.href = '/articles/new'
+              router.push('/articles/new')
             }}
           >
             <ListItemIcon className="min-w-max mr-2">
@@ -97,7 +99,11 @@ export const HeaderAction: FC<{}> = () => {
             }}
           >
             <List className="w-[160px]">
-              <ListItemButton>
+              <ListItemButton
+                onClick={() => {
+                  router.push('/user/' + accountInfo?.id)
+                }}
+              >
                 <ListItemIcon className="min-w-max mr-2">
                   <Portrait className="text-md" />
                 </ListItemIcon>

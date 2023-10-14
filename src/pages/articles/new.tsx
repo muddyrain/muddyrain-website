@@ -21,7 +21,7 @@ export default function Page() {
   const [currentCategory, setCurrentCategory] = useState('')
   return (
     <Layout hiddenFooter>
-      <div className="w-wrapper new_container mx-auto my-4 p-4 rounded-lg bg-white">
+      <div className="w-full min-w-[860px] new_container mx-auto my-4 p-4 rounded-lg bg-white">
         <Stack className="mb-2" spacing={1} direction="row">
           <TextField
             error={titleError}
@@ -70,6 +70,7 @@ export default function Page() {
                     {categories.map((item, index) => {
                       return (
                         <Button
+                          key={index}
                           className="mr-2 mb-2"
                           size="small"
                           color={currentCategory === item.label ? 'primary' : 'secondary'}
@@ -136,7 +137,7 @@ export default function Page() {
           onChangeTheme={theme => {
             console.log(theme)
           }}
-        ></Editor>
+        />
       </div>
     </Layout>
   )
