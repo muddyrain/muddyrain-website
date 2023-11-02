@@ -79,14 +79,17 @@ export const HeaderAction: FC<{}> = () => {
         </>
       ) : (
         <>
-          <IconButton
-            color="inherit"
-            onClick={e => {
-              setAccountEl(e.currentTarget)
-            }}
-          >
-            <AccountCircle />
-          </IconButton>
+          <Stack direction={'row'} alignItems={'center'} spacing={1}>
+            <span>{accountInfo?.userName}</span>
+            <IconButton
+              color="inherit"
+              onClick={e => {
+                setAccountEl(e.currentTarget)
+              }}
+            >
+              <AccountCircle />
+            </IconButton>
+          </Stack>
           <Popover
             open={Boolean(AccountEl)}
             anchorEl={AccountEl}

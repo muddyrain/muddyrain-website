@@ -7,7 +7,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 export const USER_STORE_KEY = 'userStore'
 interface State {
   accountInfo: {
-    username?: string
+    userName?: string
     password?: string
     token?: string
     id?: number | string

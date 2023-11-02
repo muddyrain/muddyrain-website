@@ -6,6 +6,6 @@ export const uploadFile = (data: any) => {
   return fetch.post('/utils/upload', formData)
 }
 
-export const loginApi = (data: { username: string; password: string }) => {
+export const loginApi = (data: { userName: string; password: string }) => {
   return fetch.post('/user/login', data)
 }

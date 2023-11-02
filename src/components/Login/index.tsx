@@ -27,7 +27,7 @@ export const Login: FC = () => {
   const [state, setState] = useState({
     scale: 0,
     opacity: 0.5,
-    username: '',
+    userName: '',
     password: '',
   })
   return (
@@ -67,7 +67,7 @@ export const Login: FC = () => {
           onSubmit={e => {
             e.preventDefault()
             loginApi({
-              username: state.username,
+              userName: state.userName,
               password: state.password,
             }).then(res => {
               if (res) {
@@ -88,12 +88,12 @@ export const Login: FC = () => {
           <Stack spacing={3}>
             <TextField
               fullWidth
-              name="username"
-              value={state.username}
+              name="userName"
+              value={state.userName}
               onChange={e => {
                 setState({
                   ...state,
-                  username: e.target.value,
+                  userName: e.target.value,
                 })
               }}
               label="账号"
