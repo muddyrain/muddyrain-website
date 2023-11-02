@@ -1,13 +1,15 @@
 import { Layout } from '@/Layout'
 import { ScrollView } from '@/components'
 import { LAYOUT_SCROLLBAR_CLASSES } from '@/constant/classes'
+import { WebSocketReturnType } from '@/hooks/useWebsocket'
 import { useChatStore } from '@/store/useChatStore'
 import { ClearOutlined, Search, Settings } from '@mui/icons-material'
-import { Avatar, Button, IconButton, Stack } from '@mui/material'
-import { OverlayScrollbarsComponentRef } from 'overlayscrollbars-react'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Avatar, Button, IconButton } from '@mui/material'
+import { useEffect, useRef, useState } from 'react'
+import { Notyf } from 'notyf'
+import 'notyf/notyf.min.css'
 
-export default function Page() {
+export default function Page({ onMessage }: WebSocketReturnType) {
   const [isShow, setIsShow] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [messageValue, setMessageValue] = useState('')
@@ -70,12 +72,13 @@ export default function Page() {
       })
     }
   }, [messageList])
-  useLayoutEffect(() => {
+  useEffect(() => {
     setTimeout(() => {
       setIsShow(true)
       textareaRef.current?.focus()
     }, 250)
   }, [])
+
   return (
     <Layout>
       <div

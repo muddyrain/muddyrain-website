@@ -16,7 +16,7 @@ export default function Music() {
   }, [currentPage])
   return (
     <Layout showBackground={false} showFixedBackground={false}>
-      <div className="relative w-full h-full overflow-hidden select-none">
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden select-none">
         <Image
           alt="bg"
           className="absolute top-[-60px] left-0 w-screen h-screen"
@@ -24,21 +24,23 @@ export default function Music() {
           priority
         />
       </div>
-      <div className="w-[1600px] h-[880px] absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]  drop-shadow-2xl rounded-xl backdrop-blur-md flex overflow-hidden flex-col select-none">
-        <div className="flex flex-1 overflow-hidden relative">
-          <Slider
-            onChange={url => {
-              setCurrentPage(url)
-            }}
-          />
-          <div className="flex-1 p-6 bg-white/40 overflow-hidden flex flex-col relative">
-            <Header />
-            {CurrentComponent}
-            <PlayList />
+      <div className="w-full h-full relative">
+        <div className="w-[1600px] h-[880px] absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]  drop-shadow-2xl rounded-xl backdrop-blur-md flex overflow-hidden flex-col select-none">
+          <div className="flex flex-1 overflow-hidden relative">
+            <Slider
+              onChange={url => {
+                setCurrentPage(url)
+              }}
+            />
+            <div className="flex-1 p-6 bg-white/40 overflow-hidden flex flex-col relative">
+              <Header />
+              {CurrentComponent}
+              <PlayList />
+            </div>
+            <SongDetail />
           </div>
-          <SongDetail />
+          <Player />
         </div>
-        <Player />
       </div>
     </Layout>
   )

@@ -1,6 +1,6 @@
 'use client'
 import { Background } from './background'
-import React, { FC, Suspense } from 'react'
+import React, { FC, Suspense, startTransition, useEffect } from 'react'
 import '@/styles/index.scss'
 import { Header } from './header'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
@@ -58,7 +58,7 @@ export const Layout: FC<{
         <div className={`layout_container w-full h-full flex flex-col`}>
           <Header isHome={isHome} />
           {showFixedBackground && <Background />}
-          <Suspense fallback={<p>Loading feed...</p>}>
+          <Suspense fallback={<div className="relative">Loading feed...</div>}>
             <div
               className={`flex-1 flex-shrink-0 relative flex flex-col ${
                 showBackground ? 'bg-zinc-100' : ''

@@ -15,3 +15,8 @@ export const JUEJIN_MARKDOWN_THEME_ID = 'juejin-markdown-theme'
  */
 
 export const REQUEST_URL = process.env['NEXT_PUBLIC_BASE_URL'] as string
+/**
+ * socket请求地址
+ */
+
+export const SOCKET_URL = process.env['NEXT_PUBLIC_SOCKET_URL'] as string
