@@ -18,7 +18,7 @@ interface State {
 export const useUserStore = create(
   persist<State>(
     set => ({
-      accountInfo: {},
+      accountInfo: null,
       setAccountInfo: accountInfo => {
         set({
           accountInfo,

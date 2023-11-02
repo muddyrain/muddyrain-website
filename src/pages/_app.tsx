@@ -5,10 +5,15 @@ import type { AppProps } from 'next/app'
 import { startTransition, useEffect, useRef, useState, useTransition } from 'react'
 function MyApp({ Component, pageProps }: AppProps) {
   const [accountInfo] = useUserStore(state => [state.accountInfo])
-  const socketRes = useWebSocket(SOCKET_URL + `?token=${accountInfo?.token}`, {
+  const socketInstance = useWebSocket(SOCKET_URL + `?token=${accountInfo?.token}`, {
     isConnect: !!accountInfo?.token,
   })
-  return <Component {...pageProps} {...socketRes} />
+  useEffect(() => {
+    if (!accountInfo?.token) {
+      socketInstance?.socket?.close()
+    }
+  }, [accountInfo])
+  return <Component {...pageProps} {...socketInstance} />
 }
 
 export default MyApp
