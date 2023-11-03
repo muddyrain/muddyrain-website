@@ -1,0 +1,23 @@
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #1c1c1c;
+      }
+
+      .cls-2 {
+        fill: #6060e0;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M25,5a2,2,0,0,1,2,2V25a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V7A2,2,0,0,1,7,5H25m0-2H7A4,4,0,0,0,3,7V25a4,4,0,0,0,4,4H25a4,4,0,0,0,4-4V7A4,4,0,0,0,25,3Z"/>
+  <path class="cls-2" d="M24,26H8a2,2,0,0,1-2-2V8A2,2,0,0,1,8,6H24a2,2,0,0,1,2,2V24A2,2,0,0,1,24,26Z"/>
+  <path class="cls-1" d="M24,8V24H8V8H24m0-2H8A2,2,0,0,0,6,8V24a2,2,0,0,0,2,2H24a2,2,0,0,0,2-2V8A2,2,0,0,0,24,6Z"/>
+  <path class="cls-1" d="M8,15H25v2H8Z"/>
+  <path class="cls-1" d="M15,7h2V24H15Z"/>
+  <path class="cls-3" d="M9,10a1,1,0,1,0,1-1A1,1,0,0,0,9,10Z"/>
+</svg>

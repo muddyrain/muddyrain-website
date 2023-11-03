@@ -65,6 +65,7 @@
     "nprogress": "^0.2.0",
     "overlayscrollbars": "^2.3.0",
     "overlayscrollbars-react": "^0.5.2",
+    "pexels": "^1.4.0",
     "plugin-gfm": "link:@types/@bytemd/plugin-gfm",
     "react-markdown": "^8.0.7",
     "react-material-ui-carousel": "^3.4.2",
