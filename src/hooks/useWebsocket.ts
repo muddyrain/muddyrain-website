@@ -1,9 +1,10 @@
+import { MessageType } from '@/pages/chat/types'
 import { useEffect, useRef, useState } from 'react'
 
 export interface WebSocketReturnType {
   socket: WebSocket | null
-  sendMessage: (message: any) => void
-  onMessage: (callback: (message: string) => void) => void
+  sendMessage: (message: MessageType) => void
+  onMessage: (callback: (message: MessageType) => void) => void
   onClose: (callback: () => void) => void
   onOpen: (callback: () => void) => void
 }
@@ -37,9 +38,9 @@ const useWebSocket = (
     }
   }, [url, isConnect])
 
-  const sendMessage = (message: any) => {
+  const sendMessage = (message: MessageType) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(message)
+      socket.send(JSON.stringify(message))
     } else {
       console.log('WebSocket not connected')
     }
@@ -61,11 +62,11 @@ const useWebSocket = (
       }
     }
   }
-  const onMessage = (callback: (message: string) => void) => {
+  const onMessage = (callback: (message: MessageType) => void) => {
     if (socket) {
       socket.onmessage = event => {
         const message: string = event.data
-        callback(message)
+        callback(JSON.parse(message || '{}'))
       }
     }
   }

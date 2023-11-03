@@ -5,11 +5,14 @@ import { WebSocketReturnType } from '@/hooks/useWebsocket'
 import { useChatStore } from '@/store/useChatStore'
 import { ClearOutlined, Search, Settings } from '@mui/icons-material'
 import { Avatar, Button, IconButton } from '@mui/material'
-import { useEffect, useRef, useState } from 'react'
+import { startTransition, useEffect, useRef, useState } from 'react'
 import { Notyf } from 'notyf'
 import 'notyf/notyf.min.css'
+import { ChatType } from './types'
+import { formateTime } from '@/utils'
+import { useUserStore } from '@/store/useUserStore'
 
-export default function Page({ onMessage }: WebSocketReturnType) {
+export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
   const [isShow, setIsShow] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [messageValue, setMessageValue] = useState('')
@@ -45,12 +48,21 @@ export default function Page({ onMessage }: WebSocketReturnType) {
       time: '13:13',
     },
   ])
+  const accountInfo = useUserStore(state => state.accountInfo)
   const handleSendMessage = () => {
     if (!messageValue) {
       return
     }
     setMessageValue('')
     textareaRef.current?.focus()
+    sendMessage({
+      type: 'chat',
+      payload: {
+        content: messageValue,
+        receiver_id: '786cb3e8-b18d-4544-96c5-b4159d9296e6',
+        sender_id: accountInfo?.id,
+      },
+    })
     setMessageList(prev => {
       return [
         ...prev,
@@ -78,6 +90,27 @@ export default function Page({ onMessage }: WebSocketReturnType) {
       textareaRef.current?.focus()
     }, 250)
   }, [])
+
+  startTransition(() => {
+    if (onMessage) {
+      onMessage(data => {
+        const payload = data.payload as ChatType
+        if (payload.receiver_id) {
+          setMessageList(prev => {
+            return [
+              ...prev,
+              {
+                content: payload.content,
+                isOwn: false,
+                id: prev.length + 1,
+                time: formateTime(payload.formatted_create_time, 'HH:mm'),
+              },
+            ]
+          })
+        }
+      })
+    }
+  })
 
   return (
     <Layout>
@@ -195,7 +228,7 @@ export default function Page({ onMessage }: WebSocketReturnType) {
                           } border-[10px]  border-solid border-t-transparent border-b-transparent `}
                         />
                       </div>
-                      <span>3:21</span>
+                      <span>{item.time}</span>
                     </div>
                   </div>
                 )
