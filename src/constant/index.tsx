@@ -4,7 +4,7 @@
 /**
  * 项目名称
  */
-export const PROJECT_NAME = '前端小记'
+export const PROJECT_NAME = '前端视窗'
 /**
  * 掘金主题ID
  */

@@ -5,13 +5,18 @@ import { WebSocketReturnType } from '@/hooks/useWebsocket'
 import { useChatStore } from '@/store/useChatStore'
 import { ClearOutlined, Search, Settings } from '@mui/icons-material'
 import { Avatar, Button, IconButton } from '@mui/material'
-import { startTransition, useEffect, useRef, useState } from 'react'
-import { Notyf } from 'notyf'
-import 'notyf/notyf.min.css'
-import { ChatType } from './types'
+import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
 import { formateTime } from '@/utils'
 import { useUserStore } from '@/store/useUserStore'
+import { getUsersListApi } from '@/api'
+import { ChatType, UserType } from '@/types'
 
+interface CurrentMessageType {
+  time: string
+  isOwn: boolean
+  id: number
+  content: string
+}
 export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
   const [isShow, setIsShow] = useState(false)
   const [searchValue, setSearchValue] = useState('')
@@ -22,32 +27,8 @@ export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
     state.currentActiveId,
     state.setCurrentActiveId,
   ])
-  const [messageList, setMessageList] = useState([
-    {
-      content: '你好',
-      isOwn: true,
-      id: 1,
-      time: '13:10',
-    },
-    {
-      content: '我是机器人小A，有什么可以帮您的吗？',
-      isOwn: false,
-      id: 2,
-      time: '13:11',
-    },
-    {
-      content: '请问你会做 UI 设计吗？',
-      isOwn: true,
-      id: 3,
-      time: '13:12',
-    },
-    {
-      content: '会的，您需要什么样式的气泡框？',
-      isOwn: false,
-      id: 4,
-      time: '13:13',
-    },
-  ])
+  const [messageList, setMessageList] = useState<CurrentMessageType[]>([])
+  const [userList, setUserList] = useState<UserType[]>([])
   const accountInfo = useUserStore(state => state.accountInfo)
   const handleSendMessage = () => {
     if (!messageValue) {
@@ -59,7 +40,7 @@ export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
       type: 'chat',
       payload: {
         content: messageValue,
-        receiver_id: '786cb3e8-b18d-4544-96c5-b4159d9296e6',
+        receiver_id: currentActiveUser?.id,
         sender_id: accountInfo?.id,
       },
     })
@@ -68,13 +49,19 @@ export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
         ...prev,
         {
           content: messageValue,
-          isOwn: Math.random() > 0.5,
+          isOwn: true,
           id: prev.length + 1,
           time: '13:14',
         },
       ]
     })
   }
+  const getUserList = () => {
+    getUsersListApi({ page: 1, pageSize: 10 }).then(res => {
+      setUserList(res.data?.filter((item: any) => item.id !== accountInfo?.id))
+    })
+  }
+  // 监听消息列表变化，自动滚动到底部
   useEffect(() => {
     // 在组件更新后滚动到底部
     if (messageContainerRef.current) {
@@ -84,13 +71,18 @@ export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
       })
     }
   }, [messageList])
+  // 监听当前选中的用户
+  const currentActiveUser = useMemo(() => {
+    return userList[currentActiveId]
+  }, [currentActiveId, userList])
   useEffect(() => {
+    getUserList()
+    // 加载后延迟触发焦点
     setTimeout(() => {
       setIsShow(true)
       textareaRef.current?.focus()
     }, 250)
   }, [])
-
   startTransition(() => {
     if (onMessage) {
       onMessage(data => {
@@ -148,7 +140,7 @@ export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
           <div className="flex-1 flex flex-col overflow-hidden relative ">
             <ScrollView>
               <div className="w-full h-full">
-                {Array.from({ length: 100 }).map((item, index) => (
+                {userList.map((item, index) => (
                   <div
                     className={`h-20 flex items-center pr-4 px-3 pl-3 border-0 border-b border-solid border-zinc-200 last:border-b-0 cursor-pointer duration-300 ${
                       currentActiveId === index ? 'bg-zinc-100 ' : 'bg-white'
@@ -162,7 +154,7 @@ export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
                     <div className="flex-1 overflow-hidden">
                       <div className="flex flex-col w-full h-full">
                         <div className="flex justify-between">
-                          <span className="mr-2">琚天雷</span>
+                          <span className="mr-2">{item.userName}</span>
                           <span>3:15</span>
                         </div>
                         <span className="truncate mt-2">哈喽，你好吗？</span>

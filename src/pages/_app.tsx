@@ -2,6 +2,7 @@ import { SOCKET_URL } from '@/constant'
 import useWebSocket from '@/hooks/useWebsocket'
 import { useUserStore } from '@/store/useUserStore'
 import type { AppProps } from 'next/app'
+import Head from 'next/head'
 import { startTransition, useEffect, useRef, useState, useTransition } from 'react'
 function MyApp({ Component, pageProps }: AppProps) {
   const [accountInfo] = useUserStore(state => [state.accountInfo])
@@ -13,7 +14,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       socketInstance?.socket?.close()
     }
   }, [accountInfo])
-  return <Component {...pageProps} {...socketInstance} />
+  return (
+    <>
+      <Head>
+        <link rel="icon" href="/logo.png" />
+      </Head>
+      <Component {...pageProps} {...socketInstance} />
+    </>
+  )
 }
 
 export default MyApp

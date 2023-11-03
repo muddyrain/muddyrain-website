@@ -1,4 +1,4 @@
-import { MessageType } from '@/pages/chat/types'
+import { MessageType } from '@/types'
 import { useEffect, useRef, useState } from 'react'
 
 export interface WebSocketReturnType {

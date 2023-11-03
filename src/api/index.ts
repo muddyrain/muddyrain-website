@@ -1,5 +1,13 @@
 import { fetch } from '@/service'
 
+/**
+ * 分页查询参数类型
+ */
+export interface PagerQueryParams {
+  page: number
+  pageSize: number
+}
+
 export const uploadFile = (data: any) => {
   const formData = new FormData()
   formData.append('file', data)
@@ -8,4 +16,8 @@ export const uploadFile = (data: any) => {
 
 export const loginApi = (data: { userName: string; password: string }) => {
   return fetch.post('/user/login', data)
+}
+
+export const getUsersListApi = (data: PagerQueryParams) => {
+  return fetch.get('/user', { params: data })
 }

@@ -4,8 +4,8 @@ interface StoreProps {
   /**
    * 当前激活的聊天窗口id 0为默认
    */
-  currentActiveId: number | string
-  setCurrentActiveId: (currentActiveId: number | string) => void
+  currentActiveId: number
+  setCurrentActiveId: (currentActiveId: number) => void
   /**
    * 当前socket实体
    */
