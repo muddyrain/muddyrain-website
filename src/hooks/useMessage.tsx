@@ -41,7 +41,12 @@ export const MessageProvider: React.FC<{
   return (
     <MessageContext.Provider value={{ showMessage, hideMessage }}>
       {children}
-      <Snackbar open={open} autoHideDuration={6000} onClose={hideMessage}>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={hideMessage}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
         <Alert {...(isHasClose ? { onClose: hideMessage } : {})} severity={typeColor}>
           {message}
         </Alert>

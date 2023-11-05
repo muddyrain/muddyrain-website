@@ -4,12 +4,22 @@ import { IAxiosInstanceProps } from './types'
 import 'nprogress/nprogress.css'
 import NProgress from 'nprogress'
 import { useUserStore } from '@/store/useUserStore'
+import { INotyfOptions, Notyf } from 'notyf'
+
+const NotyfOptions: Partial<INotyfOptions> = {
+  duration: 1000,
+  position: { x: 'center', y: 'top' },
+}
 export class CreateAxiosInstance {
   private whiteList: IAxiosInstanceProps['whiteList'] = []
   private codeList: IAxiosInstanceProps['codeList'] = {}
   private maps: IAxiosInstanceProps['maps']
   public fetch: AxiosInstance
+  public notyf: Notyf | undefined
   constructor({ baseURL, whiteList = [], codeList = {}, maps }: IAxiosInstanceProps) {
+    if (typeof document !== 'undefined') {
+      this.notyf = new Notyf(NotyfOptions)
+    }
     this.whiteList = whiteList
     this.codeList = codeList
     this.maps = maps
@@ -53,14 +63,14 @@ export class CreateAxiosInstance {
         } else if (result?.[maps?.code] === 200) {
           return result?.[maps?.data] ?? {}
         } else {
-          dealBusinessError(result || {}, { codeList, maps })
+          dealBusinessError(result || {}, { codeList, maps }, this.notyf)
           Promise.reject(result)
           return false
         }
       },
       error => {
         NProgress.done()
-        dealNetworkError(error?.response || {}, { codeList, maps })
+        dealNetworkError(error?.response || {}, { codeList, maps }, this.notyf)
         return Promise.reject(error)
       }
     )
