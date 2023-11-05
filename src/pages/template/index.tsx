@@ -1,10 +1,5 @@
-'use client';
-import { Layout } from '@/Layout';
+'use client'
 
 export default function Page() {
-  return (
-    <Layout>
-      <></>
-    </Layout>
-  );
+  return <></>
 }

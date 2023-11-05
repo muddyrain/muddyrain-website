@@ -1,4 +1,3 @@
-import { Layout } from '@/Layout'
 import { winterBg1, winterBg2, winterBg3 } from '@/assets'
 import Image from 'next/image'
 import { useMemo, useState } from 'react'
@@ -15,7 +14,7 @@ export default function Music() {
     return RouterList.find(item => item.url === currentPage)?.component
   }, [currentPage])
   return (
-    <Layout showBackground={false} showFixedBackground={false}>
+    <>
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden select-none">
         <Image
           alt="bg"
@@ -42,6 +41,6 @@ export default function Music() {
           <Player />
         </div>
       </div>
-    </Layout>
+    </>
   )
 }

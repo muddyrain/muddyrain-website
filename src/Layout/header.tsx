@@ -7,9 +7,7 @@ import { Login } from '@/components'
 import { useLayoutStore } from '@/store/useLayoutStore'
 import { PROJECT_NAME } from '@/constant'
 
-const _Header: FC<{
-  isHome: boolean
-}> = ({ isHome }) => {
+const _Header: FC = () => {
   const router = useRouter()
   const isShowLogin = useLayoutStore(state => state.isShowLogin)
   const HeaderAction = dynamic(
