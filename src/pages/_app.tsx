@@ -3,7 +3,10 @@ import useWebSocket from '@/hooks/useWebsocket'
 import { useUserStore } from '@/store/useUserStore'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import { startTransition, useEffect, useRef, useState, useTransition } from 'react'
+import { useEffect } from 'react'
+import '@/styles/index.scss'
+import '@/styles/md/index.scss'
+
 function MyApp({ Component, pageProps }: AppProps) {
   const [accountInfo] = useUserStore(state => [state.accountInfo])
   const socketInstance = useWebSocket(SOCKET_URL + `?token=${accountInfo?.token}`, {

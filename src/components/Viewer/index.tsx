@@ -1,6 +1,5 @@
 import { FC } from 'react'
 import styles from '@/styles/md/index.module.scss'
-import '@/styles/md/index.scss'
 import mediumZoom from '@bytemd/plugin-medium-zoom'
 import highlight from '@bytemd/plugin-highlight'
 import frontmatter from '@bytemd/plugin-frontmatter'
