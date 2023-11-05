@@ -9,6 +9,7 @@ import { formateTime } from '@/utils'
 import { useUserStore } from '@/store/useUserStore'
 import { getUsersListApi } from '@/api'
 import { ChatType, UserType } from '@/types'
+import { useLayoutStore } from '@/store/useLayoutStore'
 
 interface CurrentMessageType {
   time: string
@@ -29,6 +30,7 @@ export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
   const [messageList, setMessageList] = useState<CurrentMessageType[]>([])
   const [userList, setUserList] = useState<UserType[]>([])
   const accountInfo = useUserStore(state => state.accountInfo)
+  const setShowLogin = useLayoutStore(state => state.setShowLogin)
   const handleSendMessage = () => {
     if (!messageValue) {
       return
@@ -74,8 +76,15 @@ export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
   const currentActiveUser = useMemo(() => {
     return userList[currentActiveId]
   }, [currentActiveId, userList])
+
   useEffect(() => {
-    getUserList()
+    if (accountInfo?.token) {
+      getUserList()
+    } else {
+      // 未登录
+      setShowLogin(true)
+    }
+
     // 加载后延迟触发焦点
     setTimeout(() => {
       setIsShow(true)
@@ -102,7 +111,9 @@ export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
       })
     }
   })
-
+  if (!accountInfo?.token) {
+    return <></>
+  }
   return (
     <div
       className={`duration-500 min-w-[650px] w-3/4 mx-auto h-3/4 top-1/2 left-1/2 absolute translate-x-[-50%] translate-y-[-55%] flex ${

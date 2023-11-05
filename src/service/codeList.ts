@@ -1,13 +1,12 @@
+import { useUserStore } from '@/store/useUserStore'
 import { IAxiosInstanceProps } from './types'
 
 export default {
   401: () => {
-    window.sessionStorage.removeItem('accountInfo')
-    window.location.href = '/login'
+    useUserStore.getState().setAccountInfo(null)
   },
   403: () => {
-    window.sessionStorage.removeItem('accountInfo')
-    window.location.href = '/login'
+    useUserStore.getState().setAccountInfo(null)
   },
   500: () => {
     console.log('报 500了')
