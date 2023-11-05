@@ -23,6 +23,7 @@ export const HeaderAction: FC<{}> = () => {
   ])
   const router = useRouter()
   const setShowLogin = useLayoutStore(state => state.setShowLogin)
+  const setShowRegister = useLayoutStore(state => state.setShowRegister)
   const isLogged = useMemo(() => {
     return !!accountInfo?.token
   }, [accountInfo])
@@ -67,7 +68,14 @@ export const HeaderAction: FC<{}> = () => {
       </Popover>
       {!isLogged ? (
         <>
-          <Chip label="注册" color="primary" onClick={() => {}} variant="outlined" />
+          <Chip
+            label="注册"
+            color="primary"
+            onClick={() => {
+              setShowRegister(true)
+            }}
+            variant="outlined"
+          />
           <Chip
             label="登录"
             color="info"

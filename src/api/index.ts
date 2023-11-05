@@ -18,6 +18,10 @@ export const loginApi = (data: { userName: string; password: string }) => {
   return fetch.post('/user/login', data)
 }
 
+export const registerApi = (data: { userName: string; password: string }) => {
+  return fetch.post('/user/register', data)
+}
+
 export const getUsersListApi = (data: PagerQueryParams) => {
   return fetch.get('/user', { params: data })
 }

@@ -8,7 +8,4 @@ export default {
   403: () => {
     useUserStore.getState().setAccountInfo(null)
   },
-  500: () => {
-    console.log('报 500了')
-  },
 } as IAxiosInstanceProps['codeList']

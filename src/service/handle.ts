@@ -7,12 +7,15 @@ const NotyfOptions: Partial<INotyfOptions> = {
 }
 /* ### 业务请求错误处理 ### */
 export const dealBusinessError = (response: any = {}, { codeList, maps }: Options) => {
+  console.log('业务请求错误处理', response)
+  console.log(response[maps.code])
   if (!response[maps.code]) return
   const type = Object.prototype.toString.call(codeList?.[response?.[maps?.code]])
   if (type === '[object Function]') {
     codeList[response[maps.code]]()
   } else {
     const notyf = new Notyf(NotyfOptions)
+    console.log(response?.[maps?.msg] || 'server error')
     notyf.error(response?.[maps?.msg] || 'server error')
   }
 }

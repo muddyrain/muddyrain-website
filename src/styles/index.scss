@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @import url("//at.alicdn.com/t/c/font_4241398_4x7er3wtbvw.css");
+@import './transition.scss';
+@import './md/index.scss';
+@import 'notyf/notyf.min.css';
+
 
 * {
   box-sizing: border-box;
