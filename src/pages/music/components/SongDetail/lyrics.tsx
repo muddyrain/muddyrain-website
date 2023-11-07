@@ -13,12 +13,12 @@ type LyricsType = {
 export const Lyrics: FC = memo(() => {
   const [lyrics, setLyrics] = useState<LyricsType>()
   useEffect(() => {
-    fetch('/1.lrc')
-      .then(res => res.text())
-      .then(res => {
-        console.log(parse(res))
-        setLyrics(parse(res) as LyricsType)
-      })
+    // fetch('/1.lrc')
+    //   .then(res => res.text())
+    //   .then(res => {
+    //     // console.log(parse(res))
+    //     setLyrics(parse(res) as LyricsType)
+    //   })
   }, [])
   return (
     <div className="w-full h-full">

@@ -135,7 +135,7 @@ export default function Page() {
           setContent(e)
         }}
         onChangeTheme={theme => {
-          console.log(theme)
+          // console.log(theme)
         }}
       />
     </div>

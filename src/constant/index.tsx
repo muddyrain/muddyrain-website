@@ -20,3 +20,8 @@ export const REQUEST_URL = process.env['NEXT_PUBLIC_BASE_URL'] as string
  */
 
 export const SOCKET_URL = process.env['NEXT_PUBLIC_SOCKET_URL'] as string
+/**
+ * socket请求地址
+ */
+
+export const MUSIC_URL = process.env['NEXT_PUBLIC_MUSIC_URL'] as string
