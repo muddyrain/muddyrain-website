@@ -13,7 +13,7 @@ interface BannerItem {
 }
 
 /**
- * 轮播图
+ * 轮播图(登录后)
  */
 export const Banner: FC = () => {
   const [bannerList, setBannerList] = useState<BannerItem[]>([])
@@ -56,13 +56,17 @@ export const Banner: FC = () => {
     <>
       {/* banner区域 */}
       <div
-        className={`w-full relative transition-all duration-300 ${$style['banner-container']} cursor-pointer`}
+        className={`w-1/3 h-[225px] relative overflow-hidden rounded-md backdrop-blur-xl transition-all duration-300 ${$style['banner-container']} cursor-pointer`}
+        style={{
+          backgroundImage: currentBannerBackgroundColor,
+          backgroundSize: 'cover',
+          mixBlendMode: 'multiply',
+        }}
       >
         <Swiper
           modules={[Pagination]}
           className={`w-full h-[225px] ${$style.banner}`}
           spaceBetween={10}
-          slidesPerView={3}
           autoplay
           navigation
           onSlideChange={e => {
@@ -73,7 +77,7 @@ export const Banner: FC = () => {
           {bannerList.map((item, index) => (
             <SwiperSlide key={index}>
               <Image
-                className={`w-full h-[180px] select-none rounded-md opacity-95 backdrop-blur-xl ${$style['banner-item-image']} `}
+                className={`w-full h-[180px] select-none opacity-80 backdrop-blur-xl ${$style['banner-item-image']} `}
                 src={item.imageUrl}
                 priority
                 width={0}
@@ -82,6 +86,9 @@ export const Banner: FC = () => {
               />
             </SwiperSlide>
           ))}
+          <div className="absolute left-3 bottom-3 z-10 bg-white/75 rounded-md text-sm">
+            <div className={`scale-75 ${$style.banner_new_songs}`}>新歌首发</div>
+          </div>
         </Swiper>
       </div>
     </>

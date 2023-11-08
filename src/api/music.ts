@@ -10,3 +10,7 @@ export const getBannerApi = async () => fetchMusic.get('/banner')
  */
 export const getPersonalizedApi = async (limit: number = 4) =>
   fetchMusic.get('/personalized?limit=' + limit)
+/**
+ * 获取推荐最新音乐
+ */
+export const getPersonalizedNewSongApi = async () => fetchMusic.get('/personalized/newsong')
