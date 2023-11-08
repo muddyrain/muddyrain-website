@@ -1,6 +1,19 @@
-.banner {
-  .pagination-active {
-    background-color: white !important;
-    opacity: 0.75 !important;
+.banner-container {
+  .banner {
+    .pagination-active {
+      background-color: white !important;
+      opacity: 0.75 !important;
+    }
+
+    .banner_new_songs {
+      color: rgba(0, 0, 0, 0.5);
+    }
+
+    :global {
+      .swiper-pagination-bullet {
+        opacity: 0.5;
+        background-color: #666666;
+      }
+    }
   }
 }
