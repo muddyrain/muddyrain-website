@@ -7,14 +7,18 @@ import { RouterList } from './router'
 import { Header } from './components/header'
 import { PlayList } from './components/PlayList'
 import { SongDetail } from './components/SongDetail'
+import { Login } from './components/Login'
+import { useMusicStore } from '@/store/useMusicStore'
 export default function Music() {
   const [currentBg, setCurrent] = useState(winterBg1)
   const [currentPage, setCurrentPage] = useState('')
+  const isShowLogin = useMusicStore(state => state.isShowLogin)
   const CurrentComponent = useMemo(() => {
     return RouterList.find(item => item.url === currentPage)?.component
   }, [currentPage])
   return (
     <>
+      {isShowLogin && <Login />}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden select-none">
         <Image
           alt="bg"

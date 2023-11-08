@@ -1,8 +1,11 @@
 import { FC, useState } from 'react'
 import { NotificationsNoneOutlined, NavigateBefore } from '@mui/icons-material'
-import { Avatar, IconButton } from '@mui/material'
+import { Avatar, Button, IconButton } from '@mui/material'
 import { Search } from './Search'
+import { useMusicStore } from '@/store/useMusicStore'
 export const Header: FC = () => {
+  const setShowLogin = useMusicStore(state => state.setShowLogin)
+  const isShowLogin = useMusicStore(state => state.isShowLogin)
   const [searchValue, setSearchValue] = useState('')
   return (
     <>
@@ -19,9 +22,15 @@ export const Header: FC = () => {
           <IconButton color="primary">
             <NotificationsNoneOutlined className="text-xl text-zinc-600" />
           </IconButton>
-          <IconButton className="ml-2" color="primary" size="small">
+          <Button
+            className="flex items-center cursor-pointer"
+            onClick={() => {
+              setShowLogin(!isShowLogin)
+            }}
+          >
             <Avatar className="w-8 h-8" />
-          </IconButton>
+            <span className="text-zinc-700 ml-2">未登录</span>
+          </Button>
         </div>
       </div>
     </>
