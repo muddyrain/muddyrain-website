@@ -21,37 +21,11 @@ export const Banner: FC = () => {
   useEffect(() => {
     const colorThief = new ColorThief()
     getBannerApi().then(async res => {
-      // 帮我理一下异步获取所有图片的颜色后再赋值
-      const bannerItems = await Promise.all(
-        (res?.banners || []).map(async (item: BannerItem) => {
-          const img = document.createElement('img')
-          img.src = item.imageUrl
-          img.crossOrigin = 'Anonymous'
-
-          return new Promise(resolve => {
-            img.onload = () => {
-              const colors = colorThief.getColor(img)
-              item.bgColor = colors
-              resolve(item)
-            }
-          })
-        })
-      )
+      const bannerItems = res?.banners || []
       setBannerList(bannerItems)
     })
   }, [])
 
-  const currentBannerBackgroundColor = useMemo(() => {
-    if (bannerList.length) {
-      const current = bannerList[currentBannerIndex]
-      if (current.bgColor) {
-        const colors = current.bgColor
-        return `linear-gradient(to bottom, rgba(${colors[0]}, ${colors[1]}, ${colors[2]}, 0.9), rgba(${colors[0]}, ${colors[1]}, ${colors[2]}, 1))`
-      }
-    }
-    // 渐变
-    return '#fff'
-  }, [bannerList, currentBannerIndex])
   return (
     <>
       {/* banner区域 */}
@@ -71,7 +45,7 @@ export const Banner: FC = () => {
           pagination={{ clickable: true, bulletActiveClass: $style['pagination-active'] }}
         >
           {bannerList.map((item, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide className="group" key={index}>
               <Image
                 className={`w-full h-[180px] select-none rounded-md opacity-95 backdrop-blur-xl ${$style['banner-item-image']} `}
                 src={item.imageUrl}
@@ -80,6 +54,7 @@ export const Banner: FC = () => {
                 height={200}
                 alt="banner"
               />
+              <div className="w-full h-[180px] absolute top-0 left-0 rounded-md bg-black/25 opacity-0 duration-500 group-hover:opacity-100"></div>
             </SwiperSlide>
           ))}
         </Swiper>
