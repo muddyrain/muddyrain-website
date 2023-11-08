@@ -27,7 +27,6 @@ export const Banner: FC = () => {
           return new Promise(resolve => {
             img.onload = () => {
               const colors = colorThief.getColor(img)
-              console.log(colors)
               item.bgColor = colors
               resolve(item)
             }
