@@ -23,7 +23,7 @@ export const HeaderAction: FC<{}> = () => {
   ])
   const router = useRouter()
   const setShowLogin = useLayoutStore(state => state.setShowLogin)
-  const setShowRegister = useLayoutStore(state => state.setShowRegister)
+  const setCurrentType = useLayoutStore(state => state.setCurrentType)
   const isLogged = useMemo(() => {
     return !!accountInfo?.token
   }, [accountInfo])
@@ -72,7 +72,8 @@ export const HeaderAction: FC<{}> = () => {
             label="注册"
             color="primary"
             onClick={() => {
-              setShowRegister(true)
+              setShowLogin(true)
+              setCurrentType(2)
             }}
             variant="outlined"
           />
@@ -81,6 +82,7 @@ export const HeaderAction: FC<{}> = () => {
             color="info"
             onClick={() => {
               setShowLogin(true)
+              setCurrentType(1)
             }}
             variant="outlined"
           />
