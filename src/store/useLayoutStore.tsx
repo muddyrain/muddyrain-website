@@ -7,14 +7,14 @@ interface StoreProps {
   isShowLogin: boolean
   setShowLogin: (isShow: boolean) => void
   /**
-   * 是否显示注册弹窗
+   * 当前页面类型
    */
-  isShowRegister: boolean
-  setShowRegister: (isShow: boolean) => void
+  currentType: 1 | 2
+  setCurrentType: (currentType: StoreProps['currentType']) => void
 }
 export const useLayoutStore = create<StoreProps>(set => ({
   isShowLogin: false,
   setShowLogin: isShow => set({ isShowLogin: isShow }),
-  isShowRegister: false,
-  setShowRegister: isShow => set({ isShowRegister: isShow }),
+  currentType: 1,
+  setCurrentType: currentType => set({ currentType }),
 }))

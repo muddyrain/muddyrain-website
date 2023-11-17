@@ -6,12 +6,10 @@ import { FC, Suspense, memo, useMemo, useRef, useState } from 'react'
 import { Login } from '@/components'
 import { useLayoutStore } from '@/store/useLayoutStore'
 import { PROJECT_NAME } from '@/constant'
-import { Register } from '@/components/Register'
 
 const _Header: FC = () => {
   const router = useRouter()
   const isShowLogin = useLayoutStore(state => state.isShowLogin)
-  const isShowRegister = useLayoutStore(state => state.isShowRegister)
   const HeaderAction = dynamic(
     () => import('./components/HeaderAction').then(e => e.HeaderAction),
     { ssr: false }
@@ -69,7 +67,6 @@ const _Header: FC = () => {
       {/* actions */}
       <HeaderAction />
       {isShowLogin && <Login />}
-      {isShowRegister && <Register />}
     </div>
   )
 }
