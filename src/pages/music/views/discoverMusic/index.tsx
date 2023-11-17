@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import { Banner, NewSongs, RecommendedPlaylist } from './components'
 
 import { ScrollView } from '@/components'

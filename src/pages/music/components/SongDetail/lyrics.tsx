@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material'
 import { FC, memo, useEffect, useState } from 'react'
 import { parse } from 'clrc'
-type LyricsType = {
+export type LyricsType = {
   key?: string
   lineNumber: number
   raw: string
@@ -10,15 +10,14 @@ type LyricsType = {
   startMillisecond?: number
   value?: string
 }[]
-export const Lyrics: FC = memo(() => {
+const MLyrics: FC = () => {
   const [lyrics, setLyrics] = useState<LyricsType>()
   useEffect(() => {
-    // fetch('/1.lrc')
-    //   .then(res => res.text())
-    //   .then(res => {
-    //     // console.log(parse(res))
-    //     setLyrics(parse(res) as LyricsType)
-    //   })
+    fetch('/1.lrc')
+      .then(res => res.text())
+      .then(res => {
+        setLyrics(parse(res) as LyricsType)
+      })
   }, [])
   return (
     <div className="w-full h-full">
@@ -37,4 +36,6 @@ export const Lyrics: FC = memo(() => {
       </Stack>
     </div>
   )
-})
+}
+
+export const Lyrics = memo(MLyrics)

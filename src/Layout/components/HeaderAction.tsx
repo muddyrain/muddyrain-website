@@ -14,7 +14,7 @@ import {
 import { FC, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 
-export const HeaderAction: FC<{}> = () => {
+export const HeaderAction: FC = () => {
   const [AccountEl, setAccountEl] = useState<HTMLButtonElement | null>(null)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [accountInfo, setAccountInfo] = useUserStore(state => [

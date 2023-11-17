@@ -1,7 +1,7 @@
 'use client'
 import { MTabs, TabItem } from '@/components/MTabs'
 import { Female, Male, Place } from '@mui/icons-material'
-import { Avatar, Breadcrumbs, Button, Chip, Stack, Tab, Tabs, Typography } from '@mui/material'
+import { Avatar, Breadcrumbs, Button, Chip, Stack, Typography } from '@mui/material'
 import { Trends } from './components'
 import { useRouter } from 'next/router'
 

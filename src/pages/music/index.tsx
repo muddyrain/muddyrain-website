@@ -1,4 +1,4 @@
-import { winterBg1, winterBg2, winterBg3 } from '@/assets'
+import { winterBg1 } from '@/assets'
 import Image from 'next/image'
 import { useMemo, useState } from 'react'
 import { Slider } from './components/slider'
@@ -10,7 +10,6 @@ import { SongDetail } from './components/SongDetail'
 import { Login } from './components/Login'
 import { useMusicStore } from '@/store/useMusicStore'
 export default function Music() {
-  const [currentBg, setCurrent] = useState(winterBg1)
   const [currentPage, setCurrentPage] = useState('')
   const isShowLogin = useMusicStore(state => state.isShowLogin)
   const CurrentComponent = useMemo(() => {
@@ -23,7 +22,7 @@ export default function Music() {
         <Image
           alt="bg"
           className="absolute top-[-60px] left-0 w-screen h-screen"
-          src={currentBg}
+          src={winterBg1}
           priority
         />
       </div>

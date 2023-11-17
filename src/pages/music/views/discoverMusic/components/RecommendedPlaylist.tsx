@@ -1,9 +1,10 @@
 import { FC, useEffect, useState } from 'react'
-import { Grid, IconButton, Stack, Typography } from '@mui/material'
-import { NavigateNext, PlayArrow, PlayArrowOutlined } from '@mui/icons-material'
+import { Grid } from '@mui/material'
+import { PlayArrow, PlayArrowOutlined } from '@mui/icons-material'
 import { getPersonalizedApi } from '@/api/music'
 import { Title } from './index'
 import { SongListItem } from '@/pages/music/types'
+import Image from 'next/image'
 
 /**
  * 推荐歌单
@@ -31,7 +32,7 @@ export const RecommendedPlaylist: FC = () => {
           <Grid item key={item.name} sm={3} md={2} lg={2.4}>
             <div className="flex flex-col cursor-pointer group">
               <div className="relative">
-                <img className="w-full rounded-md" src={item.picUrl} alt={item.name} />
+                <Image className="w-full rounded-md" src={item.picUrl} alt={item.name} />
                 <div className="absolute top-1 right-1 flex items-center">
                   <PlayArrowOutlined className="text-white mr-1" />
                   <span className="text-white">{formatePlayCount(item.playCount)}</span>

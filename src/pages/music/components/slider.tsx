@@ -53,7 +53,7 @@ export const Slider: FC<{
             {RouterList.map((menu, index) => (
               <div
                 key={index}
-                onClick={e => {
+                onClick={() => {
                   setCurrentIndex(index)
                   onChange(menu.url)
                 }}

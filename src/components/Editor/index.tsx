@@ -1,10 +1,10 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect } from 'react'
 import styles from '@/styles/md/index.module.scss'
 import mediumZoom from '@bytemd/plugin-medium-zoom'
 import highlight from '@bytemd/plugin-highlight'
 import frontmatter from '@bytemd/plugin-frontmatter'
 import gfm from '@bytemd/plugin-gfm'
-import { Viewer as BytemdViewer, Editor as BytemdEditor } from '@bytemd/react'
+import { Editor as BytemdEditor } from '@bytemd/react'
 import * as icons from '@icon-park/svg'
 import zh from 'bytemd/locales/zh_Hans.json'
 import { BytemdPlugin } from 'bytemd'
@@ -39,7 +39,7 @@ const themePlugins = (onChangeTheme: onChangeThemeType): BytemdPlugin => {
               title: Object.keys(themes)[i],
               handler: {
                 type: 'action',
-                click: editor => {
+                click: () => {
                   changeTheme(Object.keys(themes)[i], onChangeTheme)
                 },
               },
@@ -54,10 +54,10 @@ const themePlugins = (onChangeTheme: onChangeThemeType): BytemdPlugin => {
 export const Editor: FC<{
   value: string
   onChange: (value: string) => void
-  onChangeTheme: (value: string) => void
+  onChangeTheme?: (value: string) => void
 }> = ({ value, onChange, onChangeTheme: _onChangeTheme }) => {
   const onChangeTheme = (theme: string) => {
-    _onChangeTheme(theme)
+    _onChangeTheme?.(theme)
     const themeText = `---\ntheme: ${theme}\n---\n`
     if (value.includes('---\ntheme:')) {
       const reg = /---\ntheme:.*\n---\n/

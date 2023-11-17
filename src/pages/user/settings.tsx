@@ -12,13 +12,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useState } from 'react'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 
 export default function Page() {
-  const [selectedDate, handleDateChange] = useState(new Date())
   return (
     <div className="w-container rounded-sm bg-white mx-auto border my-4 border-solid border-zinc-200">
       <div className="p-4">

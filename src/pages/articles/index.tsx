@@ -39,7 +39,7 @@ export default function Page() {
         spacing={1}
         className="shadow-sm rounded-lg border border-solid bg-white border-zinc-100 w-[180px] p-4"
       >
-        {typeList.map((item, index) => {
+        {typeList.map(item => {
           const Icon = item.icon
           return (
             <Button

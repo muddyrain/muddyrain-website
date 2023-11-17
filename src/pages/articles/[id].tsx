@@ -1,6 +1,5 @@
 'use client'
 import { Badge, IconButton, Stack, Typography } from '@mui/material'
-import { useRouter } from 'next/router'
 import {
   Recommend as RecommendIcon,
   Sms as SmsIcon,
@@ -8,14 +7,10 @@ import {
   Share as ShareIcon,
   RemoveRedEye as RemoveRedEyeIcon,
 } from '@mui/icons-material'
-import { CodeThemes, CodeThemesType } from '@/components/CodeBlock'
-import { useState } from 'react'
 import { testMd } from './test'
 import { Viewer } from '@/components'
 
 export default function Page() {
-  const router = useRouter()
-  const [theme, setTheme] = useState<CodeThemesType>(CodeThemes.dark)
   return (
     <Stack direction={'row'} className="w-container mx-auto my-4" spacing={3}>
       {/* 操作导航 */}

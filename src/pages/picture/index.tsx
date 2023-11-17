@@ -1,6 +1,7 @@
 'use client'
 import { Loading } from '@/components'
 import { ImageList, ImageListItem } from '@mui/material'
+import Image from 'next/image'
 import { createClient } from 'pexels'
 import { useEffect, useState } from 'react'
 import colors from 'tailwindcss/colors'
@@ -25,12 +26,7 @@ export default function Page() {
       <ImageList variant="masonry" cols={6} gap={20}>
         {imagesList.map((item: any, index) => (
           <ImageListItem key={index}>
-            <img
-              srcSet={`${item.src?.small}`}
-              src={`${item.src?.original}`}
-              alt={item.title}
-              loading="lazy"
-            />
+            <Image src={`${item.src?.original}`} alt={item.title} loading="lazy" />
           </ImageListItem>
         ))}
       </ImageList>

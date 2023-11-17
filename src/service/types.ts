@@ -1,5 +1,3 @@
-import { Notyf } from 'notyf'
-
 /**
  * 自定义 axios 创造器类型
  */

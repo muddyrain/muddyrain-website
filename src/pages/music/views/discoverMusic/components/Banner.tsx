@@ -1,12 +1,11 @@
 import Image from 'next/image'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { getBannerApi } from '@/api/music'
 import { Pagination } from 'swiper/modules'
 import $style from '../index.module.scss'
-import ColorThief from 'colorthief'
 interface BannerItem {
   imageUrl: string
   bgColor: [number, number, number] | null
@@ -18,8 +17,8 @@ interface BannerItem {
 export const Banner: FC = () => {
   const [bannerList, setBannerList] = useState<BannerItem[]>([])
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0)
+  currentBannerIndex
   useEffect(() => {
-    const colorThief = new ColorThief()
     getBannerApi().then(async res => {
       const bannerItems = res?.banners || []
       setBannerList(bannerItems)

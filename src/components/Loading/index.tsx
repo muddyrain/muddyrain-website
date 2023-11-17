@@ -1,9 +1,9 @@
-'use client';
-import { FC } from 'react';
-import styles from './index.module.css';
+'use client'
+import { FC } from 'react'
+import styles from './index.module.css'
 export const Loading: FC<{ color?: string }> = ({ color = '#333333' }) => {
   return (
-    <div className='w-12 h-12'>
+    <div className="w-12 h-12">
       <div
         className={`w-4 h-4 float-left ${styles.cube_item}`}
         style={{
@@ -77,5 +77,5 @@ export const Loading: FC<{ color?: string }> = ({ color = '#333333' }) => {
         }}
       ></div>
     </div>
-  );
-};
+  )
+}

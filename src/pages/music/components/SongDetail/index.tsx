@@ -1,23 +1,19 @@
 import { useMusicStore } from '@/store/useMusicStore'
-import { FC, useRef, useState } from 'react'
+import { FC } from 'react'
 import { Background } from './background'
 import { Stack } from '@mui/material'
 import Image from 'next/image'
 import { CD_TEST, CD_BG } from '../../assets'
-import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
+
 import 'swiper/css'
 import { Lyrics } from './lyrics'
 import { ScrollView } from '@/components'
 
 export const SongDetail: FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(1)
-  const { isShowSongDetail, playState, setPlayState } = useMusicStore(state => ({
+  const { isShowSongDetail } = useMusicStore(state => ({
     ...state,
   }))
-  const swiperRef = useRef<SwiperRef>(null)
-  const handleClick = (index: number) => {
-    swiperRef.current?.swiper.slideTo(index)
-  }
+
   return (
     <div
       className={`absolute overflow-hidden z-10 w-full h-full bg-indigo-200 duration-300 ${

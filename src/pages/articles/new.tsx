@@ -1,6 +1,6 @@
 'use client'
 import { Editor } from '@/components'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Stack, TextField } from '@mui/material'
 import { CloudUpload as CloudUploadIcon, Add as AddIcon } from '@mui/icons-material'
 import styles from './new.module.scss'
@@ -9,15 +9,18 @@ export default function Page() {
   const [titleError, setTitleError] = useState(false)
   const [content, setContent] = useState<string>('')
   const [visible, setVisible] = useState(false)
-  const [categories, setCategories] = useState([
-    {
-      label: '前端',
-    },
-    {
-      label: '后端',
-    },
-  ])
+  const [categories, setCategories] = useState<{ label: string }[]>([])
   const [currentCategory, setCurrentCategory] = useState('')
+  useEffect(() => {
+    setCategories([
+      {
+        label: '前端',
+      },
+      {
+        label: '后端',
+      },
+    ])
+  }, [])
   return (
     <div
       className={`w-full min-w-[860px] mx-auto my-4 p-4 rounded-lg bg-white ${styles.new_container}`}
@@ -133,9 +136,6 @@ export default function Page() {
         value={content}
         onChange={e => {
           setContent(e)
-        }}
-        onChangeTheme={theme => {
-          // console.log(theme)
         }}
       />
     </div>

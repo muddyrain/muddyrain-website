@@ -2,9 +2,10 @@ import { FC, useEffect, useState } from 'react'
 import { Title } from './Title'
 import { getPersonalizedNewSongApi } from '@/api/music'
 import { Grid } from '@mui/material'
-import { ArtistsType, SongsItem } from '@/pages/music/types'
+import { SongsItem } from '@/pages/music/types'
 import { SoundQualityOptions } from '@/pages/music/constant'
 import { PlayArrow } from '@mui/icons-material'
+import Image from 'next/image'
 
 /**
  * 最新音乐
@@ -30,7 +31,7 @@ export const NewSongs: FC = () => {
           >
             <div className="flex items-center cursor-pointer">
               <div className="relative w-20 h-20 rounded-md overflow-hidden">
-                <img className="w-full h-full" src={item.picUrl} alt={item.name} />
+                <Image className="w-full h-full" src={item.picUrl} alt={item.name} />
                 <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center group-hover:opacity-100 opacity-0 bg-black/25 duration-500">
                   <PlayArrow className="text-white scale-[1.75]" />
                 </div>

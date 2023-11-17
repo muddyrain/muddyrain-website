@@ -16,7 +16,14 @@ export const Header: FC = () => {
             <NavigateBefore className="text-2xl text-zinc-400/60" />
           </IconButton>
           {/* 搜索框 */}
-          <Search inputClassName="w-60" placeholder="搜索音乐、歌单、专辑" />
+          <Search
+            inputClassName="w-60"
+            value={searchValue}
+            onChange={e => {
+              setSearchValue(e)
+            }}
+            placeholder="搜索音乐、歌单、专辑"
+          />
         </div>
         <div className="flex items-center">
           <IconButton color="primary">

@@ -1,10 +1,5 @@
 'use client'
-import {
-  WaterDrop as WaterDropIcon,
-  Favorite as FavoriteIcon,
-  Share as ShareIcon,
-  Visibility as VisibilityIcon,
-} from '@mui/icons-material'
+import { WaterDrop as WaterDropIcon } from '@mui/icons-material'
 import {
   Avatar,
   Button,

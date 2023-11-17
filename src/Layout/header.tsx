@@ -2,12 +2,12 @@ import { IconButton, Button, Stack, Badge } from '@mui/material'
 
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { FC, Suspense, memo, useMemo, useRef, useState } from 'react'
+import { FC, memo, useMemo } from 'react'
 import { Login } from '@/components'
 import { useLayoutStore } from '@/store/useLayoutStore'
 import { PROJECT_NAME } from '@/constant'
 
-const _Header: FC = () => {
+const MHeader: FC = () => {
   const router = useRouter()
   const isShowLogin = useLayoutStore(state => state.isShowLogin)
   const HeaderAction = dynamic(
@@ -71,4 +71,4 @@ const _Header: FC = () => {
   )
 }
 
-export const Header = memo(_Header)
+export const Header = memo(MHeader)
