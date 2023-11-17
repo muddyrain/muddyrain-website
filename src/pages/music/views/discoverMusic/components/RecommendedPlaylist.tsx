@@ -31,8 +31,8 @@ export const RecommendedPlaylist: FC = () => {
         {personalized.map(item => (
           <Grid item key={item.name} sm={3} md={2} lg={2.4}>
             <div className="flex flex-col cursor-pointer group">
-              <div className="relative">
-                <Image className="w-full rounded-md" src={item.picUrl} alt={item.name} />
+              <div className="relative h-56">
+                <Image className="w-full rounded-md" src={item.picUrl} alt={item.name} fill />
                 <div className="absolute top-1 right-1 flex items-center">
                   <PlayArrowOutlined className="text-white mr-1" />
                   <span className="text-white">{formatePlayCount(item.playCount)}</span>
@@ -43,7 +43,7 @@ export const RecommendedPlaylist: FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="line-clamp-2">{item.name}</div>
+              <div className="line-clamp-2 mt-1">{item.name}</div>
             </div>
           </Grid>
         ))}

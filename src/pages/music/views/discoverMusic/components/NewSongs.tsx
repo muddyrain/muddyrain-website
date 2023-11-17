@@ -24,14 +24,20 @@ export const NewSongs: FC = () => {
         {songs.map(item => (
           <Grid
             item
-            key={item.name}
+            key={item.id}
             md={6}
             lg={6}
             className="rounded-md group p-4 hover:shadow-lg hover:bg-white/25 shadow-white/50 duration-500"
           >
             <div className="flex items-center cursor-pointer">
               <div className="relative w-20 h-20 rounded-md overflow-hidden">
-                <Image className="w-full h-full" src={item.picUrl} alt={item.name} />
+                <Image
+                  className="w-full h-full"
+                  src={item.picUrl}
+                  alt={item.name}
+                  width={0}
+                  height={0}
+                />
                 <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center group-hover:opacity-100 opacity-0 bg-black/25 duration-500">
                   <PlayArrow className="text-white scale-[1.75]" />
                 </div>

@@ -6,11 +6,11 @@ import Head from 'next/head'
 import { Suspense, useEffect } from 'react'
 import '@/styles/index.scss'
 import { ThemeProvider, createTheme } from '@mui/material'
-import { MessageProvider } from '@/hooks/useMessage'
 import { Header } from '@/Layout/header'
 import { Background } from '@/Layout/background'
 import { Footer } from '@/Layout/footer'
 import { useRouter } from 'next/router'
+import { MessageProvider } from '@/provider/messageProvider'
 
 const theme = createTheme({
   palette: {

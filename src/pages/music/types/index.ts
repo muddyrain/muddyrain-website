@@ -10,6 +10,7 @@ export interface ArtistsType {
  * 歌曲类型
  */
 export interface SongsItem {
+  id: number
   name: string
   picUrl: string
   song: {
