@@ -11,6 +11,7 @@ const nextConfig = {
   output: 'export',
   reactStrictMode: true,
   pageExtensions: ['tsx'],
+  trailingSlash: true,
 }
 
 module.exports = nextConfig
