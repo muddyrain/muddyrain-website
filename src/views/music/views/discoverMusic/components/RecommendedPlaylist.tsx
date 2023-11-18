@@ -3,7 +3,7 @@ import { Grid } from '@mui/material'
 import { PlayArrow, PlayArrowOutlined } from '@mui/icons-material'
 import { getPersonalizedApi } from '@/api/music'
 import { Title } from './index'
-import { SongListItem } from '@/pages/music/types'
+import { SongListItem } from '@/views/music/types'
 import Image from 'next/image'
 
 /**
