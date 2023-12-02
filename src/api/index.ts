@@ -25,3 +25,7 @@ export const registerApi = (data: { userName: string; password: string }) => {
 export const getUsersListApi = (data: PagerQueryParams) => {
   return fetch.get('/user', { params: data })
 }
+
+export const createArticleApi = (data: unknown) => {
+  return fetch.post(`/article`, data)
+}

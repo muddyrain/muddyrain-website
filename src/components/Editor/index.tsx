@@ -58,13 +58,6 @@ export const Editor: FC<{
 }> = ({ value, onChange, onChangeTheme: _onChangeTheme }) => {
   const onChangeTheme = (theme: string) => {
     _onChangeTheme?.(theme)
-    const themeText = `---\ntheme: ${theme}\n---\n`
-    if (value.includes('---\ntheme:')) {
-      const reg = /---\ntheme:.*\n---\n/
-      onChange(value.replace(reg, themeText))
-      return
-    }
-    onChange(themeText + '\n' + value)
   }
 
   useEffect(() => {
@@ -75,15 +68,6 @@ export const Editor: FC<{
       <BytemdEditor
         locale={zh}
         onChange={value => {
-          const reg = /---\ntheme:.*\n---\n/
-          // 获取匹配到的字符串
-          const matchStr = value.match(reg)
-          if (matchStr) {
-            const themeName = matchStr[0]?.split('---\ntheme:')?.[1]?.split('\n---\n')?.[0].trim()
-            if (Object.keys(themes).includes(themeName)) {
-              changeTheme(themeName, onChangeTheme)
-            }
-          }
           onChange(value)
         }}
         uploadImages={files => {

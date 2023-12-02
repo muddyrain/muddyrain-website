@@ -2,39 +2,107 @@
 import { Editor } from '@/components'
 import { useEffect, useState } from 'react'
 import { Button, Stack, TextField } from '@mui/material'
-import { CloudUpload as CloudUploadIcon, Add as AddIcon } from '@mui/icons-material'
+import { CloudUpload as CloudUploadIcon, Add as AddIcon, Close } from '@mui/icons-material'
 import styles from './new.module.scss'
+import { ArticleTag } from '@/types'
+import Image from 'next/image'
+import { createArticleApi, uploadFile } from '@/api'
+import { useMessage } from '@/hooks/useMessage'
 export default function Page() {
-  const [title, setTitle] = useState('')
   const [titleError, setTitleError] = useState(false)
-  const [content, setContent] = useState<string>('')
   const [visible, setVisible] = useState(false)
-  const [categories, setCategories] = useState<{ label: string }[]>([])
-  const [currentCategory, setCurrentCategory] = useState('')
+  type FormDataType = {
+    title: string
+    content: string
+    tag: number
+    cover: string
+    theme: string
+  }
+  const [formData, setFormData] = useState<FormDataType>({
+    title: '',
+    content: '',
+    tag: 0,
+    cover: '',
+    theme: 'juejin',
+  })
+  const [categories, setCategories] = useState<
+    {
+      label: string
+      value: number
+    }[]
+  >([])
+  const changeFormData = (_formData: Partial<FormDataType>) => {
+    setFormData({
+      ...formData,
+      ..._formData,
+    })
+  }
+  const message = useMessage()
   useEffect(() => {
-    setCategories([
-      {
-        label: '前端',
-      },
-      {
-        label: '后端',
-      },
-    ])
+    const categories = Object.keys(ArticleTag)
+      .filter(tag => isNaN(+tag))
+      .map(key => ({
+        label: key,
+        value: ArticleTag[key as keyof typeof ArticleTag],
+      }))
+    setCategories(categories)
   }, [])
+  const [cover, setCover] = useState<{
+    base64: string
+    file: File | null
+    url: string
+  }>({
+    base64: '',
+    file: null,
+    url: '',
+  })
+  // 上传封面
+  const handleUpload = () => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/*'
+    input.onchange = e => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (file) {
+        uploadFile(file).then(res => {
+          console.log(res)
+        })
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+          setCover({
+            ...cover,
+            base64: reader.result as string,
+            file,
+            url: reader.result as string,
+          })
+        }
+      }
+    }
+    input.click()
+  }
+  const handleSubmit = () => {
+    console.log(formData)
+    createArticleApi(formData).then(res => {
+      console.log(res)
+    })
+  }
   return (
     <div
-      className={`w-full min-w-[860px] mx-auto my-4 p-4 rounded-lg bg-white ${styles.new_container}`}
+      className={`w-full relative overflow-hidden min-w-[860px] mx-auto my-4 p-4 rounded-lg bg-white ${styles.new_container}`}
     >
-      <Stack className="mb-2" spacing={1} direction="row">
+      <Stack className="mb-2 relative z-10" spacing={1} direction="row">
         <TextField
           error={titleError}
           color="primary"
           fullWidth
           onChange={e => {
             setTitleError(e.target.value.length === 0)
-            setTitle(e.target.value)
+            changeFormData({
+              title: e.target.value,
+            })
           }}
-          value={title}
+          value={formData.title}
           label="好文标题"
           size="small"
         />
@@ -44,8 +112,15 @@ export default function Page() {
             startIcon={<CloudUploadIcon />}
             variant="outlined"
             onClick={e => {
-              e.stopPropagation()
-              setVisible(!visible)
+              if (formData.title.length > 0 && formData.content.length > 0) {
+                e.stopPropagation()
+                setVisible(!visible)
+              } else {
+                message.showMessage('请先填写标题和内容', {
+                  type: 'info',
+                })
+                setVisible(false)
+              }
             }}
           >
             <span>发布</span>
@@ -76,10 +151,12 @@ export default function Page() {
                         key={index}
                         className="mr-2 mb-2"
                         size="small"
-                        color={currentCategory === item.label ? 'primary' : 'secondary'}
+                        color={formData.tag === item.value ? 'primary' : 'secondary'}
                         variant="outlined"
                         onClick={() => {
-                          setCurrentCategory(item.label)
+                          changeFormData({
+                            tag: item.value,
+                          })
                         }}
                       >
                         {item.label}
@@ -90,19 +167,47 @@ export default function Page() {
               </div>
               <div className="mb-2 flex">
                 <div className="w-24 text-right">
-                  <span className="text-red-500 mr-1">*</span>
+                  {/* <span className="text-red-500 mr-1">*</span> */}
                   <span>文章封面：</span>
                 </div>
                 <div className="ml-2 flex-1">
-                  <Button
-                    className="w-48 h-32 border-dashed hover:border-dashed"
-                    variant="outlined"
-                  >
-                    <div className="flex flex-col justify-center items-center">
-                      <AddIcon />
-                      <span>上传封面</span>
-                    </div>
-                  </Button>
+                  <div className="w-48 h-32 border-dashed border border-zinc-400 rounded-md relative">
+                    {cover?.file ? (
+                      <>
+                        <Image
+                          src={cover.url || cover.base64}
+                          alt="cover"
+                          fill
+                          className="w-full h-full object-cover"
+                        />
+                        <div
+                          className="absolute bg-zinc-50 cursor-pointer w-6 h-6 flex justify-center items-center rounded-b-sm hover:bg-zinc-100 right-0 top-0 p-1"
+                          onClick={() => {
+                            setCover({
+                              base64: '',
+                              file: null,
+                              url: '',
+                            })
+                          }}
+                        >
+                          <Close className="text-sm" />
+                        </div>
+                      </>
+                    ) : (
+                      <Button
+                        className="w-full h-full border-none hover:border-none"
+                        variant="outlined"
+                        onClick={() => {
+                          handleUpload()
+                        }}
+                      >
+                        <div className="flex flex-col justify-center items-center">
+                          <AddIcon />
+                          <span>上传封面</span>
+                        </div>
+                      </Button>
+                    )}
+                  </div>
                   <div className="text-sm text-zinc-400 mt-2">
                     建议尺寸：6:4 (封面仅展示在首页信息流中)
                   </div>
@@ -125,7 +230,7 @@ export default function Page() {
               >
                 取消
               </Button>
-              <Button size="small" variant="outlined">
+              <Button size="small" variant="outlined" onClick={handleSubmit}>
                 确定并发布
               </Button>
             </Stack>
@@ -133,11 +238,19 @@ export default function Page() {
         </div>
       </Stack>
       <Editor
-        value={content}
+        value={formData.content}
+        onChangeTheme={e => {
+          changeFormData({
+            theme: e,
+          })
+        }}
         onChange={e => {
-          setContent(e)
+          changeFormData({
+            content: e,
+          })
         }}
       />
+      <div className={`${styles.watermark}`}>{formData.theme}</div>
     </div>
   )
 }

@@ -53,3 +53,17 @@ export interface UserType {
   id?: number | string
   [key: string]: any
 }
+
+/**
+ * 文章标签
+ */
+export enum ArticleTag {
+  '前端',
+  '后端',
+  '移动端',
+  '数据库',
+  '服务器',
+  '人工智能',
+  '开发工具',
+  '代码人生',
+}
