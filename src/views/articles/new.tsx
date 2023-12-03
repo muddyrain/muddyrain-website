@@ -5,12 +5,12 @@ import { Button, Stack, TextField } from '@mui/material'
 import { CloudUpload as CloudUploadIcon, Add as AddIcon, Close } from '@mui/icons-material'
 import styles from './new.module.scss'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { ArticleTag } from '@/types'
 import Image from 'next/image'
 import { createArticleApi, removeUploadFileApi, uploadFile } from '@/api'
 import { useMessage } from '@/hooks/useMessage'
 import { useUserStore } from '@/store/useUserStore'
 import { useRouter } from 'next/router'
+import { ArticleTagOptions } from '@/constant'
 export default function Page() {
   const [titleError, setTitleError] = useState(false)
   const [visible, setVisible] = useState(false)
@@ -45,13 +45,7 @@ export default function Page() {
   }
   const message = useMessage()
   useEffect(() => {
-    const categories = Object.keys(ArticleTag)
-      .filter(tag => isNaN(+tag))
-      .map(key => ({
-        label: key,
-        value: ArticleTag[key as keyof typeof ArticleTag],
-      }))
-    setCategories(categories)
+    setCategories(ArticleTagOptions)
   }, [])
   const [cover, setCover] = useState<{
     base64: string

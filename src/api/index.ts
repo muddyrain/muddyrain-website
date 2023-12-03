@@ -32,3 +32,7 @@ export const getUsersListApi = (data: PagerQueryParams) => {
 export const createArticleApi = (data: unknown) => {
   return fetch.post(`/article`, data)
 }
+
+export const getArticleListApi = (data: unknown) => {
+  return fetch.get(`/article`, { params: data })
+}

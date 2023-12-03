@@ -53,6 +53,18 @@ export interface UserType {
   id?: number | string
   [key: string]: any
 }
+/**
+ * 文章类型
+ */
+export interface ArticleType {
+  title?: string
+  theme?: string
+  content?: string
+  tag?: ArticleTag
+  cover?: string
+  id?: number | string
+  [key: string]: any
+}
 
 /**
  * 文章标签
