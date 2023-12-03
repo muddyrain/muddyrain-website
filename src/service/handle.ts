@@ -14,6 +14,10 @@ export const dealBusinessError = (
   if (type === '[object Function]') {
     codeList[response[maps.code]]()
   } else {
+    if (typeof response?.[maps?.msg] === 'object') {
+      notyf?.error('server error')
+      return
+    }
     notyf?.error(response?.[maps?.msg] || 'server error')
   }
 }

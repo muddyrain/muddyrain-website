@@ -13,6 +13,9 @@ export const uploadFile = (data: any) => {
   formData.append('file', data)
   return fetch.post('/utils/upload', formData)
 }
+export const removeUploadFileApi = (name: string) => {
+  return fetch.delete('/utils/upload/' + name)
+}
 
 export const loginApi = (data: { userName: string; password: string }) => {
   return fetch.post('/user/login', data)

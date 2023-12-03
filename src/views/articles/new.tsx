@@ -4,10 +4,13 @@ import { useEffect, useState } from 'react'
 import { Button, Stack, TextField } from '@mui/material'
 import { CloudUpload as CloudUploadIcon, Add as AddIcon, Close } from '@mui/icons-material'
 import styles from './new.module.scss'
+import LoadingButton from '@mui/lab/LoadingButton'
 import { ArticleTag } from '@/types'
 import Image from 'next/image'
-import { createArticleApi, uploadFile } from '@/api'
+import { createArticleApi, removeUploadFileApi, uploadFile } from '@/api'
 import { useMessage } from '@/hooks/useMessage'
+import { useUserStore } from '@/store/useUserStore'
+import { useRouter } from 'next/router'
 export default function Page() {
   const [titleError, setTitleError] = useState(false)
   const [visible, setVisible] = useState(false)
@@ -25,6 +28,9 @@ export default function Page() {
     cover: '',
     theme: 'juejin',
   })
+  const router = useRouter()
+  const accountInfo = useUserStore(state => state.accountInfo)
+  const [uploadLoading, setUploadLoading] = useState(false)
   const [categories, setCategories] = useState<
     {
       label: string
@@ -51,10 +57,12 @@ export default function Page() {
     base64: string
     file: File | null
     url: string
+    objectName: string
   }>({
     base64: '',
     file: null,
     url: '',
+    objectName: '',
   })
   // 上传封面
   const handleUpload = () => {
@@ -62,29 +70,64 @@ export default function Page() {
     input.type = 'file'
     input.accept = 'image/*'
     input.onchange = e => {
+      setUploadLoading(true)
       const file = (e.target as HTMLInputElement).files?.[0]
       if (file) {
-        uploadFile(file).then(res => {
-          console.log(res)
-        })
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = () => {
-          setCover({
-            ...cover,
-            base64: reader.result as string,
-            file,
-            url: reader.result as string,
+        uploadFile(file)
+          .then(res => {
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => {
+              setCover({
+                ...cover,
+                base64: reader.result as string,
+                file,
+                url: res.url,
+                objectName: res.objectName,
+              })
+            }
           })
-        }
+          .catch(() => {
+            message.showMessage('上传失败', {
+              type: 'error',
+            })
+          })
+          .finally(() => {
+            setUploadLoading(false)
+          })
       }
     }
     input.click()
   }
+  const removeUploadFile = () => {
+    removeUploadFileApi(cover.objectName)
+      .then(() => {
+        setCover({
+          base64: '',
+          file: null,
+          url: '',
+          objectName: '',
+        })
+      })
+      .catch(() => {
+        message.showMessage('删除失败', {
+          type: 'error',
+        })
+      })
+  }
   const handleSubmit = () => {
-    console.log(formData)
-    createArticleApi(formData).then(res => {
-      console.log(res)
+    if (formData.title.length === 0 || formData.content.length === 0) {
+      message.showMessage('标题或内容不能为空', {
+        type: 'info',
+      })
+      return
+    }
+    createArticleApi({ ...formData, user: accountInfo?.id, cover: cover.url }).then(res => {
+      message.showMessage('发布成功', {
+        type: 'success',
+      })
+      // 跳转到文章详情页
+      router.push(`/articles/${res.id}`)
     })
   }
   return (
@@ -112,15 +155,8 @@ export default function Page() {
             startIcon={<CloudUploadIcon />}
             variant="outlined"
             onClick={e => {
-              if (formData.title.length > 0 && formData.content.length > 0) {
-                e.stopPropagation()
-                setVisible(!visible)
-              } else {
-                message.showMessage('请先填写标题和内容', {
-                  type: 'info',
-                })
-                setVisible(false)
-              }
+              e.stopPropagation()
+              setVisible(!visible)
             }}
           >
             <span>发布</span>
@@ -171,31 +207,29 @@ export default function Page() {
                   <span>文章封面：</span>
                 </div>
                 <div className="ml-2 flex-1">
-                  <div className="w-48 h-32 border-dashed border border-zinc-400 rounded-md relative">
+                  <div className="w-48 flex justify-center items-center border-dashed border border-zinc-400 rounded-md relative">
                     {cover?.file ? (
                       <>
                         <Image
                           src={cover.url || cover.base64}
                           alt="cover"
-                          fill
-                          className="w-full h-full object-cover"
+                          width={0}
+                          height={0}
+                          className="w-full h-auto min-h-[50px]"
                         />
                         <div
                           className="absolute bg-zinc-50 cursor-pointer w-6 h-6 flex justify-center items-center rounded-b-sm hover:bg-zinc-100 right-0 top-0 p-1"
                           onClick={() => {
-                            setCover({
-                              base64: '',
-                              file: null,
-                              url: '',
-                            })
+                            removeUploadFile()
                           }}
                         >
                           <Close className="text-sm" />
                         </div>
                       </>
                     ) : (
-                      <Button
-                        className="w-full h-full border-none hover:border-none"
+                      <LoadingButton
+                        loading={uploadLoading}
+                        className="w-full h-32 border-none hover:border-none"
                         variant="outlined"
                         onClick={() => {
                           handleUpload()
@@ -205,7 +239,7 @@ export default function Page() {
                           <AddIcon />
                           <span>上传封面</span>
                         </div>
-                      </Button>
+                      </LoadingButton>
                     )}
                   </div>
                   <div className="text-sm text-zinc-400 mt-2">

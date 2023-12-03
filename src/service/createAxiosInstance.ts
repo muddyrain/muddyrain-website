@@ -25,7 +25,7 @@ export class CreateAxiosInstance {
     this.maps = maps
     this.fetch = axios.create({
       baseURL,
-      timeout: 10000,
+      timeout: 60000,
     })
     this.fetch.interceptors.request.use(
       config => {
