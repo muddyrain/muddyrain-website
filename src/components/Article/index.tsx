@@ -19,16 +19,15 @@ import { ArticleTagOptions } from '@/constant'
 export const Article: FC<{
   className?: string
   article: ArticleType
-}> = ({ className, article }) => {
+}> = ({ className, article = {} }) => {
   const tag = useMemo(() => {
-    return ArticleTagOptions.find(item => item.value === article.tag)?.label
+    return ArticleTagOptions.find(item => item.value === article?.tag)?.label
   }, [article])
   return (
     <Card className={`shadow-none border border-solid border-zinc-100 ${className}`}>
-      {article.cover && (
+      {article?.cover && (
         <CardMedia component="img" height="240" image={article.cover} alt="Paella dish" />
       )}
-
       <CardContent>
         <Typography className="mb-2" variant="h6" color="InfoText">
           <Stack direction="row" alignItems="center" spacing={1} className="mb-2">

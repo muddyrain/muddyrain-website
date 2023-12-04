@@ -7,6 +7,7 @@ import { ArticleTagOptions as _ArticleTagOptions } from '@/constant'
 import { getArticleListApi } from '@/api'
 import { ArticleType } from '@/types'
 import { Empty } from '@/components/Empty'
+import { LoadingBox } from '@/components/LoadingBox'
 const ArticleTagOptions = [
   {
     label: '关注',
@@ -25,12 +26,19 @@ export default function Page() {
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [articleList, setArticleList] = useState<ArticleType[]>([])
+  const [loading, setLoading] = useState(false)
   const getArticleList = () => {
-    console.log('getArticleList')
-    getArticleListApi({ page, pageSize: 10 }).then(res => {
-      setArticleList(res.data || [])
-      setTotal(res.total || 0)
-    })
+    setLoading(true)
+    getArticleListApi({ page, pageSize: 10 })
+      .then(res => {
+        setArticleList(res.data || [])
+        setTotal(res.total || 0)
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setLoading(false)
+        }, 250)
+      })
   }
 
   useEffect(() => {
@@ -69,13 +77,15 @@ export default function Page() {
       </Stack>
       {/* 文章列表 */}
       <div className="shadow-sm rounded-lg flex-1 border border-solid bg-white border-zinc-100 w-[180px] p-4">
-        {articleList?.length ? (
-          articleList.map((item, index) => {
-            return <Article key={index} article={item} className="mb-4" />
-          })
-        ) : (
-          <Empty />
-        )}
+        <LoadingBox loading={loading}>
+          {articleList?.length ? (
+            articleList.map((item, index) => {
+              return <Article key={index} article={item} className="mb-4" />
+            })
+          ) : (
+            <Empty />
+          )}
+        </LoadingBox>
       </div>
       <div className="w-[240px]">
         <Card className="shadow-lg rounded-lg">
