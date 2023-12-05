@@ -16,10 +16,12 @@ import {
 } from '@mui/icons-material'
 import { ArticleType } from '@/types'
 import { ArticleTagOptions } from '@/constant'
+import { useRouter } from 'next/router'
 export const Article: FC<{
   className?: string
   article: ArticleType
-}> = ({ className, article = {} }) => {
+}> = ({ className, article = null }) => {
+  const router = useRouter()
   const tag = useMemo(() => {
     return ArticleTagOptions.find(item => item.value === article?.tag)?.label
   }, [article])
@@ -31,7 +33,7 @@ export const Article: FC<{
       <CardContent>
         <Typography className="mb-2" variant="h6" color="InfoText">
           <Stack direction="row" alignItems="center" spacing={1} className="mb-2">
-            <span>{article.title}</span>
+            <span>{article?.title}</span>
             {/* 标签 */}
             <Chip size="small" label={tag} color="primary" className="text-sm" variant="outlined" />
           </Stack>
@@ -42,7 +44,7 @@ export const Article: FC<{
         <Button
           variant="outlined"
           onClick={() => {
-            window.location.href = '/articles/1'
+            router.push('/articles/' + article?.id)
           }}
         >
           开始阅读

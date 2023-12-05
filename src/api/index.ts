@@ -36,3 +36,7 @@ export const createArticleApi = (data: unknown) => {
 export const getArticleListApi = (data: unknown) => {
   return fetch.get(`/article`, { params: data })
 }
+
+export const getArticleByIdApi = (id: string) => {
+  return fetch.get(`/article/` + id)
+}

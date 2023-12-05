@@ -31,38 +31,41 @@ export interface MessageType {
   payload: any
 }
 
+export interface CommonType {
+  formatted_create_time: string
+  formatted_update_time: string
+}
 /**
  * 信息类型
  */
-export interface ChatType {
+export interface ChatType extends CommonType {
   id?: string
   sender_id: string
   receiver_id: string
   content: string
-  formatted_create_time: string
-  formatted_update_time: string
   [key: string]: any
 }
 /**
  * 用户类型
  */
-export interface UserType {
-  userName?: string
-  password?: string
-  token?: string
-  id?: number | string
+export interface UserType extends CommonType {
+  userName: string
+  password: string
+  token: string
+  id: number | string
   [key: string]: any
 }
 /**
  * 文章类型
  */
-export interface ArticleType {
-  title?: string
-  theme?: string
-  content?: string
-  tag?: ArticleTag
-  cover?: string
-  id?: number | string
+export interface ArticleType extends CommonType {
+  title: string
+  theme: string
+  content: string
+  tag: ArticleTag
+  cover: string
+  id: number | string
+  user: UserType
   [key: string]: any
 }
 
