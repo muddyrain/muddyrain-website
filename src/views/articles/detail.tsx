@@ -18,15 +18,12 @@ export default function Page() {
   const { id } = router.query
   const [article, setArticle] = useState<ArticleType | null>(null)
   useEffect(() => {
-    if (id) {
-      getArticleByIdApi(id as string).then(res => {
-        if (res) {
-          setArticle(res || null)
-        }
-      })
-    } else {
-      router.push('/404')
-    }
+    if (!id) return
+    getArticleByIdApi(id as string).then(res => {
+      if (res) {
+        setArticle(res || null)
+      }
+    })
   }, [id])
   return (
     <Stack direction={'row'} className="w-container mx-auto my-4" spacing={3}>
@@ -63,7 +60,7 @@ export default function Page() {
         </Typography>
         <div className="my-4 flex w-full">
           <Stack direction="row" spacing={2}>
-            <span>{article?.user.userName}</span>
+            <span>{article?.user?.userName}</span>
             <span className="text-zinc-400">{article?.formatted_update_time}</span>
             <Stack direction={'row'} alignItems={'center'}>
               <RemoveRedEyeIcon fontSize="small" color="secondary" />
