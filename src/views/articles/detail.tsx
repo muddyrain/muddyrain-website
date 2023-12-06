@@ -20,8 +20,12 @@ export default function Page() {
   useEffect(() => {
     if (id) {
       getArticleByIdApi(id as string).then(res => {
-        setArticle(res)
+        if (res) {
+          setArticle(res || null)
+        }
       })
+    } else {
+      router.push('/404')
     }
   }, [id])
   return (

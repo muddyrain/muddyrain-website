@@ -35,7 +35,15 @@ export const Article: FC<{
           <Stack direction="row" alignItems="center" spacing={1} className="mb-2">
             <span>{article?.title}</span>
             {/* 标签 */}
-            <Chip size="small" label={tag} color="primary" className="text-sm" variant="outlined" />
+            {tag && (
+              <Chip
+                size="small"
+                label={tag}
+                color="primary"
+                className="text-sm"
+                variant="outlined"
+              />
+            )}
           </Stack>
         </Typography>
         <Typography className="mb-2 truncate text-ellipsis" variant="body2" color="text.secondary">

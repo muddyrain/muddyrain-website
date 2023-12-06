@@ -1,7 +1,10 @@
-import { Box, Button, Container, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack } from '@mui/material'
 import Image from 'next/image'
+import NotFoundImage from './404.png'
+import { useRouter } from 'next/router'
 
 export default function NotFound() {
+  const router = useRouter()
   return (
     <Box
       sx={{
@@ -11,29 +14,20 @@ export default function NotFound() {
         minHeight: '100vh',
       }}
     >
-      <Container maxWidth="md">
-        <Stack direction="row" spacing={6}>
-          <Stack spacing={2}>
-            <Typography variant="h1">404</Typography>
-            <Typography variant="h6">您要查找的页面不存在。</Typography>
-            <Button
-              className="mt-4"
-              variant="contained"
-              onClick={() => {
-                history.go(-1)
-              }}
-            >
-              返回
-            </Button>
-          </Stack>
-          <Image
-            src="https://muddyrain-oss.oss-cn-hangzhou.aliyuncs.com/website/not-found-404.jpg"
-            width={500}
-            height={250}
-            alt="404"
-          />
-        </Stack>
-      </Container>
+      <Stack spacing={4}>
+        <Image src={NotFoundImage} alt="404" width={480} height={240} />
+        <div className="flex justify-center">
+          <Button
+            className="w-36"
+            variant="outlined"
+            onClick={() => {
+              router.push('/')
+            }}
+          >
+            回到首页
+          </Button>
+        </div>
+      </Stack>
     </Box>
   )
 }
