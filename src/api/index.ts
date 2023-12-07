@@ -40,3 +40,7 @@ export const getArticleListApi = (data: unknown) => {
 export const getArticleByIdApi = (id: string) => {
   return fetch.get(`/article/` + id)
 }
+
+export const postArticleLikeApi = (id: string) => {
+  return fetch.post(`/article/like/` + id)
+}
