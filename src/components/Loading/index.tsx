@@ -1,7 +1,7 @@
 'use client'
 export const Loading = () => {
   return (
-    <div className="w-36 h-4 my-4 justify-between flex relative">
+    <div className="w-36 h-4 my-4 justify-between flex relative mx-auto">
       {/* 粉色方块 */}
       <div className={`w-4 h-4 loading-slide`}>
         <div className="absolute w-4 h-4 rounded-[15%] shadow-md bg-pink-500"></div>
