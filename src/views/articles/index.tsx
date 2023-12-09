@@ -5,7 +5,7 @@ import { Assistant as AssistantIcon, Star as StarIcon } from '@mui/icons-materia
 import { useEffect, useState } from 'react'
 import { ArticleTagOptions as _ArticleTagOptions } from '@/constant'
 import { getArticleListApi } from '@/api'
-import { ArticleType } from '@/types'
+import { ArticleType, PageComponentProps } from '@/types'
 import { Empty } from '@/components/Empty'
 import { LoadingBox } from '@/components/LoadingBox'
 const ArticleTagOptions = [
@@ -21,7 +21,7 @@ const ArticleTagOptions = [
   },
   ..._ArticleTagOptions,
 ]
-export default function Page() {
+export default function Page({ accountInfo }: PageComponentProps) {
   const [currentTag, setCurrentTag] = useState(-1)
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
@@ -29,7 +29,7 @@ export default function Page() {
   const [loading, setLoading] = useState(false)
   const getArticleList = () => {
     setLoading(true)
-    getArticleListApi({ page, pageSize: 10 })
+    getArticleListApi({ page, pageSize: 10, tag: currentTag > -1 ? currentTag : undefined })
       .then(res => {
         setArticleList(res.data || [])
         setTotal(res.total || 0)
@@ -40,12 +40,11 @@ export default function Page() {
         }, 250)
       })
   }
-
   useEffect(() => {
     setPage
     total
     getArticleList()
-  }, [])
+  }, [currentTag, accountInfo])
   return (
     <Stack direction={'row'} spacing={2} className="w-container mx-auto my-4">
       {/* 类型列表 */}

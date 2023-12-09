@@ -37,7 +37,9 @@ function App({ Component, pageProps }: AppProps) {
   })
   useEffect(() => {
     if (!accountInfo?.token) {
-      socketInstance?.socket?.close()
+      socketInstance.closeServer()
+    } else {
+      socketInstance.connectServer()
     }
   }, [accountInfo])
   const router = useRouter()
@@ -60,7 +62,7 @@ function App({ Component, pageProps }: AppProps) {
                 !routesHideBackground.includes(pathname) ? 'bg-zinc-100' : ''
               }`}
             >
-              <Component {...pageProps} {...socketInstance} />
+              <Component {...pageProps} accountInfo={accountInfo} {...socketInstance} />
             </div>
           </Suspense>
           {!routesHideFooter.includes(pathname) && <Footer />}

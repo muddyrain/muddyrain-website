@@ -1,5 +1,5 @@
 import { MessageType } from '@/types'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 export interface WebSocketReturnType {
   socket: WebSocket | null
@@ -7,6 +7,8 @@ export interface WebSocketReturnType {
   onMessage: (callback: (message: MessageType) => void) => void
   onClose: (callback: () => void) => void
   onOpen: (callback: () => void) => void
+  connectServer: () => void
+  closeServer: () => void
 }
 const useWebSocket = (
   url: string,
@@ -24,7 +26,8 @@ const useWebSocket = (
   const handleCloseLog = () => {
     console.log(`%c WebSocket connection closed`, 'color: red; font-weight: bold;')
   }
-  useEffect(() => {
+
+  const connectServer = () => {
     if (!isInitWs.current && isConnect) {
       const newSocket = new WebSocket(url)
       setSocket(newSocket)
@@ -36,7 +39,13 @@ const useWebSocket = (
         handleCloseLog()
       }
     }
-  }, [url, isConnect])
+  }
+
+  const closeServer = () => {
+    if (socket) {
+      socket.close()
+    }
+  }
 
   const sendMessage = (message: MessageType) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
@@ -77,6 +86,8 @@ const useWebSocket = (
     onMessage,
     onClose,
     onOpen,
+    connectServer,
+    closeServer,
   }
 }
 

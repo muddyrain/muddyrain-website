@@ -1,3 +1,5 @@
+import { WebSocketReturnType } from '@/hooks/useWebsocket'
+
 export type THEME_TYPES =
   | 'juejin'
   | 'github'
@@ -29,6 +31,10 @@ export type THEME_TYPES =
 export interface MessageType {
   type: 'chat' | 'event' | 'status'
   payload: any
+}
+
+export interface PageComponentProps extends WebSocketReturnType {
+  accountInfo: UserType
 }
 
 export interface CommonType {

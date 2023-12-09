@@ -8,7 +8,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import { FC, useMemo } from 'react'
+import { FC, useMemo, useState } from 'react'
 import {
   Favorite as FavoriteIcon,
   Share as ShareIcon,
@@ -17,6 +17,7 @@ import {
 import { ArticleType } from '@/types'
 import { ArticleTagOptions } from '@/constant'
 import { useRouter } from 'next/router'
+import { postArticleLikeApi } from '@/api'
 export const Article: FC<{
   className?: string
   article: ArticleType
@@ -25,6 +26,17 @@ export const Article: FC<{
   const tag = useMemo(() => {
     return ArticleTagOptions.find(item => item.value === article?.tag)?.label
   }, [article])
+  const [likeCount, setLikeCount] = useState(article?.like || 0)
+  const [isLike, setIsLike] = useState(article?.isLike || false)
+  const handleClickLike = () => {
+    if (!article?.id) return
+    postArticleLikeApi(article?.id as string).then(res => {
+      if (res) {
+        setIsLike(!isLike)
+        setLikeCount(res.like)
+      }
+    })
+  }
   return (
     <Card className={`shadow-none border border-solid border-zinc-100 ${className}`}>
       {article?.cover && (
@@ -61,13 +73,20 @@ export const Article: FC<{
       <CardActions>
         <Stack direction="row" alignItems="center" spacing={1}>
           <Button variant="text" startIcon={<VisibilityIcon />}>
-            20
+            {article?.preview}
           </Button>
-          <Button variant="text" startIcon={<FavoriteIcon />}>
-            1
+          <Button
+            variant="text"
+            className={isLike ? 'text-red-500' : ''}
+            startIcon={<FavoriteIcon />}
+            onClick={() => {
+              handleClickLike()
+            }}
+          >
+            {likeCount}
           </Button>
           <Button variant="text" startIcon={<ShareIcon />}>
-            2
+            0
           </Button>
         </Stack>
       </CardActions>
