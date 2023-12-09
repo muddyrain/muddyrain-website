@@ -18,10 +18,16 @@ import { ArticleType } from '@/types'
 import { ArticleTagOptions } from '@/constant'
 import { useRouter } from 'next/router'
 import { postArticleLikeApi } from '@/api'
+import { useUserStore } from '@/store/useUserStore'
+import { useLayoutStore } from '@/store/useLayoutStore'
+import { useMessage } from '@/hooks/useMessage'
 export const Article: FC<{
   className?: string
   article: ArticleType
 }> = ({ className, article = null }) => {
+  const accountInfo = useUserStore(state => state.accountInfo)
+  const setShowLogin = useLayoutStore(state => state.setShowLogin)
+  const message = useMessage()
   const router = useRouter()
   const tag = useMemo(() => {
     return ArticleTagOptions.find(item => item.value === article?.tag)?.label
@@ -80,7 +86,14 @@ export const Article: FC<{
             className={isLike ? 'text-red-500' : ''}
             startIcon={<FavoriteIcon />}
             onClick={() => {
-              handleClickLike()
+              if (accountInfo?.token) {
+                handleClickLike()
+              } else {
+                message.showMessage('请先登录', {
+                  type: 'info',
+                })
+                setShowLogin(true)
+              }
             }}
           >
             {likeCount}
