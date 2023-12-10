@@ -9,7 +9,7 @@ import {
   RemoveRedEye as RemoveRedEyeIcon,
 } from '@mui/icons-material'
 import { Loading, Viewer } from '@/components'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   createArticleCommentApi,
   getArticleByIdApi,
@@ -23,6 +23,7 @@ import { useLayoutStore } from '@/store/useLayoutStore'
 import { useMessage } from '@/hooks/useMessage'
 import { CommentInput } from '@/components/Article/CommentInput'
 import { Comment } from '@/components/Article/Comment'
+import { Empty } from '@/components/Empty'
 
 const Card = ({ children, className }: { children: React.ReactNode; className?: string }) => (
   <Stack className={`w-full py-8 px-10 rounded-lg bg-white ${className}`}>{children}</Stack>
@@ -34,6 +35,7 @@ export default function Page() {
   const message = useMessage()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const commentTitleRef = useRef<HTMLSpanElement>(null)
   const { id } = router.query
   const [article, setArticle] = useState<ArticleType | null>(null)
   const [commentList, setCommentList] = useState<CommentType[]>([])
@@ -42,8 +44,7 @@ export default function Page() {
       setCommentList(res || [])
     })
   }
-  const getArticleList = () => {
-    setLoading(true)
+  const getArticleInfo = () => {
     getArticleByIdApi(id as string)
       .then((res: ArticleType) => {
         if (res) {
@@ -58,13 +59,14 @@ export default function Page() {
         }, 250)
       })
   }
-  const getList = () => {
+  const getData = () => {
     if (!id) return
-    getArticleList()
+    getArticleInfo()
     getArticleCommentList()
   }
   useEffect(() => {
-    getList()
+    setLoading(true)
+    getData()
   }, [id])
   const handleClickLike = () => {
     if (!id) return
@@ -83,7 +85,7 @@ export default function Page() {
   ) => {
     await createArticleCommentApi(id as string, { content, reply_id, reply_to_reply_id })
     message.showMessage('评论成功', 'success')
-    getArticleCommentList()
+    getData()
   }
 
   return (
@@ -108,9 +110,21 @@ export default function Page() {
           </IconButton>
         </Badge>
         {/* 评论 */}
-        <Badge badgeContent={article?.commentCount} color="secondary">
-          <IconButton size="large" className="bg-white">
-            <SmsIcon />
+        <Badge
+          badgeContent={article?.commentCount}
+          color={article?.isComment ? 'error' : 'secondary'}
+        >
+          <IconButton
+            size="large"
+            className="bg-white"
+            onClick={() => {
+              commentTitleRef.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              })
+            }}
+          >
+            <SmsIcon className={`${article?.isComment ? 'text-red-400' : ''} scale-125`} />
           </IconButton>
         </Badge>
         {/* 收藏 */}
@@ -130,7 +144,7 @@ export default function Page() {
           size="large"
           className="bg-white"
           onClick={() => {
-            getList()
+            getData()
           }}
         >
           <RefreshIcon />
@@ -167,7 +181,7 @@ export default function Page() {
           {/* 文章评论信息 */}
           <Card>
             <Typography variant="h5" className="">
-              评论
+              <span ref={commentTitleRef}>评论</span>
             </Typography>
             {/* 评论内容 */}
             <Stack direction="row" className="w-full mt-2" spacing={2}>
@@ -175,6 +189,7 @@ export default function Page() {
               <CommentInput onSubmit={handleSubmitComment} />
             </Stack>
             {/* 评论列表 */}
+            {commentList.length === 0 && <Empty description="暂无评论数据" />}
             {commentList.map(item => (
               <Comment
                 article={article}

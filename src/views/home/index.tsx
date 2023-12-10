@@ -7,10 +7,10 @@ import {
   Stack,
   Switch,
   Typography,
-  List,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  List,
 } from '@mui/material'
 import Image from 'next/image'
 import Carousel from 'react-material-ui-carousel'
@@ -110,12 +110,12 @@ export default function Page() {
       <Stack direction="row" spacing={4} className="mt-4">
         <Stack className="w-2/3">
           <div className="text-2xl">优质好文</div>
-          <LoadingBox loading={loading}>
-            <List>
+          <LoadingBox loading={loading} className="mt-2">
+            <Stack direction={'column'} spacing={1}>
               {articleList.map((item, index) => {
                 return <Article article={item} key={index} />
               })}
-            </List>
+            </Stack>
           </LoadingBox>
         </Stack>
         <Stack className="w-1/3">
@@ -123,7 +123,7 @@ export default function Page() {
           <List className="h-[240]">
             {Array.from({ length: 5 }).map((_, index) => {
               return (
-                <ListItem key={index} alignItems="flex-start">
+                <ListItem key={index} className="mb-2" alignItems="flex-start">
                   <ListItemAvatar>
                     <Avatar alt="Cindy Baker" />
                   </ListItemAvatar>

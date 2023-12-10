@@ -1,13 +1,4 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Chip,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Button, Card, CardActions, CardContent, Chip, Stack, Typography } from '@mui/material'
 import { FC, useMemo, useState } from 'react'
 import {
   Favorite as FavoriteIcon,
@@ -21,6 +12,7 @@ import { postArticleLikeApi } from '@/api'
 import { useUserStore } from '@/store/useUserStore'
 import { useLayoutStore } from '@/store/useLayoutStore'
 import { useMessage } from '@/hooks/useMessage'
+import Image from 'next/image'
 export const Article: FC<{
   className?: string
   article: ArticleType
@@ -46,7 +38,15 @@ export const Article: FC<{
   return (
     <Card className={`shadow-none border border-solid border-zinc-100 ${className}`}>
       {article?.cover && (
-        <CardMedia component="img" height="240" image={article.cover} alt="Paella dish" />
+        <div className="h-[240px] w-full relative overflow-hidden flex justify-center items-center group cursor-pointer">
+          <Image
+            width={0}
+            height={0}
+            className="w-full h-auto group-hover:scale-150 duration-300"
+            src={article.cover}
+            alt="article-image"
+          />
+        </div>
       )}
       <CardContent>
         <Typography className="mb-2" variant="h6" color="InfoText">

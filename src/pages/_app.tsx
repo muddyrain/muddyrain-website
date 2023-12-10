@@ -4,13 +4,14 @@ import { useUserStore } from '@/store/useUserStore'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Suspense, useEffect } from 'react'
-import { ThemeProvider, createTheme } from '@mui/material'
+import { IconButton, ThemeProvider, createTheme } from '@mui/material'
 import { Header } from '@/Layout/header'
 import '@/styles/index.scss'
 import { Background } from '@/Layout/background'
 import { Footer } from '@/Layout/footer'
 import { useRouter } from 'next/router'
 import { MessageProvider } from '@/provider/messageProvider'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 
 const theme = createTheme({
   palette: {
@@ -53,6 +54,17 @@ function App({ Component, pageProps }: AppProps) {
           <meta name="description" content={PROJECT_NAME} />
           <meta name="keywords" content={PROJECT_NAME} />
         </Head>
+        <IconButton
+          className="fixed right-10 bottom-10 bg-primary z-50"
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth',
+            })
+          }}
+        >
+          <KeyboardArrowUpIcon className="text-white" />
+        </IconButton>
         <div className={`layout_container w-full h-full flex flex-col`}>
           <Header />
           <Background />
