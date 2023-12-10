@@ -89,9 +89,7 @@ export const Article: FC<{
               if (accountInfo?.token) {
                 handleClickLike()
               } else {
-                message.showMessage('请先登录', {
-                  type: 'info',
-                })
+                message.showMessage('请先登录', 'info')
                 setShowLogin(true)
               }
             }}

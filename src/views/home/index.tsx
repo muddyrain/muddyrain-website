@@ -14,14 +14,35 @@ import {
 } from '@mui/material'
 import Image from 'next/image'
 import Carousel from 'react-material-ui-carousel'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Article } from '@/components'
+import { getArticleListApi } from '@/api'
+import { ArticleType } from '@/types'
+import { LoadingBox } from '@/components/LoadingBox'
 export default function Page() {
   const list = [
     'https://muddyrain-oss.oss-cn-hangzhou.aliyuncs.com/1.jpg',
     'https://muddyrain-oss.oss-cn-hangzhou.aliyuncs.com/2.jpg',
     'https://muddyrain-oss.oss-cn-hangzhou.aliyuncs.com/3.jpg',
   ]
+  const [articleList, setArticleList] = useState<ArticleType[]>([])
+  const [loading, setLoading] = useState(false)
+  const getArticleList = () => {
+    setLoading(true)
+    getArticleListApi({ page: 1, pageSize: 10 })
+      .then(res => {
+        setArticleList(res.data || [])
+        // setTotal(res.total || 0)
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setLoading(false)
+        }, 250)
+      })
+  }
+  useEffect(() => {
+    getArticleList()
+  }, [])
   const [autoPlay, setAutoPlay] = useState(true)
   return (
     <div className="w-container mx-auto p-3">
@@ -89,9 +110,13 @@ export default function Page() {
       <Stack direction="row" spacing={4} className="mt-4">
         <Stack className="w-2/3">
           <div className="text-2xl">优质好文</div>
-          <List>
-            <Article />
-          </List>
+          <LoadingBox loading={loading}>
+            <List>
+              {articleList.map((item, index) => {
+                return <Article article={item} key={index} />
+              })}
+            </List>
+          </LoadingBox>
         </Stack>
         <Stack className="w-1/3">
           <Typography variant="h6">最近动态</Typography>

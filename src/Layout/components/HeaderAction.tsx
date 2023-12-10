@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 import { FC, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
+import { useMessage } from '@/hooks/useMessage'
 
 export const HeaderAction: FC = () => {
   const [AccountEl, setAccountEl] = useState<HTMLButtonElement | null>(null)
@@ -22,6 +23,7 @@ export const HeaderAction: FC = () => {
     state.setAccountInfo,
   ])
   const router = useRouter()
+  const message = useMessage()
   const setShowLogin = useLayoutStore(state => state.setShowLogin)
   const setCurrentType = useLayoutStore(state => state.setCurrentType)
   const isLogged = useMemo(() => {
@@ -32,7 +34,13 @@ export const HeaderAction: FC = () => {
       <IconButton
         color="inherit"
         onClick={e => {
-          setAnchorEl(e.currentTarget)
+          if (accountInfo?.id) {
+            setAnchorEl(e.currentTarget)
+          } else {
+            message.showMessage('请先登录', 'info')
+            setShowLogin(true)
+            setCurrentType(1)
+          }
         }}
       >
         <Add />
@@ -129,7 +137,7 @@ export const HeaderAction: FC = () => {
               </ListItemButton>
               <ListItemButton
                 onClick={() => {
-                  setAccountInfo({})
+                  setAccountInfo(null)
                 }}
               >
                 <ListItemIcon className="min-w-max mr-2">

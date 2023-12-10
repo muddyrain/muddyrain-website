@@ -28,9 +28,11 @@ export default function Page() {
     if (!id) return
     setLoading(true)
     getArticleByIdApi(id as string)
-      .then(res => {
+      .then((res: ArticleType) => {
         if (res) {
           setArticle(res || null)
+        } else {
+          router.push('/404')
         }
       })
       .finally(() => {
@@ -63,9 +65,7 @@ export default function Page() {
               if (accountInfo?.token) {
                 handleClickLike()
               } else {
-                message.showMessage('请先登录', {
-                  type: 'info',
-                })
+                message.showMessage('请先登录', 'info')
                 setShowLogin(true)
               }
             }}

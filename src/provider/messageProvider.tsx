@@ -4,10 +4,12 @@ import React, { createContext, useState } from 'react'
 export interface IMessageContext {
   showMessage: (
     msg: string,
-    options?: {
-      type?: AlertColor
-      isHasClose?: boolean
-    }
+    options?:
+      | {
+          type?: AlertColor
+          isHasClose?: boolean
+        }
+      | AlertColor
   ) => void
   hideMessage: () => void
 }
@@ -28,6 +30,11 @@ export const MessageProvider: React.FC<{
   const showMessage: IMessageContext['showMessage'] = (msg, options) => {
     setOpen(true)
     setMessage(msg)
+    if (typeof options === 'string') {
+      setTypeColor(options)
+      setIsHasClose(true)
+      return
+    }
     setTypeColor(options?.type || 'success')
     setIsHasClose(options?.isHasClose === undefined ? true : options?.isHasClose)
   }
