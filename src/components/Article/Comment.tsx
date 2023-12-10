@@ -3,14 +3,15 @@ import { FC } from 'react'
 import { Comment as CommentIcon, Favorite as FavoriteIcon } from '@mui/icons-material'
 import { CommentInput } from './CommentInput'
 import { useArticleStore } from '@/store/useArticleStore'
-import { CommentType } from '@/types'
+import { ArticleType, CommentType } from '@/types'
 
 export const Comment: FC<{
   children?: React.ReactNode
   isSimple?: boolean
   comment?: CommentType
-  onSubmit?: (content: string, reply_id: number, reply_to_reply_id?: number) => void
-}> = ({ children, isSimple, comment, onSubmit }) => {
+  article?: ArticleType | null
+  onSubmit?: (content: string, reply_id: number, reply_to_reply_id?: number) => Promise<void>
+}> = ({ children, isSimple, comment, onSubmit, article }) => {
   const setCurrentCommentId = useArticleStore(state => state.setCurrentCommentId)
   const currentCommentId = useArticleStore(state => state.currentCommentId)
   const authorName = comment?.user?.nikeName || comment?.user?.userName || '匿名用户'
@@ -22,7 +23,12 @@ export const Comment: FC<{
   } else {
     title = authorName
   }
-
+  const authorTag =
+    article?.user?.id === comment?.user?.id ? (
+      <span className="inline-block mx-0.5 text-sm rounded-sm bg-primary/10 text-primary w-10 text-center">
+        作者
+      </span>
+    ) : null
   return (
     <Stack direction="row" className="w-full mt-8" spacing={2}>
       <Avatar />
@@ -30,9 +36,7 @@ export const Comment: FC<{
         {isSimple ? (
           <div>
             <span>{title}</span>
-            <span className="inline-block mx-0.5 text-sm rounded-sm bg-primary/10 text-primary w-10 text-center ">
-              作者
-            </span>
+            {authorTag}
             <span>:</span>
             <span>{comment?.content}</span>
           </div>
@@ -40,6 +44,7 @@ export const Comment: FC<{
           <>
             <div>
               <span className="text-lg">{title}</span>
+              {authorTag}
             </div>
             <div>{comment?.content}</div>
           </>
@@ -75,12 +80,13 @@ export const Comment: FC<{
           <CommentInput
             isSimple
             rows={2}
-            onSubmit={content => {
+            onSubmit={async content => {
               if (comment?.reply_id) {
-                onSubmit?.(content, comment?.reply_id as number, comment?.id as number)
+                await onSubmit?.(content, comment?.reply_id as number, comment?.id as number)
               } else {
-                onSubmit?.(content, comment?.id as number)
+                await onSubmit?.(content, comment?.id as number)
               }
+              setCurrentCommentId(0)
             }}
           />
         ) : null}

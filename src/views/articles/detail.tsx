@@ -24,8 +24,8 @@ import { useMessage } from '@/hooks/useMessage'
 import { CommentInput } from '@/components/Article/CommentInput'
 import { Comment } from '@/components/Article/Comment'
 
-const Card = ({ children }: { children: React.ReactNode }) => (
-  <Stack className="w-full py-8 px-10 rounded-lg bg-white">{children}</Stack>
+const Card = ({ children, className }: { children: React.ReactNode; className?: string }) => (
+  <Stack className={`w-full py-8 px-10 rounded-lg bg-white ${className}`}>{children}</Stack>
 )
 
 export default function Page() {
@@ -76,11 +76,14 @@ export default function Page() {
       }
     })
   }
-  const handleSubmitComment = (content: string, reply_id: number = 0, reply_to_reply_id = 0) => {
-    createArticleCommentApi(id as string, { content, reply_id, reply_to_reply_id }).then(() => {
-      message.showMessage('评论成功', 'success')
-      getArticleCommentList()
-    })
+  const handleSubmitComment = async (
+    content: string,
+    reply_id: number = 0,
+    reply_to_reply_id = 0
+  ) => {
+    await createArticleCommentApi(id as string, { content, reply_id, reply_to_reply_id })
+    message.showMessage('评论成功', 'success')
+    getArticleCommentList()
   }
 
   return (
@@ -105,7 +108,7 @@ export default function Page() {
           </IconButton>
         </Badge>
         {/* 评论 */}
-        <Badge badgeContent={0} color="secondary">
+        <Badge badgeContent={article?.commentCount} color="secondary">
           <IconButton size="large" className="bg-white">
             <SmsIcon />
           </IconButton>
@@ -134,7 +137,7 @@ export default function Page() {
         </IconButton>
       </Stack>
       {loading ? (
-        <Card>
+        <Card className="min-h-[50vh]">
           <Loading />
         </Card>
       ) : (
@@ -173,9 +176,20 @@ export default function Page() {
             </Stack>
             {/* 评论列表 */}
             {commentList.map(item => (
-              <Comment key={item.id} comment={item} onSubmit={handleSubmitComment}>
+              <Comment
+                article={article}
+                key={item.id}
+                comment={item}
+                onSubmit={handleSubmitComment}
+              >
                 {item?.children?.map(child => (
-                  <Comment isSimple key={child.id} comment={child} onSubmit={handleSubmitComment} />
+                  <Comment
+                    article={article}
+                    isSimple
+                    key={child.id}
+                    comment={child}
+                    onSubmit={handleSubmitComment}
+                  />
                 ))}
               </Comment>
             ))}

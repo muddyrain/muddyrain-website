@@ -6,7 +6,7 @@ import { FC, useState } from 'react'
 
 const MaxCommentLength = 200
 export const CommentInput: FC<{
-  onSubmit?: (content: string) => void
+  onSubmit?: (content: string) => Promise<void>
   rows?: number
   isSimple?: boolean
 }> = ({ onSubmit, rows = 4, isSimple }) => {
@@ -46,7 +46,7 @@ export const CommentInput: FC<{
         </span>
         <Button
           variant="contained"
-          onClick={() => {
+          onClick={async () => {
             if (!accountInfo?.token) {
               message.showMessage('请先登录', 'info')
               setShowLogin(true)
@@ -56,7 +56,7 @@ export const CommentInput: FC<{
               message.showMessage(`评论内容不能超过${MaxCommentLength}个字符`, 'error')
               return
             }
-            onSubmit?.(commentContent)
+            await onSubmit?.(commentContent)
             setCommentContent('')
           }}
         >

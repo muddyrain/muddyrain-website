@@ -76,6 +76,7 @@ export interface ArticleType extends CommonType {
   user: UserType
   preview: number
   like: number
+  commentCount: number
   isLike: boolean
   [key: string]: any
 }
