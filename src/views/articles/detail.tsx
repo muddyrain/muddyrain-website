@@ -1,20 +1,32 @@
 'use client'
-import { Badge, IconButton, Stack, Typography } from '@mui/material'
+import { Avatar, Badge, IconButton, Stack, Typography } from '@mui/material'
 import {
   Recommend as RecommendIcon,
   Sms as SmsIcon,
   Star as StarIcon,
   Share as ShareIcon,
+  Refresh as RefreshIcon,
   RemoveRedEye as RemoveRedEyeIcon,
 } from '@mui/icons-material'
 import { Loading, Viewer } from '@/components'
 import { useEffect, useState } from 'react'
-import { getArticleByIdApi, postArticleLikeApi } from '@/api'
+import {
+  createArticleCommentApi,
+  getArticleByIdApi,
+  getArticleCommentListApi,
+  postArticleLikeApi,
+} from '@/api'
 import { useRouter } from 'next/router'
-import { ArticleType, THEME_TYPES } from '@/types'
+import { ArticleType, CommentType, THEME_TYPES } from '@/types'
 import { useUserStore } from '@/store/useUserStore'
 import { useLayoutStore } from '@/store/useLayoutStore'
 import { useMessage } from '@/hooks/useMessage'
+import { CommentInput } from '@/components/Article/CommentInput'
+import { Comment } from '@/components/Article/Comment'
+
+const Card = ({ children }: { children: React.ReactNode }) => (
+  <Stack className="w-full py-8 px-10 rounded-lg bg-white">{children}</Stack>
+)
 
 export default function Page() {
   const accountInfo = useUserStore(state => state.accountInfo)
@@ -24,8 +36,13 @@ export default function Page() {
   const [loading, setLoading] = useState(false)
   const { id } = router.query
   const [article, setArticle] = useState<ArticleType | null>(null)
-  useEffect(() => {
-    if (!id) return
+  const [commentList, setCommentList] = useState<CommentType[]>([])
+  const getArticleCommentList = () => {
+    getArticleCommentListApi(id as string).then(res => {
+      setCommentList(res || [])
+    })
+  }
+  const getArticleList = () => {
     setLoading(true)
     getArticleByIdApi(id as string)
       .then((res: ArticleType) => {
@@ -40,6 +57,14 @@ export default function Page() {
           setLoading(false)
         }, 250)
       })
+  }
+  const getList = () => {
+    if (!id) return
+    getArticleList()
+    getArticleCommentList()
+  }
+  useEffect(() => {
+    getList()
   }, [id])
   const handleClickLike = () => {
     if (!id) return
@@ -49,6 +74,12 @@ export default function Page() {
           article => ({ ...article, isLike: !article?.isLike, like: res.like }) as ArticleType
         )
       }
+    })
+  }
+  const handleSubmitComment = (content: string, reply_id: number = 0, reply_to_reply_id = 0) => {
+    createArticleCommentApi(id as string, { content, reply_id, reply_to_reply_id }).then(() => {
+      message.showMessage('评论成功', 'success')
+      getArticleCommentList()
     })
   }
 
@@ -91,12 +122,25 @@ export default function Page() {
             <ShareIcon />
           </IconButton>
         </Badge>
+        {/* 刷新 */}
+        <IconButton
+          size="large"
+          className="bg-white"
+          onClick={() => {
+            getList()
+          }}
+        >
+          <RefreshIcon />
+        </IconButton>
       </Stack>
-      <Stack className="flex-1 py-12 px-20 rounded-lg bg-white">
-        {loading ? (
+      {loading ? (
+        <Card>
           <Loading />
-        ) : (
-          <>
+        </Card>
+      ) : (
+        <Stack spacing={2} className="flex-1">
+          {/* 文章主体信息 */}
+          <Card>
             <Typography variant="h4" className="">
               {article?.title}
             </Typography>
@@ -116,9 +160,28 @@ export default function Page() {
                 value={article?.content || ''}
               />
             </Typography>
-          </>
-        )}
-      </Stack>
+          </Card>
+          {/* 文章评论信息 */}
+          <Card>
+            <Typography variant="h5" className="">
+              评论
+            </Typography>
+            {/* 评论内容 */}
+            <Stack direction="row" className="w-full mt-2" spacing={2}>
+              <Avatar />
+              <CommentInput onSubmit={handleSubmitComment} />
+            </Stack>
+            {/* 评论列表 */}
+            {commentList.map(item => (
+              <Comment key={item.id} comment={item} onSubmit={handleSubmitComment}>
+                {item?.children?.map(child => (
+                  <Comment isSimple key={child.id} comment={child} onSubmit={handleSubmitComment} />
+                ))}
+              </Comment>
+            ))}
+          </Card>
+        </Stack>
+      )}
     </Stack>
   )
 }

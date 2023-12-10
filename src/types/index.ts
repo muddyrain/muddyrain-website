@@ -56,11 +56,13 @@ export interface ChatType extends CommonType {
  */
 export interface UserType extends CommonType {
   userName: string
+  nikeName: string
   password: string
   token: string
   id: number | string
   [key: string]: any
 }
+
 /**
  * 文章类型
  */
@@ -75,6 +77,21 @@ export interface ArticleType extends CommonType {
   preview: number
   like: number
   isLike: boolean
+  [key: string]: any
+}
+
+/**
+ * 评论类型
+ */
+export interface CommentType extends CommonType {
+  id: number | string
+  content: string
+  article: ArticleType
+  user: UserType
+  reply_id: number | string
+  reply_to_reply_id: number | string
+  replyToReply?: CommentType
+  children: CommentType[]
   [key: string]: any
 }
 

@@ -37,6 +37,14 @@ export const getArticleListApi = (data: unknown) => {
   return fetch.get(`/article`, { params: data })
 }
 
+export const createArticleCommentApi = (id: string, data: unknown) => {
+  return fetch.post(`/article/comment/` + id, data)
+}
+
+export const getArticleCommentListApi = (id: string) => {
+  return fetch.get(`/article/comment/` + id)
+}
+
 export const getArticleByIdApi = (id: string) => {
   return fetch.get(`/article/` + id)
 }
