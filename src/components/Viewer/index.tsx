@@ -11,7 +11,7 @@ export const Viewer: FC<{
   theme?: THEME_TYPES
 }> = ({ value, theme = 'juejin' }) => {
   return (
-    <div className={`${styles.markdown_container}  `}>
+    <div className={`${styles.markdown_container}`}>
       <style dangerouslySetInnerHTML={{ __html: themes[theme].style }} />
       <BytemdViewer plugins={[mediumZoom(), highlight({}), frontmatter()]} value={value} />
     </div>

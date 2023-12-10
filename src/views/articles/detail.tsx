@@ -89,7 +89,7 @@ export default function Page() {
   }
 
   return (
-    <Stack direction={'row'} className="w-container mx-auto my-4" spacing={3}>
+    <Stack direction={'row'} className="w-content mx-auto my-4" spacing={3}>
       {/* 操作导航 */}
       <Stack className="py-10 fixed -translate-x-12" spacing={2}>
         {/* 点赞 */}

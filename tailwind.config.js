@@ -13,6 +13,7 @@ export const theme = {
     },
     width: {
       container: '1180px',
+      content: '960px',
       wrapper: '1680px',
     },
     height: {

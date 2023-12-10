@@ -1,6 +1,6 @@
 'use client'
 import { Editor } from '@/components'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Button, Stack, TextField } from '@mui/material'
 import { CloudUpload as CloudUploadIcon, Add as AddIcon, Close } from '@mui/icons-material'
 import styles from './new.module.scss'
@@ -16,14 +16,13 @@ export default function Page() {
   const [visible, setVisible] = useState(false)
   type FormDataType = {
     title: string
-    content: string
     tag: number
     cover: string
     theme: string
   }
+  const [content, setContent] = useState('')
   const [formData, setFormData] = useState<FormDataType>({
     title: '',
-    content: '',
     tag: 0,
     cover: '',
     theme: 'juejin',
@@ -110,20 +109,30 @@ export default function Page() {
       })
   }
   const handleSubmit = () => {
-    if (formData.title.length === 0 || formData.content.length === 0) {
+    if (formData.title.length === 0 || content.length === 0) {
       message.showMessage('标题或内容不能为空', {
         type: 'info',
       })
       return
     }
-    createArticleApi({ ...formData, user: accountInfo?.id, cover: cover.url }).then(res => {
-      message.showMessage('发布成功', {
-        type: 'success',
-      })
-      // 跳转到文章详情页
-      router.push(`/articles/${res.id}`)
-    })
+    createArticleApi({ ...formData, user: accountInfo?.id, cover: cover.url, content }).then(
+      res => {
+        message.showMessage('发布成功', {
+          type: 'success',
+        })
+        // 跳转到文章详情页
+        router.push(`/articles/${res.id}`)
+      }
+    )
   }
+  const handleChangeTheme = useCallback((theme: string) => {
+    changeFormData({
+      theme,
+    })
+  }, [])
+  const handleChange = useCallback((value: string) => {
+    setContent(value)
+  }, [])
   return (
     <div
       className={`w-full relative overflow-hidden min-w-[860px] mx-auto my-4 p-4 rounded-lg bg-white ${styles.new_container}`}
@@ -265,19 +274,7 @@ export default function Page() {
           </div>
         </div>
       </Stack>
-      <Editor
-        value={formData.content}
-        onChangeTheme={e => {
-          changeFormData({
-            theme: e,
-          })
-        }}
-        onChange={e => {
-          changeFormData({
-            content: e,
-          })
-        }}
-      />
+      <Editor value={content} onChangeTheme={handleChangeTheme} onChange={handleChange} />
       <div className={`${styles.watermark}`}>{formData.theme}</div>
     </div>
   )
