@@ -3,7 +3,7 @@ import { MTabs, TabItem } from '@/components/MTabs'
 import { Female, Male, Place } from '@mui/icons-material'
 import { Avatar, Breadcrumbs, Button, Chip, Stack, Typography } from '@mui/material'
 import { Trends } from './components'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 export default function Page() {
   const tabsList: TabItem[] = [

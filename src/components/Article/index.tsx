@@ -7,7 +7,7 @@ import {
 } from '@mui/icons-material'
 import { ArticleType } from '@/types'
 import { ArticleTagOptions } from '@/constant'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { postArticleLikeApi } from '@/api'
 import { useUserStore } from '@/store/useUserStore'
 import { useLayoutStore } from '@/store/useLayoutStore'

@@ -10,7 +10,7 @@ const nextConfig = {
   },
   output: 'export',
   reactStrictMode: true,
-  pageExtensions: ['tsx'],
+  pageExtensions: ['mdx', 'md', 'jsx', 'js', 'tsx', 'ts'],
   trailingSlash: true,
 }
 

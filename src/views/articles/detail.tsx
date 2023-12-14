@@ -16,7 +16,7 @@ import {
   getArticleCommentListApi,
   postArticleLikeApi,
 } from '@/api'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { ArticleType, CommentType, THEME_TYPES } from '@/types'
 import { useUserStore } from '@/store/useUserStore'
 import { useLayoutStore } from '@/store/useLayoutStore'

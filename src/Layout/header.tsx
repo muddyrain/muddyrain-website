@@ -1,19 +1,22 @@
 import { IconButton, Button, Stack, Badge } from '@mui/material'
 
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router'
+import { usePathname, useRouter } from 'next/navigation'
 import { FC, memo, useMemo } from 'react'
-import { Login } from '@/components'
+import { BlockLoading, Login } from '@/components'
 import { useLayoutStore } from '@/store/useLayoutStore'
 import { PROJECT_NAME } from '@/constant'
 
-const MHeader: FC = () => {
+const HeaderAction = dynamic(() => import('./components/HeaderAction').then(e => e.HeaderAction), {
+  ssr: false,
+  loading: () => <BlockLoading size="small" />,
+})
+
+const HeaderComponent: FC = () => {
   const router = useRouter()
+  const pathname = usePathname()
   const isShowLogin = useLayoutStore(state => state.isShowLogin)
-  const HeaderAction = dynamic(
-    () => import('./components/HeaderAction').then(e => e.HeaderAction),
-    { ssr: false }
-  )
+
   const navList = useMemo(() => {
     return [
       {
@@ -22,38 +25,42 @@ const MHeader: FC = () => {
       },
       {
         label: '好文',
-        href: '/articles',
+        href: '/articles/',
       },
       {
         label: '碎语',
-        href: '/words',
+        href: '/words/',
       },
       {
         label: '音乐',
-        href: '/music',
+        href: '/music/',
       },
       {
         label: '图画',
-        href: '/picture',
+        href: '/picture/',
       },
       {
         label: '聊天',
-        href: '/chat',
+        href: '/chat/',
         number: 1,
       },
     ]
   }, [])
   return (
-    <div className="w-full flex items-center bg-white z-20 sticky top-0 py-2 shadow-md justify-between px-4 header_container duration-300">
+    <div className="w-full flex items-center bg-white z-20 sticky top-0 py-2 shadow-md justify-between px-4 header_container relative duration-300">
       {/* Logo */}
       <IconButton color="primary">{PROJECT_NAME}</IconButton>
       {/* nav */}
-      <Stack className="flex-1 mx-40 justify-center" direction="row" spacing={2}>
+      <Stack
+        className="flex-1 absolute left-1/2 translate-x-[-50%] justify-center"
+        direction="row"
+        spacing={2}
+      >
         {navList.map((nav, index) => {
           return (
             <Badge badgeContent={nav.number} color="error" key={index}>
               <Button
-                color={router?.route === nav.href ? 'primary' : 'inherit'}
+                color={pathname === nav.href ? 'primary' : 'inherit'}
                 onClick={() => {
                   router.push(nav.href)
                 }}
@@ -71,4 +78,4 @@ const MHeader: FC = () => {
   )
 }
 
-export const Header = memo(MHeader)
+export const Header = memo(HeaderComponent)

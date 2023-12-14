@@ -9,7 +9,7 @@ import { Header } from '@/Layout/header'
 import '@/styles/index.scss'
 import { Background } from '@/Layout/background'
 import { Footer } from '@/Layout/footer'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { MessageProvider } from '@/provider/messageProvider'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 

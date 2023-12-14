@@ -11,11 +11,11 @@ import {
   Popover,
   Stack,
 } from '@mui/material'
-import { FC, useMemo, useState } from 'react'
-import { useRouter } from 'next/router'
+import { FC, memo, useMemo, useState } from 'react'
 import { useMessage } from '@/hooks/useMessage'
+import { useRouter } from 'next/navigation'
 
-export const HeaderAction: FC = () => {
+const HeaderActionComponent: FC = () => {
   const [AccountEl, setAccountEl] = useState<HTMLButtonElement | null>(null)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [accountInfo, setAccountInfo] = useUserStore(state => [
@@ -157,3 +157,5 @@ export const HeaderAction: FC = () => {
     </Stack>
   )
 }
+
+export const HeaderAction = memo(HeaderActionComponent)

@@ -9,7 +9,7 @@ import Image from 'next/image'
 import { createArticleApi, removeUploadFileApi, uploadFile } from '@/api'
 import { useMessage } from '@/hooks/useMessage'
 import { useUserStore } from '@/store/useUserStore'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { ArticleTagOptions } from '@/constant'
 export default function Page() {
   const [titleError, setTitleError] = useState(false)
