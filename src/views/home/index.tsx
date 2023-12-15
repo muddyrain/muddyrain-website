@@ -16,8 +16,8 @@ import Image from 'next/image'
 import Carousel from 'react-material-ui-carousel'
 import { useEffect, useState } from 'react'
 import { Article } from '@/components'
-import { getArticleListApi } from '@/api'
-import { ArticleType } from '@/types'
+import { getArticleListApi, getRecentActivityListApi } from '@/api'
+import { ArticleType, RecentActivityType } from '@/types'
 import { LoadingBox } from '@/components/LoadingBox'
 export default function Page() {
   const list = [
@@ -27,6 +27,7 @@ export default function Page() {
   ]
   const [articleList, setArticleList] = useState<ArticleType[]>([])
   const [loading, setLoading] = useState(false)
+  const [recentActivityList, setRecentActivityList] = useState<RecentActivityType[]>([])
   const getArticleList = () => {
     setLoading(true)
     getArticleListApi({ page: 1, pageSize: 10 })
@@ -40,8 +41,14 @@ export default function Page() {
         }, 250)
       })
   }
+  const getRecentActivityList = () => {
+    getRecentActivityListApi().then(res => {
+      setRecentActivityList(res || [])
+    })
+  }
   useEffect(() => {
     getArticleList()
+    getRecentActivityList()
   }, [])
   const [autoPlay, setAutoPlay] = useState(true)
   return (
@@ -121,14 +128,14 @@ export default function Page() {
         <Stack className="w-1/3">
           <Typography variant="h6">最近动态</Typography>
           <List className="h-[240]">
-            {Array.from({ length: 5 }).map((_, index) => {
+            {recentActivityList.map((item, index) => {
               return (
                 <ListItem key={index} className="mb-2" alignItems="flex-start">
                   <ListItemAvatar>
                     <Avatar alt="Cindy Baker" />
                   </ListItemAvatar>
                   <ListItemText
-                    primary="Oui Oui"
+                    primary={item.user?.nikeName || ''}
                     secondary={
                       <>
                         <Typography
@@ -137,9 +144,8 @@ export default function Page() {
                           variant="body2"
                           color="text.primary"
                         >
-                          Sandra Adams
+                          {item.type}
                         </Typography>
-                        {' — Do you have Paris recommendations? Have you ever…'}
                       </>
                     }
                   />

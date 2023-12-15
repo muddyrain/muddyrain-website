@@ -33,6 +33,15 @@ export interface MessageType {
   payload: any
 }
 
+export enum RecentActivityTypeEnum {
+  // 注册
+  register = 0,
+  // 登录
+  login = 1,
+  // 发布文章
+  publishArticle = 2,
+}
+
 export interface PageComponentProps extends WebSocketInstance {
   accountInfo: UserType
 }
@@ -63,6 +72,16 @@ export interface UserType extends CommonType {
   [key: string]: any
 }
 
+/**
+ * 活动类型
+ */
+export interface RecentActivityType extends CommonType {
+  id: number | string
+  content: string
+  user: UserType
+  type: RecentActivityTypeEnum
+  [key: string]: any
+}
 /**
  * 文章类型
  */
@@ -109,4 +128,15 @@ export enum ArticleTag {
   '人工智能',
   '开发工具',
   '代码人生',
+}
+
+/**
+ * 响应数据类型
+ */
+export interface ResponseDataType<T = any> {
+  data: T
+  isFormate: boolean
+  page: number
+  pageSize: number
+  total: number
 }

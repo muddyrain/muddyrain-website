@@ -1,4 +1,5 @@
 import { fetch } from '@/service'
+import { RecentActivityType } from '@/types'
 
 /**
  * 分页查询参数类型
@@ -27,6 +28,10 @@ export const registerApi = (data: { userName: string; password: string }) => {
 
 export const getUsersListApi = (data: PagerQueryParams) => {
   return fetch.get('/user', { params: data })
+}
+
+export const getRecentActivityListApi = () => {
+  return fetch.get<RecentActivityType[]>('/recent-activity')
 }
 
 export const createArticleApi = (data: unknown) => {
