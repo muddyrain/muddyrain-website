@@ -36,7 +36,7 @@ export const Article: FC<{
     })
   }
   return (
-    <Card className={`shadow-none border border-solid border-zinc-100 ${className}`}>
+    <Card elevation={0} className={`shadow-sm ${className}`}>
       {article?.cover && (
         <div className="h-[240px] w-full relative overflow-hidden flex justify-center items-center group cursor-pointer">
           <Image
@@ -64,17 +64,19 @@ export const Article: FC<{
             )}
           </Stack>
         </Typography>
-        <Typography className="mb-2 truncate text-ellipsis" variant="body2" color="text.secondary">
+        <Typography className="truncate text-ellipsis" variant="body2" color="text.secondary">
           <span>{article?.brief_content || ''}</span>
         </Typography>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            router.push('/articles/' + article?.id)
-          }}
-        >
-          开始阅读
-        </Button>
+        <div className="mt-2">
+          <Button
+            variant="outlined"
+            onClick={() => {
+              router.push('/articles/' + article?.id)
+            }}
+          >
+            开始阅读
+          </Button>
+        </div>
       </CardContent>
       <CardActions>
         <Stack direction="row" alignItems="center" spacing={1}>

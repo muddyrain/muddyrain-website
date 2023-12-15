@@ -1,6 +1,5 @@
 import { ScrollView } from '@/components'
 import { LAYOUT_SCROLLBAR_CLASSES } from '@/constant/classes'
-import { WebSocketReturnType } from '@/hooks/useWebsocket'
 import { useChatStore } from '@/store/useChatStore'
 import { ClearOutlined, Search, Settings } from '@mui/icons-material'
 import { Avatar, Button, IconButton } from '@mui/material'
@@ -17,7 +16,7 @@ interface CurrentMessageType {
   id: number
   content: string
 }
-export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
+export default function Page() {
   const [isShow, setIsShow] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [messageValue, setMessageValue] = useState('')
@@ -27,6 +26,7 @@ export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
     state.currentActiveId,
     state.setCurrentActiveId,
   ])
+  const socketInstance = useChatStore(state => state.socketInstance)
   const [messageList, setMessageList] = useState<CurrentMessageType[]>([])
   const [userList, setUserList] = useState<UserType[]>([])
   const accountInfo = useUserStore(state => state.accountInfo)
@@ -37,7 +37,7 @@ export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
     }
     setMessageValue('')
     textareaRef.current?.focus()
-    sendMessage({
+    socketInstance?.sendMessage({
       type: 'chat',
       payload: {
         content: messageValue,
@@ -92,8 +92,8 @@ export default function Page({ onMessage, sendMessage }: WebSocketReturnType) {
     }, 250)
   }, [])
   startTransition(() => {
-    if (onMessage) {
-      onMessage(data => {
+    if (socketInstance?.onMessage) {
+      socketInstance?.onMessage(data => {
         const payload = data.payload as ChatType
         if (payload.receiver_id) {
           setMessageList(prev => {

@@ -1,4 +1,4 @@
-import { WebSocketReturnType } from '@/hooks/useWebsocket'
+import { WebSocketInstance } from '@/hooks/useWebsocket'
 
 export type THEME_TYPES =
   | 'juejin'
@@ -33,7 +33,7 @@ export interface MessageType {
   payload: any
 }
 
-export interface PageComponentProps extends WebSocketReturnType {
+export interface PageComponentProps extends WebSocketInstance {
   accountInfo: UserType
 }
 

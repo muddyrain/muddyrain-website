@@ -1,7 +1,7 @@
 import { MessageType } from '@/types'
 import { useRef, useState } from 'react'
 
-export interface WebSocketReturnType {
+export interface WebSocketInstance {
   socket: WebSocket | null
   sendMessage: (message: MessageType) => void
   onMessage: (callback: (message: MessageType) => void) => void
@@ -17,7 +17,7 @@ const useWebSocket = (
   }: {
     isConnect: boolean
   }
-): WebSocketReturnType => {
+): WebSocketInstance => {
   const [socket, setSocket] = useState<WebSocket | null>(null)
   const isInitWs = useRef(false)
   const handleOpenLog = () => {

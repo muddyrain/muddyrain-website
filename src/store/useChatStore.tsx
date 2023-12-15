@@ -1,3 +1,4 @@
+import { WebSocketInstance } from '@/hooks/useWebsocket'
 import { create } from 'zustand'
 
 interface StoreProps {
@@ -7,14 +8,14 @@ interface StoreProps {
   currentActiveId: number
   setCurrentActiveId: (currentActiveId: number) => void
   /**
-   * 当前socket实体
+   * 当前socket实例
    */
-  socket: WebSocket | null
-  setSocket: (socket: WebSocket | null) => void
+  socketInstance: WebSocketInstance | null
+  setSocketInstance: (socket: StoreProps['socketInstance']) => void
 }
 export const useChatStore = create<StoreProps>(set => ({
   currentActiveId: 0,
   setCurrentActiveId: id => set({ currentActiveId: id }),
-  socket: null,
-  setSocket: socket => set({ socket }),
+  socketInstance: null,
+  setSocketInstance: socketInstance => set({ socketInstance }),
 }))

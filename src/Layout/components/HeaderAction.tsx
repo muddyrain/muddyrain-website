@@ -125,7 +125,7 @@ const HeaderActionComponent: FC = () => {
                   router.push('/user/' + accountInfo?.id)
                 }}
               >
-                <ListItemIcon className="min-w-max mr-2">
+                <ListItemIcon className="min-w-max">
                   <Portrait className="text-md" />
                 </ListItemIcon>
                 <ListItemText
@@ -140,7 +140,7 @@ const HeaderActionComponent: FC = () => {
                   setAccountInfo(null)
                 }}
               >
-                <ListItemIcon className="min-w-max mr-2">
+                <ListItemIcon className="min-w-max">
                   <Logout className="text-md" />
                 </ListItemIcon>
                 <ListItemText
