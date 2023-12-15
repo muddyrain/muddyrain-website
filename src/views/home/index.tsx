@@ -98,9 +98,9 @@ export default function Page() {
                 <Button variant="contained" className="rounded-full duration-300">
                   请阅读我
                 </Button>
-                <Typography color="white" className="mt-2">
-                  芳树无人花自落，春山一路鸟空啼
-                </Typography>
+                <div className="mt-2">
+                  <Typography color="white">芳树无人花自落，春山一路鸟空啼</Typography>
+                </div>
               </div>
             </div>
           )

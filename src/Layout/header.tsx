@@ -47,7 +47,7 @@ const HeaderComponent: FC = () => {
     ]
   }, [])
   return (
-    <div className="w-full flex items-center bg-white z-20 sticky top-0 py-2 shadow-md justify-between px-4 header_container relative duration-300">
+    <div className="w-full flex items-center bg-white z-20 top-0 py-2 shadow-md justify-between px-4 header_container relative duration-300">
       {/* Logo */}
       <IconButton color="primary">{PROJECT_NAME}</IconButton>
       {/* nav */}
