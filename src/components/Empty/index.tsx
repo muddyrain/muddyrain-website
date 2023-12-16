@@ -20,7 +20,7 @@ export const Empty: FC<{
         src={NoData}
         alt="no-data"
       />
-      <span className="text-gray-600 mt-2">{description}</span>
+      <span className="text-gray-500 mt-2">{description}</span>
     </Box>
   )
 }

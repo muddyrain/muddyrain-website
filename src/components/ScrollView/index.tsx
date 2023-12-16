@@ -5,12 +5,16 @@ import {
 import 'overlayscrollbars/overlayscrollbars.css'
 import { FC } from 'react'
 
-export const ScrollView: FC<OverlayScrollbarsComponentProps> = ({ children, ...props }) => {
+export const ScrollView: FC<OverlayScrollbarsComponentProps> = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
     <OverlayScrollbarsComponent
       element="div"
       defer
-      className="relative"
+      className={`relative w-full h-full ${className}`}
       options={{ scrollbars: { autoHide: 'scroll', autoHideSuspend: true } }}
       {...props}
     >

@@ -23,8 +23,8 @@ export const SongDetail: FC = () => {
       <div className="w-full h-full absolute top-0 left-0 bg-white/50 drop-shadow-lg">
         <Background />
       </div>
-      <div className="w-full h-full flex flex-col absolute top-0 p-8 left-0 z-10">
-        <ScrollView>
+      <div className="w-full h-full flex flex-col absolute top-0 p-8 left-0 z-10 overflow-hidden">
+        <ScrollView className="w-full h-full">
           <Stack direction={'row'} className="h-8 " alignItems={'center'} spacing={2}>
             <h1 className="text-zinc-600 cursor-pointer hover:text-zinc-400 duration-300">
               Young And Beautiful

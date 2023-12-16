@@ -1,6 +1,6 @@
 import { Box, Button, Stack } from '@mui/material'
 import Image from 'next/image'
-import NotFoundImage from './404.png'
+import NotFoundImage from './404.svg'
 import { useRouter } from 'next/navigation'
 
 export default function NotFound() {

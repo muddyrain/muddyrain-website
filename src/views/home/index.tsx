@@ -19,6 +19,7 @@ import { Article } from '@/components'
 import { getArticleListApi, getRecentActivityListApi } from '@/api'
 import { ArticleType, RecentActivityType } from '@/types'
 import { LoadingBox } from '@/components/LoadingBox'
+import { Empty } from '@/components/Empty'
 export default function Page() {
   const list = [
     'https://muddyrain-oss.oss-cn-hangzhou.aliyuncs.com/1.jpg',
@@ -118,6 +119,7 @@ export default function Page() {
         <Stack className="w-2/3">
           <div className="text-2xl">优质好文</div>
           <LoadingBox loading={loading} className="mt-2">
+            {articleList.length === 0 && <Empty />}
             <Stack direction={'column'} spacing={1}>
               {articleList.map((item, index) => {
                 return <Article article={item} key={index} />
@@ -128,33 +130,39 @@ export default function Page() {
         <Stack className="w-1/3">
           <Typography variant="h6">最近动态</Typography>
           <List className="h-[240]">
-            {recentActivityList.map((item, index) => {
-              return (
-                <ListItem key={index} className="mb-2" alignItems="flex-start">
-                  <ListItemAvatar>
-                    <Avatar alt="Cindy Baker" />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={item.user?.nikeName || ''}
-                    secondary={
-                      <>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="body2"
-                          color="text.primary"
-                        >
-                          {item.type}
-                        </Typography>
-                      </>
-                    }
-                  />
-                </ListItem>
-              )
-            })}
-            <div className="flex justify-center">
-              <Button>查看更多</Button>
-            </div>
+            {recentActivityList.length === 0 ? (
+              <Empty />
+            ) : (
+              <>
+                {recentActivityList.map((item, index) => {
+                  return (
+                    <ListItem key={index} className="mb-2" alignItems="flex-start">
+                      <ListItemAvatar>
+                        <Avatar alt="Cindy Baker" />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={item.user?.nikeName || ''}
+                        secondary={
+                          <>
+                            <Typography
+                              sx={{ display: 'inline' }}
+                              component="span"
+                              variant="body2"
+                              color="text.primary"
+                            >
+                              {item.type}
+                            </Typography>
+                          </>
+                        }
+                      />
+                    </ListItem>
+                  )
+                })}
+                <div className="flex justify-center">
+                  <Button>查看更多</Button>
+                </div>
+              </>
+            )}
           </List>
         </Stack>
       </Stack>

@@ -1,4 +1,4 @@
-import { IconButton, Button, Stack, Badge } from '@mui/material'
+import { Button, Stack, Badge } from '@mui/material'
 
 import dynamic from 'next/dynamic'
 import { usePathname, useRouter } from 'next/navigation'
@@ -49,7 +49,15 @@ const HeaderComponent: FC = () => {
   return (
     <div className="w-full flex items-center bg-white z-20 top-0 py-2 shadow-md justify-between px-4 header_container relative duration-300">
       {/* Logo */}
-      <IconButton color="primary">{PROJECT_NAME}</IconButton>
+      <Button
+        color="primary"
+        variant="text"
+        onClick={() => {
+          router.push('/')
+        }}
+      >
+        <span className="text-2xl">{PROJECT_NAME}</span>
+      </Button>
       {/* nav */}
       <Stack
         className="flex-1 absolute left-1/2 translate-x-[-50%] justify-center"

@@ -9,6 +9,7 @@ import { useUserStore } from '@/store/useUserStore'
 import { getUsersListApi } from '@/api'
 import { ChatType, UserType } from '@/types'
 import { useLayoutStore } from '@/store/useLayoutStore'
+import { Empty } from '@/components/Empty'
 
 interface CurrentMessageType {
   time: string
@@ -147,8 +148,13 @@ export default function Page() {
         </div>
         {/* 信息列表 */}
         <div className="flex-1 flex flex-col overflow-hidden relative ">
-          <ScrollView>
+          <ScrollView className="w-full h-full">
             <div className="w-full h-full">
+              {userList.length === 0 && (
+                <div className="w-full h-full flex flex-col justify-center items-center">
+                  <Empty />
+                </div>
+              )}
               {userList.map((item, index) => (
                 <div
                   className={`h-20 flex items-center pr-4 px-3 pl-3 border-0 border-b border-solid border-zinc-200 last:border-b-0 cursor-pointer duration-300 ${
