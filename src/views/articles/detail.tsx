@@ -16,7 +16,7 @@ import {
   getArticleCommentListApi,
   postArticleLikeApi,
 } from '@/api'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { ArticleType, CommentType, THEME_TYPES } from '@/types'
 import { useUserStore } from '@/store/useUserStore'
 import { useLayoutStore } from '@/store/useLayoutStore'
@@ -34,9 +34,9 @@ export default function Page() {
   const setShowLogin = useLayoutStore(state => state.setShowLogin)
   const message = useMessage()
   const router = useRouter()
+  const { id } = useParams<{ id: string }>()
   const [loading, setLoading] = useState(false)
   const commentTitleRef = useRef<HTMLSpanElement>(null)
-  const { id } = router.query
   const [article, setArticle] = useState<ArticleType | null>(null)
   const [commentList, setCommentList] = useState<CommentType[]>([])
   const getArticleCommentList = () => {

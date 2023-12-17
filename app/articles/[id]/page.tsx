@@ -1,3 +1,4 @@
+'use client'
 import ArticlesDetailPage from '@/views/articles/detail'
 
 export default function Page() {
