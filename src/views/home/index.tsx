@@ -14,12 +14,83 @@ import {
 } from '@mui/material'
 import Image from 'next/image'
 import Carousel from 'react-material-ui-carousel'
-import { useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Article } from '@/components'
 import { getArticleListApi, getRecentActivityListApi } from '@/api'
-import { ArticleType, RecentActivityType } from '@/types'
+import { ArticleType, RecentActivityType, RecentActivityTypeEnum } from '@/types'
 import { LoadingBox } from '@/components/LoadingBox'
 import { Empty } from '@/components/Empty'
+import { formateTime } from '@/utils'
+const RecentActivityList: FC = () => {
+  const [recentActivityList, setRecentActivityList] = useState<RecentActivityType[]>([])
+  const [loading, setLoading] = useState(false)
+  const formatType = (type: RecentActivityTypeEnum) => {
+    switch (type) {
+      case RecentActivityTypeEnum.login:
+        return '登录了系统'
+      case RecentActivityTypeEnum.register:
+        return '注册了系统'
+      default:
+        return '未知'
+    }
+  }
+  const getRecentActivityList = () => {
+    setLoading(true)
+    getRecentActivityListApi()
+      .then(res => {
+        setRecentActivityList(res || [])
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setLoading(false)
+        }, 250)
+      })
+  }
+  useEffect(() => {
+    getRecentActivityList()
+  }, [])
+  return (
+    <LoadingBox loading={loading}>
+      <List className="h-[240]">
+        {recentActivityList.length === 0 ? (
+          <Empty />
+        ) : (
+          <>
+            {recentActivityList.map((item, index) => {
+              return (
+                <ListItem key={index} className="mb-2" alignItems="flex-start">
+                  <ListItemAvatar>
+                    <Avatar alt="Cindy Baker" />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={
+                      <div className="flex justify-between">
+                        {item.user?.nikeName || item.user?.userName || '匿名用户'}
+                        <span>{formateTime(item.formatted_create_time, 'YYYY-MM-DD')}</span>
+                      </div>
+                    }
+                    secondary={
+                      <>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          {formatType(item.type as RecentActivityTypeEnum)}
+                        </Typography>
+                      </>
+                    }
+                  />
+                </ListItem>
+              )
+            })}
+          </>
+        )}
+      </List>
+    </LoadingBox>
+  )
+}
 export default function Page() {
   const list = [
     'https://muddyrain-oss.oss-cn-hangzhou.aliyuncs.com/1.jpg',
@@ -28,7 +99,6 @@ export default function Page() {
   ]
   const [articleList, setArticleList] = useState<ArticleType[]>([])
   const [loading, setLoading] = useState(false)
-  const [recentActivityList, setRecentActivityList] = useState<RecentActivityType[]>([])
   const getArticleList = () => {
     setLoading(true)
     getArticleListApi({ page: 1, pageSize: 10 })
@@ -42,14 +112,9 @@ export default function Page() {
         }, 250)
       })
   }
-  const getRecentActivityList = () => {
-    getRecentActivityListApi().then(res => {
-      setRecentActivityList(res || [])
-    })
-  }
+
   useEffect(() => {
     getArticleList()
-    getRecentActivityList()
   }, [])
   const [autoPlay, setAutoPlay] = useState(true)
   return (
@@ -129,41 +194,7 @@ export default function Page() {
         </Stack>
         <Stack className="w-1/3">
           <Typography variant="h6">最近动态</Typography>
-          <List className="h-[240]">
-            {recentActivityList.length === 0 ? (
-              <Empty />
-            ) : (
-              <>
-                {recentActivityList.map((item, index) => {
-                  return (
-                    <ListItem key={index} className="mb-2" alignItems="flex-start">
-                      <ListItemAvatar>
-                        <Avatar alt="Cindy Baker" />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={item.user?.nikeName || ''}
-                        secondary={
-                          <>
-                            <Typography
-                              sx={{ display: 'inline' }}
-                              component="span"
-                              variant="body2"
-                              color="text.primary"
-                            >
-                              {item.type}
-                            </Typography>
-                          </>
-                        }
-                      />
-                    </ListItem>
-                  )
-                })}
-                <div className="flex justify-center">
-                  <Button>查看更多</Button>
-                </div>
-              </>
-            )}
-          </List>
+          <RecentActivityList />
         </Stack>
       </Stack>
     </div>
