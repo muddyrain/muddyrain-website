@@ -1,7 +1,8 @@
 import { useLayoutStore } from '@/store/useLayoutStore'
 import { useUserStore } from '@/store/useUserStore'
-import { AccountCircle, Add, EditNote, Logout, Portrait } from '@mui/icons-material'
+import { Add, EditNote, Logout, Portrait } from '@mui/icons-material'
 import {
+  Avatar,
   Chip,
   IconButton,
   List,
@@ -98,14 +99,14 @@ const HeaderActionComponent: FC = () => {
       ) : (
         <>
           <Stack direction={'row'} alignItems={'center'} spacing={1}>
-            <span>{accountInfo?.userName}</span>
+            <span>{accountInfo?.nickName || accountInfo?.userName}</span>
             <IconButton
               color="inherit"
               onClick={e => {
                 setAccountEl(e.currentTarget)
               }}
             >
-              <AccountCircle />
+              <Avatar src={accountInfo?.avatar} />
             </IconButton>
           </Stack>
           <Popover

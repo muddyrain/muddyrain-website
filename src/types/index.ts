@@ -65,11 +65,15 @@ export interface ChatType extends CommonType {
  */
 export interface UserType extends CommonType {
   userName: string
-  nikeName: string
+  nickName: string
   password: string
   token: string
+  description: string
+  avatar: string
+  birthday: string
+  gender: number | string
+  email: string
   id: number | string
-  [key: string]: any
 }
 
 /**
