@@ -65,7 +65,7 @@ const RecentActivityList: FC = () => {
                   <ListItemText
                     primary={
                       <div className="flex justify-between">
-                        {item.user?.nikeName || item.user?.userName || '匿名用户'}
+                        {item.user?.nickName || item.user?.userName || '匿名用户'}
                         <span>{formateTime(item.formatted_create_time, 'YYYY-MM-DD')}</span>
                       </div>
                     }

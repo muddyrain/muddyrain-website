@@ -1,43 +1,45 @@
 'use client'
 import { Loading } from '@/components'
+import { LazyImage } from '@/components/LazyImage'
 import { ImageList, ImageListItem } from '@mui/material'
-import Image from 'next/image'
 import { createClient } from 'pexels'
-import { useEffect, useState } from 'react'
-import colors from 'tailwindcss/colors'
+import { useEffect, useRef, useState } from 'react'
 const client = createClient('KHVIPVzSojHHqIBSsI93saqTHpyQLrynPqq9DiPjTHgPkRctuwaPxHhf')
 
 export default function Page() {
-  const [loading, setLoading] = useState(false)
   const [imagesList, setImagesList] = useState<any[]>([])
+  const loadingRef = useRef<HTMLDivElement>(null)
+  const [page, setPage] = useState(1)
+  const getList = () => {
+    client.photos.search({ query: 'cartoon', page, per_page: 20 }).then((res: any) => {
+      setImagesList(list => [...list, ...res.photos])
+    })
+  }
   useEffect(() => {
-    setLoading(true)
-    client.photos
-      .search({ query: 'cartoon', per_page: 10 })
-      .then((res: any) => {
-        setImagesList(res.photos)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [])
+    getList()
+  }, [page])
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        console.log('loading')
+        setPage(page => page + 1)
+      }
+    })
+    if (loadingRef.current) {
+      observer.observe(loadingRef.current)
+    }
+  }, [loadingRef])
   return (
-    <div className="w-wrapper mx-auto mt-4 p-4">
-      <ImageList variant="masonry" cols={6} gap={20}>
+    <div className="w-container mx-auto mt-4 p-4">
+      <ImageList className="w-full" variant="masonry" cols={6} gap={2}>
         {imagesList.map((item: any, index) => (
-          <ImageListItem key={index} className="w-20">
-            <Image
-              src={`${item.src?.original}`}
-              width={'100'}
-              height={250}
-              alt={'picture'}
-              loading="lazy"
-            />
+          <ImageListItem key={index} className="w-full">
+            <LazyImage src={item.src} />
           </ImageListItem>
         ))}
       </ImageList>
-      <div className="flex justify-center">
-        {loading && <Loading color={colors['violet']['400']} />}
+      <div className="flex justify-center mt-2" ref={loadingRef}>
+        <Loading />
       </div>
     </div>
   )
