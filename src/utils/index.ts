@@ -16,6 +16,9 @@ export const formateTime = (
   return dayjs(time).format(formate)
 }
 
+/**
+ * 节流函数
+ */
 export function throttle<T extends (...args: any[]) => any>(
   func: T,
   delay: number
@@ -40,5 +43,22 @@ export function throttle<T extends (...args: any[]) => any>(
         return result
       }, delay - elapsedTime)
     }
+  }
+}
+
+/**
+ * 防抖函数
+ */
+export function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  delay: number
+): (...args: Parameters<T>) => void {
+  let timerId: ReturnType<typeof setTimeout> | null
+
+  return function (this: any, ...args: Parameters<T>): void {
+    clearTimeout(timerId!)
+    timerId = setTimeout(() => {
+      func.apply(this, args)
+    }, delay)
   }
 }

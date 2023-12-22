@@ -144,3 +144,18 @@ export interface ResponseDataType<T = any> {
   pageSize: number
   total: number
 }
+
+/**
+ * src 类型
+ */
+export interface srcType {
+  landscape: string
+  large: string
+  large2x: string
+  medium: string
+  original: string
+  portrait: string
+  small: string
+  tiny: string
+  [key: string]: string
+}

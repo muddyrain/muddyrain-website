@@ -8,7 +8,7 @@ const nextConfig = {
       'http://p1.music.126.net',
     ],
   },
-  reactStrictMode: true,
+  reactStrictMode: false,
   pageExtensions: ['mdx', 'md', 'jsx', 'js', 'tsx', 'ts'],
   trailingSlash: true,
 }

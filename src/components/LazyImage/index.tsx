@@ -1,17 +1,7 @@
+import { srcType } from '@/types'
 import NextImage from 'next/image'
 import { FC, useEffect, useRef, useState } from 'react'
 
-interface srcType {
-  landscape: string
-  large: string
-  large2x: string
-  medium: string
-  original: string
-  portrait: string
-  small: string
-  tiny: string
-  [key: string]: string
-}
 export const LazyImage: FC<{
   src: srcType
 }> = ({ src }) => {
