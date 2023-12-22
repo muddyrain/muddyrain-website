@@ -1,4 +1,5 @@
 'use client'
+import { LazyImage } from '@/components/LazyImage'
 import { WaterFall } from '@/components/WaterFall'
 import { createClient } from 'pexels'
 import { useEffect, useState } from 'react'
@@ -21,6 +22,23 @@ export default function Page() {
       <WaterFall
         className="w-container"
         dataSource={imagesList}
+        renderItem={item => {
+          return (
+            <div
+              style={{
+                position: 'absolute',
+                visibility: 'visible',
+                pointerEvents: 'auto',
+                width: item.width,
+                height: item.height,
+                transform: `translateX(${item.left}px) translateY(${item.top}px)`,
+              }}
+            >
+              <LazyImage src={item.src} />
+            </div>
+          )
+        }}
+        imageKey="src.small"
         onRefresh={() => {
           setPage(_page => _page + 1)
         }}
