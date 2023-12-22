@@ -19,6 +19,8 @@ interface ListItem {
   left: number
   top: number
   src: srcType
+  id: number
+  key: string
 }
 export const WaterFall: FC<WaterFallProps> = ({
   className,
@@ -51,8 +53,9 @@ export const WaterFall: FC<WaterFallProps> = ({
     if (containerRef.current && !isLoading) {
       setIsLoading(true)
       const columnWidth = computedWidth()
-      for (const item of dataSource) {
+      for (let i = 0; i < dataSource.length; i++) {
         if (containerRef.current) {
+          const item = dataSource[i]
           const imageUrl = item.src.small
           const { height: imageHeight, image } = await loadImage(imageUrl, columnWidth)
           // 计算高度最小的列
@@ -66,8 +69,10 @@ export const WaterFall: FC<WaterFallProps> = ({
             top: minHeight,
             width: columnWidth,
             height: imageHeight,
+            id: item.id,
+            key: `${i}-${item.id || '0'}`,
           })
-          setList([...list])
+          setList(() => [...list])
           // 更新高度
           heightList.current[minIndex] = minHeight + imageHeight + gap
           // 设置容器高度
@@ -91,38 +96,40 @@ export const WaterFall: FC<WaterFallProps> = ({
 
   const debounceCallback = useCallback(
     debounce(() => {
-      onRefresh?.()
-      console.log('loadData')
+      !isLoading && onRefresh?.()
     }, 500),
-    []
+    [isLoading]
   )
   useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        debounceCallback()
+    let observer: IntersectionObserver | null = null
+    if (list.length > 0) {
+      observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          debounceCallback()
+        }
+      })
+      if (loadingRef.current) {
+        observer.observe(loadingRef.current)
       }
-    })
-    if (loadingRef.current) {
-      observer.observe(loadingRef.current)
     }
     return () => {
       if (loadingRef.current) {
-        observer.unobserve(loadingRef.current)
+        observer?.unobserve(loadingRef.current)
       }
     }
-  }, [loadingRef])
+  }, [loadingRef, isLoading, list])
 
   return (
     <div>
       <div
-        className={`flex flex-wrap relative border duration-200 border-zinc-400 border-solid ${className}`}
+        className={`flex flex-wrap relative duration-200 ${className}`}
         style={{ gap, height: containerHeight.current }}
         ref={containerRef}
       >
-        {list.map((item, index) => {
+        {list.map(item => {
           return (
             <div
-              key={index}
+              key={item.key}
               style={{
                 position: 'absolute',
                 visibility: 'visible',
