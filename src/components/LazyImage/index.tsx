@@ -5,6 +5,7 @@ import { FC, useEffect, useRef, useState } from 'react'
 export const LazyImage: FC<{
   src: srcType
 }> = ({ src }) => {
+  const imageRef = useRef<HTMLImageElement>(null)
   const [imageSrc, setImageSrc] = useState(src.small)
   const currentQuality = useRef<'small' | 'medium' | 'large' | 'large2x'>('small')
   const getNextQuality = (
@@ -20,23 +21,33 @@ export const LazyImage: FC<{
   }
   const loadImage = () => {
     const tempImage = new Image()
-    tempImage.src = src[currentQuality.current]
+    const currentUrl = src[currentQuality.current]
+    tempImage.src = currentUrl
     tempImage.onload = () => {
-      currentQuality.current = getNextQuality(currentQuality.current)
-      setImageSrc(src[currentQuality.current])
+      if (imageRef.current) {
+        currentQuality.current = getNextQuality(currentQuality.current)
+        requestAnimationFrame(() => {
+          if (currentQuality.current === 'large2x') return
+          loadImage()
+          setImageSrc(currentUrl)
+        })
+      }
     }
   }
   useEffect(() => {
     loadImage()
-  }, [imageSrc])
+  }, [])
+
   return (
-    <NextImage
-      src={`${imageSrc}`}
-      width={0}
-      height={0}
-      alt={'picture'}
-      className="w-full h-auto"
-      priority={true}
-    />
+    <div className="w-full h-auto relative">
+      <NextImage
+        src={`${imageSrc}`}
+        width={0}
+        height={0}
+        alt={'picture'}
+        className="w-full h-auto "
+        ref={imageRef}
+      />
+    </div>
   )
 }
