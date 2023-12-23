@@ -7,10 +7,26 @@ import Image from 'next/image'
 interface WaterFallProps {
   className?: string
   dataSource: any[]
+  /**
+   * 列数
+   */
   column?: number
+  /**
+   * 间距
+   */
   gap?: number
+  /**
+   * 图片地址的key
+   */
   imageKey?: string
+  /**
+   * 刷新回调
+   */
   onRefresh?: () => void
+  /**
+   * 数据是否已经加载完毕
+   */
+  loaded?: boolean
   renderItem?: (item: ListItem) => React.ReactNode
 }
 interface ListItem {
@@ -32,6 +48,7 @@ export const WaterFall: FC<WaterFallProps> = ({
   onRefresh,
   renderItem,
   imageKey = 'src',
+  loaded = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const containerHeight = useRef<number>(0)
@@ -164,9 +181,18 @@ export const WaterFall: FC<WaterFallProps> = ({
           )
         })}
       </div>
-      <div className="flex justify-center mt-2" ref={loadingRef}>
-        <Loading />
-      </div>
+      {
+        // 数据加载完毕
+        loaded ? (
+          <div className="flex justify-center mt-2">
+            <div className="text-gray-400">没有更多了</div>
+          </div>
+        ) : (
+          <div className="flex justify-center mt-2" ref={loadingRef}>
+            <Loading />
+          </div>
+        )
+      }
     </div>
   )
 }

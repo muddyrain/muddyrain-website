@@ -8,9 +8,14 @@ const client = createClient('KHVIPVzSojHHqIBSsI93saqTHpyQLrynPqq9DiPjTHgPkRctuwa
 export default function Page() {
   const [imagesList, setImagesList] = useState<any[]>([])
   const [page, setPage] = useState(1)
+  const [pageSize] = useState(20)
+  const [loaded, setLoaded] = useState(false)
   const getList = () => {
-    client.photos.search({ query: 'cartoon', page, per_page: 20 }).then((res: any) => {
+    client.photos.search({ query: 'landscape', page, per_page: pageSize }).then((res: any) => {
       setImagesList(list => [...list, ...res.photos])
+      if (page * pageSize > res.total_results) {
+        setLoaded(true)
+      }
     })
   }
   useEffect(() => {
@@ -42,6 +47,7 @@ export default function Page() {
         onRefresh={() => {
           setPage(_page => _page + 1)
         }}
+        loaded={loaded}
       />
     </div>
   )

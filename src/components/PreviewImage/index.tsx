@@ -76,7 +76,7 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
       const offsetX = e.clientX - (draggableElement?.offsetLeft || 0)
       const offsetY = e.clientY - (draggableElement?.offsetTop || 0)
       // 添加拖动时的样式
-      draggableElement.style.opacity = '0.85'
+      draggableElement.style.opacity = '0.95'
       draggableElement.style.cursor = 'grabbing'
       setOffsetPosition({ x: offsetX, y: offsetY })
       setDragging(true)
@@ -154,7 +154,7 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
             onClick={() => {
               gsap.to(previewRef.current, {
                 duration: 0.3,
-                scale: '-=0.1',
+                scale: '-=0.25',
               })
             }}
           >
@@ -166,7 +166,7 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
             onClick={() => {
               gsap.to(previewRef.current, {
                 duration: 0.3,
-                scale: '+=0.1',
+                scale: '+=0.25',
               })
             }}
           >
