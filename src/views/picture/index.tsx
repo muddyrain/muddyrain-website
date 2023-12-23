@@ -34,7 +34,7 @@ export default function Page() {
                 transform: `translateX(${item.left}px) translateY(${item.top}px)`,
               }}
             >
-              <LazyImage src={item.src} />
+              <LazyImage src={item.src} preview />
             </div>
           )
         }}

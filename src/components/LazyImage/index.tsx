@@ -1,11 +1,12 @@
 import { srcType } from '@/types'
 import NextImage from 'next/image'
 import { FC, useEffect, useRef, useState } from 'react'
+import { PreviewImage } from '../PreviewImage'
 
 export const LazyImage: FC<{
   src: srcType
-}> = ({ src }) => {
-  const imageRef = useRef<HTMLImageElement>(null)
+  preview?: boolean
+}> = ({ src, preview }) => {
   const [imageSrc, setImageSrc] = useState(src.small)
   const currentQuality = useRef<'small' | 'medium' | 'large' | 'large2x'>('small')
   const getNextQuality = (
@@ -24,14 +25,12 @@ export const LazyImage: FC<{
     const currentUrl = src[currentQuality.current]
     tempImage.src = currentUrl
     tempImage.onload = () => {
-      if (imageRef.current) {
-        currentQuality.current = getNextQuality(currentQuality.current)
-        requestAnimationFrame(() => {
-          if (currentQuality.current === 'large2x') return
-          loadImage()
-          setImageSrc(currentUrl)
-        })
-      }
+      currentQuality.current = getNextQuality(currentQuality.current)
+      requestAnimationFrame(() => {
+        setImageSrc(currentUrl)
+        if (currentQuality.current === 'large2x') return
+        loadImage()
+      })
     }
   }
   useEffect(() => {
@@ -40,14 +39,17 @@ export const LazyImage: FC<{
 
   return (
     <div className="w-full h-auto relative">
-      <NextImage
-        src={`${imageSrc}`}
-        width={0}
-        height={0}
-        alt={'picture'}
-        className="w-full h-auto "
-        ref={imageRef}
-      />
+      {preview ? (
+        <PreviewImage src={`${imageSrc}`} width={0} height={0} alt={'picture'} />
+      ) : (
+        <NextImage
+          src={`${imageSrc}`}
+          width={0}
+          height={0}
+          alt={'picture'}
+          className="w-full h-auto "
+        />
+      )}
     </div>
   )
 }

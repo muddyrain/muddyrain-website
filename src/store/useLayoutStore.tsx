@@ -11,10 +11,17 @@ interface StoreProps {
    */
   currentType: 1 | 2
   setCurrentType: (currentType: StoreProps['currentType']) => void
+  /**
+   * 是否禁止滚动
+   */
+  isScrollDisabled: boolean
+  setIsScrollDisabled: (isScrollDisabled: boolean) => void
 }
 export const useLayoutStore = create<StoreProps>(set => ({
   isShowLogin: false,
   setShowLogin: isShow => set({ isShowLogin: isShow }),
   currentType: 1,
   setCurrentType: currentType => set({ currentType }),
+  isScrollDisabled: false,
+  setIsScrollDisabled: isScrollDisabled => set({ isScrollDisabled }),
 }))

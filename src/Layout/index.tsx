@@ -1,4 +1,4 @@
-import { FC, ReactElement, ReactNode, cloneElement, memo, useEffect } from 'react'
+import { FC, ReactElement, ReactNode, cloneElement, memo, useEffect, useRef } from 'react'
 import { PROJECT_NAME, SOCKET_URL } from '@/constant'
 import Head from 'next/head'
 import { Suspense } from 'react'
@@ -14,6 +14,7 @@ import { useUserStore } from '@/store/useUserStore'
 import useWebSocket from '@/hooks/useWebsocket'
 import { useChatStore } from '@/store/useChatStore'
 import { usePathname } from 'next/navigation'
+import { useLayoutStore } from '@/store/useLayoutStore'
 
 const FixedComponent = memo(() => {
   return (
@@ -36,11 +37,21 @@ const showFooterPath = ['/', '/articles/', '/words/', '/picture/']
 
 const LayoutComponent: FC<{ children: ReactNode }> = ({ children }) => {
   const [accountInfo] = useUserStore(state => [state.accountInfo])
+  const wrapperRef = useRef<HTMLDivElement>(null)
   const setSocketInstance = useChatStore(state => state.setSocketInstance)
   const socketInstance = useWebSocket(SOCKET_URL + `?token=${accountInfo?.token}`, {
     isConnect: !!accountInfo?.token,
   })
+  const isScrollDisabled = useLayoutStore(state => state.isScrollDisabled)
+  useEffect(() => {
+    if (isScrollDisabled) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+  }, [isScrollDisabled])
   const pathname = usePathname()
+
   useEffect(() => {
     if (!accountInfo?.token) {
       setSocketInstance(null)
@@ -59,7 +70,7 @@ const LayoutComponent: FC<{ children: ReactNode }> = ({ children }) => {
           <meta name="description" content={PROJECT_NAME} />
           <meta name="keywords" content={PROJECT_NAME} />
         </Head>
-        <div className={`layout_container w-full h-full flex flex-col`}>
+        <div ref={wrapperRef} className={`layout_container w-full h-full flex flex-col`}>
           <Header />
           <Background />
           <Suspense fallback={<div className="relative">Loading feed...</div>}>
