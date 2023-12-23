@@ -42,7 +42,7 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
         setIsScrollDisabled(false)
       },
     })
-  }, [])
+  }, [rect])
   // 重置属性
   const handleReset = useCallback((onComplete?: GSAPCallback) => {
     gsap.to(previewRef.current, {
@@ -74,7 +74,6 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
       // 计算鼠标在拖动元素内的偏移量
       const offsetX = e.clientX - (draggableElement?.offsetLeft || 0)
       const offsetY = e.clientY - (draggableElement?.offsetTop || 0)
-
       // 添加拖动时的样式
       draggableElement.style.opacity = '0.85'
       draggableElement.style.cursor = 'grabbing'
