@@ -40,6 +40,7 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
       onComplete: () => {
         setRect(null)
         setIsScrollDisabled(false)
+        setDragging(false)
       },
     })
   }, [rect])
