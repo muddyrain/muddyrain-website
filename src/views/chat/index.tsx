@@ -4,7 +4,7 @@ import { useChatStore } from '@/store/useChatStore'
 import { ClearOutlined, Search, Settings } from '@mui/icons-material'
 import { Avatar, Button, IconButton } from '@mui/material'
 import { startTransition, useEffect, useRef, useState } from 'react'
-import { formateTime } from '@/utils'
+import { formatTime } from '@/utils'
 import { useUserStore } from '@/store/useUserStore'
 import { getUsersListApi } from '@/api'
 import { ChatType, UserType } from '@/types'
@@ -100,7 +100,7 @@ export default function Page() {
                 content: payload.content,
                 isOwn: false,
                 id: prev.length + 1,
-                time: formateTime(payload.formatted_create_time, 'HH:mm'),
+                time: formatTime(payload.formatted_create_time, 'HH:mm'),
               },
             ]
           })

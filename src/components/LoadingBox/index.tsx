@@ -1,19 +1,23 @@
 import { FC } from 'react'
 import { Loading } from '../Loading'
-import colors from 'tailwindcss/colors'
 
 export const LoadingBox: FC<{
   className?: string
   loadingClassName?: string
   children?: React.ReactNode
   loading?: boolean
-}> = ({ className, children, loading, loadingClassName }) => {
+  component?: React.ReactNode
+}> = ({ className, children, loading, loadingClassName, component }) => {
   return (
     <div className={className}>
       {loading ? (
-        <div className={`mx-auto pt-4 flex justify-center ${loadingClassName}`}>
-          <Loading color={colors.indigo[500]} />
-        </div>
+        component ? (
+          component
+        ) : (
+          <div className={`mx-auto pt-4 flex justify-center ${loadingClassName}`}>
+            <Loading />
+          </div>
+        )
       ) : (
         children
       )}

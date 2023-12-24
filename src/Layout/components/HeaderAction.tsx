@@ -63,10 +63,11 @@ const HeaderActionComponent: FC = () => {
               router.push('/articles/new')
             }}
           >
-            <ListItemIcon className="min-w-max mr-2">
+            <ListItemIcon className="min-w-max ">
               <EditNote className="text-md" />
             </ListItemIcon>
             <ListItemText
+              className="ml-1"
               primaryTypographyProps={{
                 className: 'text-sm',
               }}
@@ -130,6 +131,7 @@ const HeaderActionComponent: FC = () => {
                   <Portrait className="text-md" />
                 </ListItemIcon>
                 <ListItemText
+                  className="ml-1"
                   primaryTypographyProps={{
                     className: 'text-sm',
                   }}
@@ -145,6 +147,7 @@ const HeaderActionComponent: FC = () => {
                   <Logout className="text-md" />
                 </ListItemIcon>
                 <ListItemText
+                  className="ml-1"
                   primaryTypographyProps={{
                     className: 'text-sm',
                   }}

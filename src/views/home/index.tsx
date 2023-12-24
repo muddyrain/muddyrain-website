@@ -1,96 +1,16 @@
 'use client'
 import { WaterDrop as WaterDropIcon } from '@mui/icons-material'
-import {
-  Avatar,
-  Button,
-  FormControlLabel,
-  Stack,
-  Switch,
-  Typography,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  List,
-} from '@mui/material'
+import { Button, FormControlLabel, Skeleton, Stack, Switch, Typography } from '@mui/material'
 import Image from 'next/image'
 import Carousel from 'react-material-ui-carousel'
-import { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Article } from '@/components'
-import { getArticleListApi, getRecentActivityListApi } from '@/api'
-import { ArticleType, RecentActivityType, RecentActivityTypeEnum } from '@/types'
+import { getArticleListApi } from '@/api'
+import { ArticleType } from '@/types'
 import { LoadingBox } from '@/components/LoadingBox'
 import { Empty } from '@/components/Empty'
-import { formateTime } from '@/utils'
-const RecentActivityList: FC = () => {
-  const [recentActivityList, setRecentActivityList] = useState<RecentActivityType[]>([])
-  const [loading, setLoading] = useState(false)
-  const formatType = (type: RecentActivityTypeEnum) => {
-    switch (type) {
-      case RecentActivityTypeEnum.login:
-        return '登录了系统'
-      case RecentActivityTypeEnum.register:
-        return '注册了系统'
-      default:
-        return '未知'
-    }
-  }
-  const getRecentActivityList = () => {
-    setLoading(true)
-    getRecentActivityListApi()
-      .then(res => {
-        setRecentActivityList(res || [])
-      })
-      .finally(() => {
-        setTimeout(() => {
-          setLoading(false)
-        }, 250)
-      })
-  }
-  useEffect(() => {
-    getRecentActivityList()
-  }, [])
-  return (
-    <LoadingBox loading={loading}>
-      <List className="h-[240]">
-        {recentActivityList.length === 0 ? (
-          <Empty />
-        ) : (
-          <>
-            {recentActivityList.map((item, index) => {
-              return (
-                <ListItem key={index} className="mb-2" alignItems="flex-start">
-                  <ListItemAvatar>
-                    <Avatar alt="Cindy Baker" />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={
-                      <div className="flex justify-between">
-                        {item.user?.nickName || item.user?.userName || '匿名用户'}
-                        <span>{formateTime(item.formatted_create_time, 'YYYY-MM-DD')}</span>
-                      </div>
-                    }
-                    secondary={
-                      <>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="body2"
-                          color="text.primary"
-                        >
-                          {formatType(item.type as RecentActivityTypeEnum)}
-                        </Typography>
-                      </>
-                    }
-                  />
-                </ListItem>
-              )
-            })}
-          </>
-        )}
-      </List>
-    </LoadingBox>
-  )
-}
+import { RecentActivityList } from './RecentActivityList'
+
 export default function Page() {
   const list = [
     'https://muddyrain-oss.oss-cn-hangzhou.aliyuncs.com/1.jpg',
@@ -98,7 +18,7 @@ export default function Page() {
     'https://muddyrain-oss.oss-cn-hangzhou.aliyuncs.com/3.jpg',
   ]
   const [articleList, setArticleList] = useState<ArticleType[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const getArticleList = () => {
     setLoading(true)
     getArticleListApi({ page: 1, pageSize: 10 })
@@ -107,9 +27,7 @@ export default function Page() {
         // setTotal(res.total || 0)
       })
       .finally(() => {
-        setTimeout(() => {
-          setLoading(false)
-        }, 250)
+        setLoading(false)
       })
   }
 
@@ -183,7 +101,25 @@ export default function Page() {
       <Stack direction="row" spacing={4} className="mt-4">
         <Stack className="w-2/3">
           <div className="text-2xl">优质好文</div>
-          <LoadingBox loading={loading} className="mt-2">
+          <LoadingBox
+            loading={loading}
+            className="mt-2"
+            component={
+              <Stack spacing={2}>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Stack spacing={1} key={index}>
+                    <Stack spacing={1} direction={'row'} alignItems={'center'}>
+                      <Skeleton variant="rounded" className="w-1/3" height={30} />
+                      <Skeleton variant="rounded" className="w-20" height={30} />
+                    </Stack>
+                    <Skeleton variant="rounded" className="w-full" height={25} />
+                    <Skeleton variant="rounded" className="w-4/5" height={25} />
+                    <Skeleton variant="rounded" className="w-3/5" height={25} />
+                  </Stack>
+                ))}
+              </Stack>
+            }
+          >
             {articleList.length === 0 && <Empty />}
             <Stack direction={'column'} spacing={1}>
               {articleList.map((item, index) => {
