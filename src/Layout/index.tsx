@@ -67,7 +67,7 @@ const LayoutComponent: FC<{ children: ReactNode }> = ({ children }) => {
       setSocketInstance(socketInstance)
       socketInstance.connectServer()
     }
-  }, [accountInfo])
+  }, [accountInfo, socketInstance])
   return (
     <ThemeProvider theme={theme}>
       <MessageProvider>
