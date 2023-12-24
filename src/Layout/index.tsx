@@ -43,6 +43,7 @@ const LayoutComponent: FC<{ children: ReactNode }> = ({ children }) => {
     isConnect: !!accountInfo?.token,
   })
   const isScrollDisabled = useLayoutStore(state => state.isScrollDisabled)
+  const setAccountInfo = useUserStore(state => state.setAccountInfo)
   useEffect(() => {
     if (isScrollDisabled) {
       document.body.style.overflow = 'hidden'
@@ -51,7 +52,13 @@ const LayoutComponent: FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, [isScrollDisabled])
   const pathname = usePathname()
-
+  useEffect(() => {
+    if (socketInstance?.onClose) {
+      socketInstance.onClose(() => {
+        setAccountInfo(null)
+      })
+    }
+  }, [socketInstance])
   useEffect(() => {
     if (!accountInfo?.token) {
       setSocketInstance(null)

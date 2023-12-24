@@ -6,6 +6,7 @@ import { IconButton } from '@mui/material'
 import { useLayoutStore } from '@/store/useLayoutStore'
 import { Mask } from '../Mask'
 import { useMouseLeavePage } from '@/hooks/useMouseLeavePage'
+import { getTransformScale } from './tools'
 
 export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
   const imageRef = useRef<HTMLImageElement>(null)
@@ -13,6 +14,8 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
   const [dragging, setDragging] = useState(false)
   const [offsetPosition, setOffsetPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
   const [rect, setRect] = useState<DOMRect | null>(null)
+  const isAnimatingRef = useRef(false)
+  const timelineRef = useRef<gsap.core.Timeline | null>(null)
   const setIsScrollDisabled = useLayoutStore(state => state.setIsScrollDisabled)
   const handlePreview = () => {
     if (!imageRef.current) return
@@ -63,10 +66,13 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
     gsap.to(previewRef.current, {
       duration: 0.5,
       delay: 0,
+      scale: 1,
+      rotate: 0,
       x: window.innerWidth / 2 - rect.width / 2,
       y: window.innerHeight / 2 - rect.height / 2,
     })
   }, [rect])
+
   // 拖拽
   const handleDragStart = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
@@ -107,6 +113,66 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
     }
   }
 
+  // 生成带timeline的handler
+  const withTimeline = (handler: (timeline: gsap.core.Timeline) => void) => {
+    return () => {
+      if (isAnimatingRef.current) return
+
+      isAnimatingRef.current = true
+
+      const timeline = gsap.timeline({
+        onComplete: () => {
+          isAnimatingRef.current = false
+        },
+      })
+
+      handler(timeline)
+
+      timelineRef.current = timeline
+    }
+  }
+  // 放大
+  const handleZoomIn = withTimeline(timeline => {
+    const scaleValue = getTransformScale(previewRef.current!)
+    if (Math.abs(scaleValue) <= 5) {
+      timeline.to(previewRef.current, {
+        duration: 0.3,
+        scale: '+=0.25',
+      })
+    }
+  })
+  // 缩小
+  const handleZoomOut = withTimeline(timeline => {
+    const scaleValue = getTransformScale(previewRef.current!)
+    if (Math.abs(scaleValue) >= 0.5) {
+      timeline.to(previewRef.current, {
+        duration: 0.3,
+        scale: '-=0.25',
+      })
+    }
+  })
+  // 顺时针旋转
+  const handleRotateRight = withTimeline(timeline => {
+    timeline.to(previewRef.current, {
+      duration: 0.3,
+      rotate: '+=90',
+    })
+  })
+
+  // 逆时针旋转
+  const handleRotateLeft = withTimeline(timeline => {
+    timeline.to(previewRef.current, {
+      duration: 0.3,
+      rotate: '-=90',
+    })
+  })
+
+  // 滚轮缩放
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+    e.deltaY < 0 ? handleZoomIn() : handleZoomOut()
+  }
+
   return (
     <>
       <NextImage
@@ -134,11 +200,14 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
           onMouseDown={handleDragStart}
           onMouseMove={handleDragMove}
           onMouseUp={handleDragEnd}
+          onWheel={handleWheel}
           style={{
             position: 'absolute',
             left: 0,
             top: 0,
-            transform: `translateX(${rect?.left || 0}px) translateY(${rect?.top || 0}px)`,
+            transform: `translateX(${rect?.left || 0}px) translateY(${
+              rect?.top || 0
+            }px) scale(1) rotate(0)`,
           }}
         />
         {/* 工具条 */}
@@ -152,10 +221,7 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
           <IconButton
             className="text-zinc-100"
             onClick={() => {
-              gsap.to(previewRef.current, {
-                duration: 0.3,
-                scale: '-=0.25',
-              })
+              handleZoomOut()
             }}
           >
             <ZoomOutOutlined />
@@ -164,10 +230,7 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
           <IconButton
             className="text-zinc-100"
             onClick={() => {
-              gsap.to(previewRef.current, {
-                duration: 0.3,
-                scale: '+=0.25',
-              })
+              handleZoomIn()
             }}
           >
             <ZoomInOutlined />
@@ -180,10 +243,7 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
           <IconButton
             className="text-zinc-100"
             onClick={() => {
-              gsap.to(previewRef.current, {
-                duration: 0.3,
-                rotate: '-=90',
-              })
+              handleRotateLeft()
             }}
           >
             <RefreshOutlined className="-scale-x-100" />
@@ -192,10 +252,7 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
           <IconButton
             className="text-zinc-100"
             onClick={() => {
-              gsap.to(previewRef.current, {
-                duration: 0.3,
-                rotate: '+=90',
-              })
+              handleRotateRight()
             }}
           >
             <RefreshOutlined />

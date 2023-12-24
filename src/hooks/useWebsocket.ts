@@ -16,6 +16,7 @@ const useWebSocket = (
     isConnect = true,
   }: {
     isConnect: boolean
+    onClose?: () => void
   }
 ): WebSocketInstance => {
   const [socket, setSocket] = useState<WebSocket | null>(null)

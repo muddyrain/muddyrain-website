@@ -16,7 +16,6 @@ const HeaderComponent: FC = () => {
   const router = useRouter()
   const pathname = usePathname()
   const isShowLogin = useLayoutStore(state => state.isShowLogin)
-
   const navList = useMemo(() => {
     return [
       {
