@@ -7,6 +7,7 @@ export const Header: FC = () => {
   const setShowLogin = useMusicStore(state => state.setShowLogin)
   const isShowLogin = useMusicStore(state => state.isShowLogin)
   const [searchValue, setSearchValue] = useState('')
+  const [inputFocus, setInputFocus] = useState(false)
   return (
     <>
       {/* 头部栏 */}
@@ -17,8 +18,14 @@ export const Header: FC = () => {
           </IconButton>
           {/* 搜索框 */}
           <Search
-            inputClassName="w-60"
+            inputClassName={`${inputFocus ? 'w-80' : 'w-50'} duration-300`}
             value={searchValue}
+            onFocus={() => {
+              setInputFocus(true)
+            }}
+            onBlur={() => {
+              setInputFocus(false)
+            }}
             onChange={e => {
               setSearchValue(e)
             }}

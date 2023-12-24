@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, FocusEventHandler, useEffect, useRef, useState } from 'react'
 import { Search as SearchIcon, HighlightOff } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 
@@ -8,8 +8,8 @@ export const Search: FC<{
   className?: string
   placeholder?: string
   showClear?: boolean
-  onFocus?: () => void
-  onBlur?: () => void
+  onFocus?: FocusEventHandler<HTMLInputElement> | undefined
+  onBlur?: FocusEventHandler<HTMLInputElement> | undefined
   value?: string
 }> = ({
   value = '',
@@ -22,6 +22,7 @@ export const Search: FC<{
   onBlur,
 }) => {
   const [searchValue, setSearchValue] = useState(value)
+  const inputRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     onChange && onChange(searchValue)
   }, [searchValue])
@@ -29,6 +30,7 @@ export const Search: FC<{
     <div className={`relative flex items-center ${className}`}>
       <input
         type="text"
+        ref={inputRef}
         placeholder={placeholder}
         value={searchValue}
         onChange={e => {
@@ -43,8 +45,11 @@ export const Search: FC<{
         <IconButton
           className="absolute cursor-pointer right-2"
           size="small"
-          onClick={() => {
+          onMouseDown={e => {
+            e.preventDefault()
+            e.stopPropagation()
             setSearchValue('')
+            inputRef.current?.focus()
           }}
         >
           <HighlightOff className="duration-300 text-zinc-400/60 text-xl" />
