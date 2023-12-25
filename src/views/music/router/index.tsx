@@ -1,46 +1,43 @@
 import { Album, Favorite, Group, MusicNote, MusicVideo, Radio } from '@mui/icons-material'
-import { DiscoverMusic } from '../views/discoverMusic'
-import { SongList } from '../views/songList'
-import { Podcast } from '../views/podcast'
-import { VideoMv } from '../views/videoMv'
-import { FocusOn } from '../views/focusOn'
-import { MyMusic } from '../views/MyMusic'
+import { lazy } from 'react'
 
 export const RouterList = [
   {
     name: '发现音乐',
     url: 'discover-music',
     icon: <MusicNote />,
-    component: <DiscoverMusic />,
+    component: lazy(() =>
+      import('../views/discoverMusic').then(module => ({ default: module.DiscoverMusic }))
+    ),
   },
   {
     name: '歌单',
     url: 'song-list',
     icon: <Album />,
-    component: <SongList />,
+    component: lazy(() => import('../views/podcast').then(module => ({ default: module.Podcast }))),
   },
   {
     name: '播客',
     url: 'podcast',
     icon: <Radio />,
-    component: <Podcast />,
+    component: lazy(() => import('../views/podcast').then(module => ({ default: module.Podcast }))),
   },
   {
     name: '视频',
     url: 'video-mv',
     icon: <MusicVideo />,
-    component: <VideoMv />,
+    component: lazy(() => import('../views/videoMv').then(module => ({ default: module.VideoMv }))),
   },
   {
     name: '关注',
     url: 'focus-on',
     icon: <Group />,
-    component: <FocusOn />,
+    component: lazy(() => import('../views/focusOn').then(module => ({ default: module.FocusOn }))),
   },
   {
     name: '我的音乐',
     url: 'my-music',
     icon: <Favorite />,
-    component: <MyMusic />,
+    component: lazy(() => import('../views/MyMusic').then(module => ({ default: module.MyMusic }))),
   },
 ]

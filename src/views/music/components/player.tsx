@@ -14,6 +14,7 @@ import { useClickOutside } from '@/hooks/useClickOutside'
 import { useMusicStore } from '@/store/useMusicStore'
 import { PlayListToggleTrigger } from '@/constant/triggerIds'
 import { millisecondToTime } from '@/utils/time'
+import { errorImage } from '@/assets'
 
 export const Player: FC = () => {
   const [volume, setVolume] = useState(100)
@@ -96,7 +97,6 @@ export const Player: FC = () => {
       }
     }
   }, [])
-  console.log(currentSong)
   return (
     <div
       className={`absolute bottom-0 z-50 duration-300 overflow-hidden w-full bg-zinc-50 ${
@@ -125,7 +125,7 @@ export const Player: FC = () => {
             }}
           >
             <Image
-              src={currentSong?.picUrl || ''}
+              src={currentSong?.picUrl || errorImage}
               alt="album"
               width={0}
               height={0}

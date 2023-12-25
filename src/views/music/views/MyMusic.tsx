@@ -1,10 +1,10 @@
-import { testImg } from '@/assets'
 import { Download, Favorite, PlayArrow } from '@mui/icons-material'
 import { Avatar, Button, IconButton, Stack } from '@mui/material'
 import Image from 'next/image'
 import { FC, useEffect, useState } from 'react'
 import { Search } from '../components/Search'
 import { ScrollView } from '@/components'
+import { errorImage } from '@/assets'
 
 export const MyMusic: FC = () => {
   const [searchIsFocus, setSearchIsFocus] = useState(false)
@@ -18,7 +18,7 @@ export const MyMusic: FC = () => {
     <>
       <div className="flex">
         <div className="relative w-[200px] h-[200px] rounded-md overflow-hidden ">
-          <Image src={testImg} alt="my-music" className="w-full h-full" />
+          <Image src={errorImage} alt="my-music" className="w-full h-full" />
           <div className="w-full h-full absolute top-0 left-0 bg-black/10">
             <div className="flex items-center justify-end mt-1 mr-1 text-yellow-50">
               <PlayArrow />
