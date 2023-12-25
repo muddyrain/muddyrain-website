@@ -14,3 +14,12 @@ export const getPersonalizedApi = async (limit: number = 4) =>
  * 获取推荐最新音乐
  */
 export const getPersonalizedNewSongApi = async () => fetchMusic.get('/personalized/newsong')
+/**
+ * 获取歌曲详情
+ */
+export const getSongDetailApi = async (ids: string | number) =>
+  fetchMusic.get('/song/detail?ids=' + ids)
+/**
+ * 获取音乐 url
+ */
+export const getSongUrlApi = async (id: string | number) => fetchMusic.get('/song/url?id=' + id)

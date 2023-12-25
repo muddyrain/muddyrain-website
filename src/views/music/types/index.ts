@@ -18,7 +18,10 @@ export interface SongsItem {
     privilege: {
       maxBrLevel: string
     }
+    duration: number
   }
+  type?: string
+  url?: string
 }
 
 /**

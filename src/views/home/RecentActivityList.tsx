@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material'
 import { Empty } from '@/components'
-import { formatTime } from '@/utils'
+import { formatTime } from '@/utils/time'
 
 const RecentActivityLoading: FC = () => {
   return (

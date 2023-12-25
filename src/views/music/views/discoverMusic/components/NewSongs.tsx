@@ -1,22 +1,33 @@
 import { FC, useEffect, useState } from 'react'
 import { Title } from './Title'
-import { getPersonalizedNewSongApi } from '@/api/music'
+import { getPersonalizedNewSongApi, getSongUrlApi } from '@/api/music'
 import { Grid } from '@mui/material'
 import { SongsItem } from '@/views/music/types'
 import { SoundQualityOptions } from '@/views/music/constant'
 import { PlayArrow } from '@mui/icons-material'
 import Image from 'next/image'
+import { useMusicStore } from '@/store/useMusicStore'
 
 /**
  * 最新音乐
  */
 export const NewSongs: FC = () => {
   const [songs, setSongs] = useState<SongsItem[]>([])
+  const setCurrentSong = useMusicStore(state => state.setCurrentSong)
   useEffect(() => {
     getPersonalizedNewSongApi().then(res => {
       setSongs(res.result || [])
     })
   }, [])
+  const handleClickItem = (song: SongsItem) => {
+    console.log('click item', song)
+    getSongUrlApi(song.id).then(res => {
+      const tmp = res.data?.[0]
+      if (tmp) {
+        setCurrentSong({ ...song, url: tmp.url, type: tmp.type })
+      }
+    })
+  }
   return (
     <div className="relative mt-4">
       <Title title="最新音乐" />
@@ -30,7 +41,10 @@ export const NewSongs: FC = () => {
             className="rounded-md group p-4 hover:shadow-lg hover:bg-white/25 shadow-white/50 duration-500"
           >
             <div className="flex items-center cursor-pointer">
-              <div className="relative w-20 h-20 rounded-md overflow-hidden">
+              <div
+                className="relative w-20 h-20 rounded-md overflow-hidden"
+                onClick={() => handleClickItem(item)}
+              >
                 <Image
                   className="w-full h-full"
                   src={item.picUrl}

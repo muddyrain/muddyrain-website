@@ -1,4 +1,6 @@
+import { SongsItem } from '@/views/music/types'
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 type PlayStateType = 'stopped' | 'paused' | 'playing'
 interface StoreProps {
@@ -23,14 +25,29 @@ interface StoreProps {
    */
   playState: PlayStateType
   setPlayState: (state: PlayStateType) => void
+  /**
+   * 当前播放的歌曲
+   */
+  currentSong: SongsItem | null
+  setCurrentSong: (song: StoreProps['currentSong']) => void
 }
-export const useMusicStore = create<StoreProps>(set => ({
-  isShowPlayList: false,
-  setShowPlayList: isShow => set({ isShowPlayList: isShow }),
-  isShowLogin: false,
-  setShowLogin: isShow => set({ isShowLogin: isShow }),
-  isShowSongDetail: false,
-  setShowSongDetail: isShow => set({ isShowSongDetail: isShow }),
-  playState: 'stopped',
-  setPlayState: state => set({ playState: state }),
-}))
+export const useMusicStore = create(
+  persist<StoreProps>(
+    set => ({
+      isShowPlayList: false,
+      setShowPlayList: isShow => set({ isShowPlayList: isShow }),
+      isShowLogin: false,
+      setShowLogin: isShow => set({ isShowLogin: isShow }),
+      isShowSongDetail: false,
+      setShowSongDetail: isShow => set({ isShowSongDetail: isShow }),
+      playState: 'stopped',
+      setPlayState: state => set({ playState: state }),
+      currentSong: null,
+      setCurrentSong: song => set({ currentSong: song }),
+    }),
+    {
+      name: 'music-store',
+      storage: createJSONStorage(() => sessionStorage),
+    }
+  )
+)
