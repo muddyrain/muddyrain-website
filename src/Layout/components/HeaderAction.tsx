@@ -15,14 +15,78 @@ import {
 import { FC, memo, useMemo, useState } from 'react'
 import { useMessage } from '@/hooks/useMessage'
 import { useRouter } from 'next/navigation'
-
-const HeaderActionComponent: FC = () => {
-  const [AccountEl, setAccountEl] = useState<HTMLButtonElement | null>(null)
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
+const AccountPopover = () => {
+  const [accountEl, setAccountEl] = useState<HTMLButtonElement | null>(null)
   const [accountInfo, setAccountInfo] = useUserStore(state => [
     state.accountInfo,
     state.setAccountInfo,
   ])
+  const router = useRouter()
+  return (
+    <>
+      <Stack direction={'row'} alignItems={'center'} spacing={1}>
+        <span>{accountInfo?.nickName || accountInfo?.userName}</span>
+        <IconButton
+          color="inherit"
+          onClick={e => {
+            setAccountEl(e.currentTarget)
+          }}
+        >
+          <Avatar src={accountInfo?.avatar} />
+        </IconButton>
+      </Stack>
+      <Popover
+        open={Boolean(accountEl)}
+        anchorEl={accountEl}
+        onClose={() => {
+          setAccountEl(null)
+        }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <List className="w-[160px]">
+          <ListItemButton
+            onClick={() => {
+              router.push('/user/' + accountInfo?.id)
+            }}
+          >
+            <ListItemIcon className="min-w-max">
+              <Portrait className="text-md" />
+            </ListItemIcon>
+            <ListItemText
+              className="ml-1"
+              primaryTypographyProps={{
+                className: 'text-sm',
+              }}
+              primary="个人信息"
+            />
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              setAccountInfo(null)
+            }}
+          >
+            <ListItemIcon className="min-w-max">
+              <Logout className="text-md" />
+            </ListItemIcon>
+            <ListItemText
+              className="ml-1"
+              primaryTypographyProps={{
+                className: 'text-sm',
+              }}
+              primary="退出登录"
+            />
+          </ListItemButton>
+        </List>
+      </Popover>
+    </>
+  )
+}
+const HeaderActionComponent: FC = () => {
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
+  const [accountInfo] = useUserStore(state => [state.accountInfo])
   const router = useRouter()
   const message = useMessage()
   const setShowLogin = useLayoutStore(state => state.setShowLogin)
@@ -98,65 +162,7 @@ const HeaderActionComponent: FC = () => {
           />
         </>
       ) : (
-        <>
-          <Stack direction={'row'} alignItems={'center'} spacing={1}>
-            <span>{accountInfo?.nickName || accountInfo?.userName}</span>
-            <IconButton
-              color="inherit"
-              onClick={e => {
-                setAccountEl(e.currentTarget)
-              }}
-            >
-              <Avatar src={accountInfo?.avatar} />
-            </IconButton>
-          </Stack>
-          <Popover
-            open={Boolean(AccountEl)}
-            anchorEl={AccountEl}
-            onClose={() => {
-              setAccountEl(null)
-            }}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-          >
-            <List className="w-[160px]">
-              <ListItemButton
-                onClick={() => {
-                  router.push('/user/' + accountInfo?.id)
-                }}
-              >
-                <ListItemIcon className="min-w-max">
-                  <Portrait className="text-md" />
-                </ListItemIcon>
-                <ListItemText
-                  className="ml-1"
-                  primaryTypographyProps={{
-                    className: 'text-sm',
-                  }}
-                  primary="个人信息"
-                />
-              </ListItemButton>
-              <ListItemButton
-                onClick={() => {
-                  setAccountInfo(null)
-                }}
-              >
-                <ListItemIcon className="min-w-max">
-                  <Logout className="text-md" />
-                </ListItemIcon>
-                <ListItemText
-                  className="ml-1"
-                  primaryTypographyProps={{
-                    className: 'text-sm',
-                  }}
-                  primary="退出登录"
-                />
-              </ListItemButton>
-            </List>
-          </Popover>
-        </>
+        <AccountPopover />
       )}
     </Stack>
   )
