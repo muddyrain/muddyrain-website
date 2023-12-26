@@ -2,7 +2,7 @@ import { SongsItem } from '@/views/music/types'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-type PlayStateType = 'stopped' | 'paused' | 'playing'
+type PlayStateType = 'paused' | 'playing'
 interface StoreProps {
   /**
    * 是否显示播放列表
@@ -40,7 +40,7 @@ export const useMusicStore = create(
       setShowLogin: isShow => set({ isShowLogin: isShow }),
       isShowSongDetail: false,
       setShowSongDetail: isShow => set({ isShowSongDetail: isShow }),
-      playState: 'stopped',
+      playState: 'paused',
       setPlayState: state => set({ playState: state }),
       currentSong: null,
       setCurrentSong: song => set({ currentSong: song }),
