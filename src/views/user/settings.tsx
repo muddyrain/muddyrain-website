@@ -38,12 +38,12 @@ export default function Page() {
     if (!accountInfo?.id) return
     setLoading(true)
     getUserByIdApi(accountInfo?.id)
-      .then(res => {
+      .then((res: Partial<UserType>) => {
         delete res.password
         onChange({
           ...res,
           avatar: res.avatar || '',
-          nikeName: res.nikeName || '',
+          nickName: res.nickName || '',
           email: res.email || '',
           birthday: res.birthday ? dayjs(res.birthday) : defaultBirthday,
         })
