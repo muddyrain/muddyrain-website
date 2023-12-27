@@ -1,4 +1,5 @@
 import { fetchMusic } from '@/service'
+import { SongListItem, SongsItem } from '@/views/music/types'
 
 /**
  * 获取轮播图
@@ -13,11 +14,12 @@ export const getPersonalizedApi = async (limit: number = 4) =>
 /**
  * 获取推荐最新音乐
  */
-export const getPersonalizedNewSongApi = async () => fetchMusic.get('/personalized/newsong')
+export const getPersonalizedNewSongApi = async (): Promise<SongListItem> =>
+  fetchMusic.get('/personalized/newsong')
 /**
  * 获取歌曲详情
  */
-export const getSongDetailApi = async (ids: string | number) =>
+export const getSongDetailApi = async (ids: string | number): Promise<SongsItem> =>
   fetchMusic.get('/song/detail?ids=' + ids)
 /**
  * 获取音乐 url

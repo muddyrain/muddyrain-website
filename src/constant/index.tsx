@@ -48,3 +48,12 @@ export const ArticleTagOptions = [
   { label: '开发工具', value: 6, icon: DeveloperBoardIcon },
   { label: '代码人生', value: 7, icon: IntegrationInstructionsIcon },
 ]
+
+/**
+ * 性别配置项
+ */
+export const GenderOptions = [
+  { label: '男', value: 0 },
+  { label: '女', value: 1 },
+  { label: '保密', value: 2 },
+]

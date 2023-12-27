@@ -91,6 +91,7 @@ export default function Page() {
       birthday: formData.birthday?.format('YYYY-MM-DD') || '',
     }).then(() => {
       message.showMessage('修改成功', 'success')
+      router.back()
     })
   }
   const router = useRouter()

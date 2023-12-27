@@ -30,7 +30,7 @@ export const getUsersListApi = (data: PagerQueryParams) => {
   return fetch.get('/user', { params: data })
 }
 
-export const getUserByIdApi = (id: number | string) => {
+export const getUserByIdApi = (id: number | string): Promise<UserType> => {
   return fetch.get('/user/' + id)
 }
 
