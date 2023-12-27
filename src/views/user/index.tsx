@@ -79,7 +79,7 @@ export default function Page() {
                 </Breadcrumbs>
               </Stack>
               <Typography variant="body2">邮箱: {user?.email}</Typography>
-              <Typography variant="body2">手机号: xxxxxxxxxxxx</Typography>
+              <Typography variant="body2">手机号: {user?.mobile}</Typography>
               <Typography variant="body2">生日: {user?.birthday}</Typography>
               <Stack
                 direction="row"

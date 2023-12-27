@@ -156,6 +156,24 @@ export default function Page() {
                 </Stack>
                 <Stack spacing={2} direction={'row'} alignItems={'center'}>
                   <div className="w-24 text-right flex-shrink-0">
+                    <span>手机号码</span>
+                  </div>
+                  <TextField
+                    name="email"
+                    type="number"
+                    value={formData.mobile}
+                    onChange={e => {
+                      onChange({
+                        mobile: e.target.value || '',
+                      })
+                    }}
+                    label="手机号码"
+                    placeholder="请输入手机号码"
+                    fullWidth
+                  />
+                </Stack>
+                <Stack spacing={2} direction={'row'} alignItems={'center'}>
+                  <div className="w-24 text-right flex-shrink-0">
                     <span>生日</span>
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>

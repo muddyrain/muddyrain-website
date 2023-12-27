@@ -73,6 +73,7 @@ export interface UserType extends CommonType {
   birthday: string
   gender: number | string
   email: string
+  mobile: number | string
   id: number | string
 }
 
