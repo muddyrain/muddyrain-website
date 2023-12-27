@@ -14,6 +14,8 @@ import { useMusicStore } from '@/store/useMusicStore'
 export const NewSongs: FC = () => {
   const [songs, setSongs] = useState<SongsItem[]>([])
   const setCurrentSong = useMusicStore(state => state.setCurrentSong)
+  const setCurrentSongList = useMusicStore(state => state.setCurrentSongList)
+  const currentSongList = useMusicStore(state => state.currentSongList)
   useEffect(() => {
     getPersonalizedNewSongApi().then(res => {
       setSongs(res.result || [])
@@ -24,7 +26,10 @@ export const NewSongs: FC = () => {
     getSongUrlApi(song.id).then(res => {
       const tmp = res.data?.[0]
       if (tmp) {
-        setCurrentSong({ ...song, url: tmp.url, type: tmp.type })
+        const songItem = { ...song, url: tmp.url, type: tmp.type }
+        setCurrentSong(songItem)
+        currentSongList.push(songItem)
+        setCurrentSongList([...currentSongList])
       }
     })
   }

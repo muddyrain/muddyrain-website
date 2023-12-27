@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { IconButton, Slider } from '@mui/material'
 import {
   Pause,
@@ -17,74 +17,96 @@ import { millisecondToTime } from '@/utils/time'
 import { errorImage } from '@/assets'
 
 export const Player: FC = () => {
-  const [volume, setVolume] = useState(100)
+  const [volume, setVolume] = useState(10)
   const [progress, setProgress] = useState(0)
   const [maxProgress, setMaxProgress] = useState(0)
   const [volumeVisible, setVolumeVisible] = useState(false)
   const currentSong = useMusicStore(state => state.currentSong)
-  const [audio] = useState(new window.Audio())
+  const audio = useRef<HTMLAudioElement | null>(null)
   const volumeRef = useClickOutside(() => {
     setVolumeVisible(false)
   })
-  const {
-    setShowPlayList,
-    isShowPlayList,
-    isShowSongDetail,
-    setShowSongDetail,
-    playState,
-    setPlayState,
-  } = useMusicStore(state => ({
-    ...state,
-  }))
+  const [playState, setPlayState] = useState<'playing' | 'paused'>('paused')
+  const { setShowPlayList, isShowPlayList, isShowSongDetail, setShowSongDetail } = useMusicStore(
+    state => ({
+      ...state,
+    })
+  )
   // 停止播放
   const stopPlay = () => {
-    audio.pause()
+    audio.current?.pause()
+    setPlayState('paused')
   }
   // 开始播放
   const startPlay = () => {
-    audio.src = currentSong?.url || ''
+    if (!audio.current) return
+    audio.current.src = currentSong?.url || ''
     // 监听音频加载完成
-    audio.addEventListener('loadedmetadata', () => {
-      audio.play()
+    audio.current.addEventListener('loadedmetadata', () => {
+      if (!audio.current) return
+      audio.current.play()
+      setMaxProgress(audio.current.duration || 0)
+      setPlayState('playing')
     })
     // 监听音频加载失败
-    audio.addEventListener('error', () => {
-      audio.src = 'https://music.163.com/song/media/outer/url?id=' + currentSong?.id
+    audio.current.addEventListener('error', () => {
+      if (!audio.current) return
+      audio.current.src = 'https://music.163.com/song/media/outer/url?id=' + currentSong?.id
     })
   }
   // 切换播放状态
   const changePlayState = () => {
     if (playState === 'playing') {
-      setPlayState('paused')
+      stopPlay()
     } else {
+      audio.current?.play()
       setPlayState('playing')
     }
   }
   useEffect(() => {
-    if (playState === 'playing') {
-      startPlay()
-    } else {
-      stopPlay()
+    if (!audio.current) return
+    audio.current.currentTime = 0
+    startPlay()
+  }, [currentSong])
+  useEffect(() => {
+    if (!audio.current) return
+    audio.current.volume = volume / 100
+  }, [volume, audio])
+  const handleWatchProgress = () => {
+    if (!audio.current) return
+    setProgress(audio.current.currentTime)
+  }
+  useEffect(() => {
+    audio.current = new Audio()
+    // 进行其他的 DOM 操作或事件绑定
+    return () => {
+      // 在组件卸载时清理资源
+      audio.current?.pause()
+      audio.current = null
+      // 清理其他的 DOM 操作或事件绑定
     }
-  }, [playState])
+  }, [])
   useEffect(() => {
-    audio.volume = volume / 100
-  }, [volume])
-  useEffect(() => {
-    if (audio) {
-      audio.addEventListener('timeupdate', () => {
-        setProgress(audio.currentTime)
-        setMaxProgress(audio.duration)
-      })
+    if (audio.current) {
+      audio.current.addEventListener('timeupdate', handleWatchProgress)
+    }
+    return () => {
+      audio.current?.removeEventListener('timeupdate', handleWatchProgress)
     }
   }, [audio])
+  const totalDuration = useMemo(() => {
+    return millisecondToTime(currentSong?.song?.duration || 0)
+  }, [currentSong])
+  const currentDuration = useMemo(() => {
+    return millisecondToTime(progress * 1000)
+  }, [progress])
   return (
     <div
       className={`absolute bottom-0 z-50 duration-300 w-full bg-zinc-50 ${
-        currentSong ? 'h-24' : 'h-0'
+        currentSong ? 'h-24' : 'h-0 overflow-hidden'
       }`}
     >
-      <div className="p-2 h-full flex items-center justify-between">
+      <div className={`p-2 h-full flex items-center justify-between`}>
         <Slider
           className="w-full absolute top-[-12px] left-0"
           aria-label="Volume"
@@ -92,12 +114,13 @@ export const Player: FC = () => {
           max={maxProgress}
           value={progress}
           onChange={(_, value) => {
-            console.log(value)
+            if (!audio.current) return
+            audio.current.currentTime = value as number
           }}
         />
-        <div className="flex items-center">
+        <div className={`flex items-center`}>
           <div
-            className="cursor-pointer w-[75px] h-[75px] rounded-md overflow-hidden relative group"
+            className={`cursor-pointer w-[75px] h-[75px] rounded-md overflow-hidden relative group`}
             onClick={() => {
               setShowSongDetail(!isShowSongDetail)
             }}
@@ -121,9 +144,9 @@ export const Player: FC = () => {
               </span>
             </div>
             <div className="text-zinc-400 select-none text-sm mt-2">
-              <span>00:00</span>
+              <span>{currentDuration}</span>
               <span>/</span>
-              <span>{millisecondToTime(currentSong?.song?.duration || 0)}</span>
+              <span>{totalDuration}</span>
             </div>
           </div>
         </div>

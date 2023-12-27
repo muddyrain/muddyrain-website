@@ -8,6 +8,7 @@ import { PlayArrow } from '@mui/icons-material'
 import { ScrollView } from '@/components'
 
 export const PlayList: FC = () => {
+  const currentSongList = useMusicStore(state => state.currentSongList)
   const [setShowPlayList, isShowPlayList] = useMusicStore(state => [
     state.setShowPlayList,
     state.isShowPlayList,
@@ -37,14 +38,14 @@ export const PlayList: FC = () => {
         <div className="flex-1 flex flex-col overflow-hidden relative">
           <ScrollView>
             <div className="w-full h-full">
-              {Array.from({ length: 40 }).map((item, index) => (
+              {currentSongList.map((item, index) => (
                 <div
                   className={`flex py-2 px-4 text-sm items-center odd:bg-zinc-50/75 even:bg-zinc-100/75 cursor-pointer hover:bg-zinc-200 drop-shadow-lg ${
                     index === 6 && 'text-primary/75'
                   }`}
                   key={index}
                 >
-                  {index === 6 && <PlayArrow className="text-sm absolute left-0 text-primary" />}
+                  <PlayArrow className="text-sm absolute left-0 text-primary" />
                   <span className="flex-[2] select-none">多远都要在一起</span>
                   <span className="flex-1 select-none">邓紫棋</span>
                   <span className="mx-2 select-none text-zinc-400">3:54</span>
