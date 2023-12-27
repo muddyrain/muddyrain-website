@@ -13,7 +13,7 @@ import { useMusicStore } from '@/store/useMusicStore'
  */
 export const NewSongs: FC = () => {
   const [songs, setSongs] = useState<SongsItem[]>([])
-  const setCurrentSong = useMusicStore(state => state.setCurrentSong)
+  const setCurrentSongIndex = useMusicStore(state => state.setCurrentSongIndex)
   const setCurrentSongList = useMusicStore(state => state.setCurrentSongList)
   const currentSongList = useMusicStore(state => state.currentSongList)
   useEffect(() => {
@@ -27,9 +27,9 @@ export const NewSongs: FC = () => {
       const tmp = res.data?.[0]
       if (tmp) {
         const songItem = { ...song, url: tmp.url, type: tmp.type }
-        setCurrentSong(songItem)
         currentSongList.push(songItem)
         setCurrentSongList([...currentSongList])
+        setCurrentSongIndex(currentSongList.length - 1)
       }
     })
   }

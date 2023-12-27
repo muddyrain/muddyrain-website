@@ -15,13 +15,16 @@ import { useMusicStore } from '@/store/useMusicStore'
 import { PlayListToggleTrigger } from '@/constant/triggerIds'
 import { millisecondToTime } from '@/utils/time'
 import { errorImage } from '@/assets'
+import { NeteaseMusicPrefix } from '../constant'
 
 export const Player: FC = () => {
   const [volume, setVolume] = useState(10)
   const [progress, setProgress] = useState(0)
   const [maxProgress, setMaxProgress] = useState(0)
   const [volumeVisible, setVolumeVisible] = useState(false)
-  const currentSong = useMusicStore(state => state.currentSong)
+  const currentSongIndex = useMusicStore(state => state.currentSongIndex)
+  const setCurrentSongIndex = useMusicStore(state => state.setCurrentSongIndex)
+  const currentSongList = useMusicStore(state => state.currentSongList)
   const audio = useRef<HTMLAudioElement | null>(null)
   const volumeRef = useClickOutside(() => {
     setVolumeVisible(false)
@@ -32,6 +35,9 @@ export const Player: FC = () => {
       ...state,
     })
   )
+  const currentSong = useMemo(() => {
+    return currentSongList[currentSongIndex]
+  }, [currentSongIndex, currentSongList])
   // 停止播放
   const stopPlay = () => {
     audio.current?.pause()
@@ -44,6 +50,7 @@ export const Player: FC = () => {
     // 监听音频加载完成
     audio.current.addEventListener('loadedmetadata', () => {
       if (!audio.current) return
+      audio.current.volume = volume / 100
       audio.current.play()
       setMaxProgress(audio.current.duration || 0)
       setPlayState('playing')
@@ -51,7 +58,7 @@ export const Player: FC = () => {
     // 监听音频加载失败
     audio.current.addEventListener('error', () => {
       if (!audio.current) return
-      audio.current.src = 'https://music.163.com/song/media/outer/url?id=' + currentSong?.id
+      audio.current.src = NeteaseMusicPrefix + currentSong?.id
     })
   }
   // 切换播放状态
@@ -72,28 +79,42 @@ export const Player: FC = () => {
     if (!audio.current) return
     audio.current.volume = volume / 100
   }, [volume, audio])
+  // 监听音频播放进度
   const handleWatchProgress = () => {
     if (!audio.current) return
     setProgress(audio.current.currentTime)
   }
+  // 音频播放结束
+  const handleAudioEnded = () => {
+    if (!audio.current) return
+    const nextIndex = currentSongIndex + 1
+    if (nextIndex >= currentSongList.length) {
+      stopPlay()
+      return
+    }
+    setCurrentSongIndex(nextIndex)
+  }
   useEffect(() => {
     audio.current = new Audio()
+    if (currentSong) {
+      startPlay()
+    }
     // 进行其他的 DOM 操作或事件绑定
     return () => {
-      // 在组件卸载时清理资源
       audio.current?.pause()
       audio.current = null
-      // 清理其他的 DOM 操作或事件绑定
     }
   }, [])
   useEffect(() => {
     if (audio.current) {
       audio.current.addEventListener('timeupdate', handleWatchProgress)
+      audio.current.addEventListener('ended', handleAudioEnded)
     }
     return () => {
       audio.current?.removeEventListener('timeupdate', handleWatchProgress)
+      audio.current?.removeEventListener('ended', handleAudioEnded)
     }
-  }, [audio])
+  }, [audio, currentSongIndex])
   const totalDuration = useMemo(() => {
     return millisecondToTime(currentSong?.song?.duration || 0)
   }, [currentSong])

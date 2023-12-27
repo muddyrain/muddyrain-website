@@ -19,7 +19,7 @@ const MusicLoading = () => (
 export default function Music() {
   const [currentPage, setCurrentPage] = useState('')
   const isShowLogin = useMusicStore(state => state.isShowLogin)
-  const currentSong = useMusicStore(state => state.currentSong)
+  const currentSongIndex = useMusicStore(state => state.currentSongIndex)
   const CurrentComponent = useMemo(() => {
     const component = RouterList.find(item => item.url === currentPage)?.component || NoLoad
     return component
@@ -45,7 +45,11 @@ export default function Music() {
             />
             <div className="flex-1 p-6 bg-white/40 overflow-hidden flex flex-col relative">
               <Header />
-              <div className={`flex-1 overflow-hidden duration-300 ${currentSong ? 'pb-24' : ''}`}>
+              <div
+                className={`flex-1 overflow-hidden duration-300 ${
+                  currentSongIndex > -1 ? 'pb-24' : ''
+                }`}
+              >
                 <Suspense fallback={<MusicLoading />}>{<CurrentComponent />}</Suspense>
               </div>
               <PlayList />

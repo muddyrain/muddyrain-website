@@ -19,15 +19,15 @@ interface StoreProps {
   isShowLogin: boolean
   setShowLogin: (state: boolean) => void
   /**
-   * 当前播放的歌曲
-   */
-  currentSong: SongsItem | null
-  setCurrentSong: (song: StoreProps['currentSong']) => void
-  /**
    * 当前播放的歌曲列表
    */
   currentSongList: SongsItem[]
   setCurrentSongList: (songList: StoreProps['currentSongList']) => void
+  /**
+   * 当前播放的歌曲索引
+   */
+  currentSongIndex: number
+  setCurrentSongIndex: (index: StoreProps['currentSongIndex']) => void
 }
 export const useMusicStore = create<StoreProps>(set => ({
   isShowPlayList: false,
@@ -36,8 +36,8 @@ export const useMusicStore = create<StoreProps>(set => ({
   setShowLogin: isShow => set({ isShowLogin: isShow }),
   isShowSongDetail: false,
   setShowSongDetail: isShow => set({ isShowSongDetail: isShow }),
-  currentSong: null,
-  setCurrentSong: song => set({ currentSong: song }),
   currentSongList: [],
   setCurrentSongList: songList => set({ currentSongList: songList }),
+  currentSongIndex: -1,
+  setCurrentSongIndex: index => set({ currentSongIndex: index }),
 }))

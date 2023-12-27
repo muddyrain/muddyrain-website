@@ -1,4 +1,9 @@
 /**
+ * 网易云音乐前缀
+ */
+export const NeteaseMusicPrefix = 'https://music.163.com/song/media/outer/url?id='
+
+/**
  * 音质配置
  */
 export const SoundQualityOptions = [
