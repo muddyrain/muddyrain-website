@@ -51,7 +51,9 @@ export const Player: FC = () => {
     audio.current.addEventListener('loadedmetadata', () => {
       if (!audio.current) return
       audio.current.volume = volume / 100
-      audio.current.play()
+      audio.current.play().catch(() => {
+        stopPlay()
+      })
       setMaxProgress(audio.current.duration || 0)
       setPlayState('playing')
     })

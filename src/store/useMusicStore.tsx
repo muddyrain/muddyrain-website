@@ -1,6 +1,6 @@
 import { SongsItem } from '@/views/music/types'
 import { create } from 'zustand'
-
+import { persist, createJSONStorage } from 'zustand/middleware'
 interface StoreProps {
   /**
    * 是否显示播放列表
@@ -29,15 +29,23 @@ interface StoreProps {
   currentSongIndex: number
   setCurrentSongIndex: (index: StoreProps['currentSongIndex']) => void
 }
-export const useMusicStore = create<StoreProps>(set => ({
-  isShowPlayList: false,
-  setShowPlayList: isShow => set({ isShowPlayList: isShow }),
-  isShowLogin: false,
-  setShowLogin: isShow => set({ isShowLogin: isShow }),
-  isShowSongDetail: false,
-  setShowSongDetail: isShow => set({ isShowSongDetail: isShow }),
-  currentSongList: [],
-  setCurrentSongList: songList => set({ currentSongList: songList }),
-  currentSongIndex: -1,
-  setCurrentSongIndex: index => set({ currentSongIndex: index }),
-}))
+export const useMusicStore = create(
+  persist<StoreProps>(
+    set => ({
+      isShowPlayList: false,
+      setShowPlayList: isShow => set({ isShowPlayList: isShow }),
+      isShowLogin: false,
+      setShowLogin: isShow => set({ isShowLogin: isShow }),
+      isShowSongDetail: false,
+      setShowSongDetail: isShow => set({ isShowSongDetail: isShow }),
+      currentSongList: [],
+      setCurrentSongList: songList => set({ currentSongList: songList }),
+      currentSongIndex: -1,
+      setCurrentSongIndex: index => set({ currentSongIndex: index }),
+    }),
+    {
+      name: 'music-store',
+      storage: createJSONStorage(() => window.localStorage),
+    }
+  )
+)
