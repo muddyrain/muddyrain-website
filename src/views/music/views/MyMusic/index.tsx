@@ -2,7 +2,7 @@ import { Download, Favorite, PlayArrow } from '@mui/icons-material'
 import { Avatar, Button, IconButton, Stack } from '@mui/material'
 import Image from 'next/image'
 import { FC, useEffect, useState } from 'react'
-import { Search } from '../components/Search'
+import { Search } from '../../components/Search'
 import { ScrollView } from '@/components'
 import { errorImage } from '@/assets'
 
