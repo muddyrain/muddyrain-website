@@ -8,6 +8,7 @@ export interface IMessageContext {
       | {
           type?: AlertColor
           isHasClose?: boolean
+          durationClose?: number
         }
       | AlertColor
   ) => void
@@ -26,10 +27,20 @@ export const MessageProvider: React.FC<{
   const [open, setOpen] = useState(false)
   const [typeColor, setTypeColor] = useState<AlertColor>('success')
   const [isHasClose, setIsHasClose] = useState(true)
+  const timer = React.useRef<NodeJS.Timeout>()
 
   const showMessage: IMessageContext['showMessage'] = (msg, options) => {
-    setOpen(true)
-    setMessage(msg)
+    if (timer.current) {
+      clearTimeout(timer.current)
+    }
+    setOpen(() => true)
+    setMessage(() => msg)
+    timer.current = setTimeout(
+      () => {
+        hideMessage()
+      },
+      typeof options === 'object' ? options.durationClose : 2000
+    )
     if (typeof options === 'string') {
       setTypeColor(options)
       setIsHasClose(true)
@@ -40,8 +51,8 @@ export const MessageProvider: React.FC<{
   }
 
   const hideMessage = () => {
-    setMessage(null)
-    setOpen(false)
+    setMessage(() => null)
+    setOpen(() => false)
   }
 
   return (
@@ -49,8 +60,7 @@ export const MessageProvider: React.FC<{
       {children}
       <Snackbar
         open={open}
-        autoHideDuration={6000}
-        onClose={hideMessage}
+        autoHideDuration={3000}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert {...(isHasClose ? { onClose: hideMessage } : {})} severity={typeColor}>

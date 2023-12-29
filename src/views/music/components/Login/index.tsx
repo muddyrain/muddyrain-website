@@ -5,10 +5,18 @@ import { FC, useEffect, useState } from 'react'
 import { LOGO } from '../../assets'
 import { useMusicStore } from '@/store/useMusicStore'
 import { gsap } from 'gsap'
+import { useMessage } from '@/hooks/useMessage'
+
+const send_time = 50
 
 export const Login: FC = () => {
   const setShowLogin = useMusicStore(state => state.setShowLogin)
   const isShowLogin = useMusicStore(state => state.isShowLogin)
+  const message = useMessage()
+  // 验证码倒计时
+  const [countdown, setCountdown] = useState(60)
+  // 切换登录方式
+  const [loginType, setLoginType] = useState<'password' | 'captcha'>('captcha')
   useEffect(() => {
     if (isShowLogin) {
       gsap.to(state, {
@@ -26,7 +34,27 @@ export const Login: FC = () => {
     opacity: 0.5,
     userName: '',
     password: '',
+    captcha: '',
   })
+  const sendCaptcha = () => {
+    if (state.userName === '') {
+      message.showMessage('请输入手机号', 'info')
+      return
+    }
+    if (countdown < 60) {
+      return
+    }
+    const timer = setInterval(() => {
+      setCountdown(prevCountdown => prevCountdown - 1)
+      setCountdown(prevCountdown => {
+        if (prevCountdown <= 0) {
+          clearInterval(timer)
+          return 60
+        }
+        return prevCountdown
+      })
+    }, send_time)
+  }
   return (
     <div
       className="fixed inset-0 m-auto z-50 w-[480px] h-[480px] bg-white border border-solid border-zinc-200 shadow-sm rounded-xl"
@@ -58,7 +86,7 @@ export const Login: FC = () => {
         <Image src={LOGO} width={36} height={36} className="rounded-md" alt="logo" />
         <span className="ml-2 text-xl">网易云音乐</span>
       </div>
-      <Stack spacing={3} className="px-8 mt-12">
+      <Stack spacing={2} className="px-8 mt-12">
         <TextField
           fullWidth
           name="userName"
@@ -72,25 +100,60 @@ export const Login: FC = () => {
           }}
           label="账号"
         />
-        <TextField
-          fullWidth
-          label="密码"
-          name="password"
-          value={state.password}
-          type="password"
-          onChange={e => {
-            setState({
-              ...state,
-              password: e.target.value,
-            })
-          }}
-        />
-        <div>
-          <Button variant="contained" fullWidth className="mt-4">
-            登录
-          </Button>
+        {
+          // 验证码登录
+          loginType === 'captcha' ? (
+            <div className="flex">
+              <TextField
+                fullWidth
+                name="captcha"
+                label="验证码"
+                className="rounded-full"
+                onChange={e => {
+                  setState({
+                    ...state,
+                    captcha: e.target.value,
+                  })
+                }}
+              />
+              <Button variant="outlined" className="ml-2 w-36 px-2" onClick={sendCaptcha}>
+                {countdown < 60 ? `${countdown}s重新获取` : `获取验证码`}
+              </Button>
+            </div>
+          ) : (
+            <TextField
+              fullWidth
+              label="密码"
+              name="password"
+              value={state.password}
+              type="password"
+              onChange={e => {
+                setState({
+                  ...state,
+                  password: e.target.value,
+                })
+              }}
+            />
+          )
+        }
+
+        <div className="w-full py-4 rounded-full bg-primary text-center text-white cursor-pointer hover:bg-opacity-95 duration-200">
+          <span className="select-none">登录</span>
         </div>
       </Stack>
+      <div className="flex justify-between px-8 mt-2">
+        {/* 自动登录 */}
+        <Button variant="text">自动登录</Button>
+        {/* 验证码登录 */}
+        <Button
+          variant="text"
+          onClick={() => {
+            setLoginType(loginType === 'password' ? 'captcha' : 'password')
+          }}
+        >
+          验证码登录
+        </Button>
+      </div>
     </div>
   )
 }
