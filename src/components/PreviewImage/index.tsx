@@ -3,10 +3,10 @@ import NextImage, { ImageProps } from 'next/image'
 import gsap from 'gsap'
 import { RefreshOutlined, RestartAlt, ZoomInOutlined, ZoomOutOutlined } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
-import { useLayoutStore } from '@/store/useLayoutStore'
 import { Mask } from '../Mask'
 import { useMouseLeavePage } from '@/hooks/useMouseLeavePage'
 import { getTransformScale } from './tools'
+import { debounce } from '@/utils'
 
 export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
   const imageRef = useRef<HTMLImageElement>(null)
@@ -16,12 +16,10 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
   const [rect, setRect] = useState<DOMRect | null>(null)
   const isAnimatingRef = useRef(false)
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
-  const setIsScrollDisabled = useLayoutStore(state => state.setIsScrollDisabled)
   const handlePreview = () => {
     if (!imageRef.current) return
     const rect = imageRef.current.getBoundingClientRect()
     setRect(rect)
-    setIsScrollDisabled(true)
   }
   useMouseLeavePage(() => {
     if (rect) {
@@ -42,7 +40,6 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
       rotate: 0,
       onComplete: () => {
         setRect(null)
-        setIsScrollDisabled(false)
         setDragging(false)
       },
     })
@@ -117,9 +114,7 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
   const withTimeline = (handler: (timeline: gsap.core.Timeline) => void) => {
     return () => {
       if (isAnimatingRef.current) return
-
       isAnimatingRef.current = true
-
       const timeline = gsap.timeline({
         onComplete: () => {
           isAnimatingRef.current = false
@@ -127,7 +122,6 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
       })
 
       handler(timeline)
-
       timelineRef.current = timeline
     }
   }
@@ -172,7 +166,20 @@ export const PreviewImage: FC<ImageProps> = ({ ...props }) => {
     e.stopPropagation()
     e.deltaY < 0 ? handleZoomIn() : handleZoomOut()
   }
-
+  const debounceClose = useCallback(
+    debounce(() => {
+      if (rect) {
+        handleClose()
+      }
+    }, 300),
+    [rect]
+  )
+  useEffect(() => {
+    window.addEventListener('resize', debounceClose)
+    return () => {
+      window.removeEventListener('resize', debounceClose)
+    }
+  }, [rect])
   return (
     <>
       <NextImage
