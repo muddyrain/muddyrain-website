@@ -6,6 +6,7 @@ import { LOGO } from '../../assets'
 import { useMusicStore } from '@/store/useMusicStore'
 import { gsap } from 'gsap'
 import { useMessage } from '@/hooks/useMessage'
+import { sendCaptchaApi } from '@/api/music'
 
 const send_time = 50
 
@@ -44,6 +45,13 @@ export const Login: FC = () => {
     if (countdown < 60) {
       return
     }
+    sendCaptchaApi(state.userName).then(res => {
+      if (res.code === 200) {
+        message.showMessage('验证码已发送', 'success')
+      } else {
+        message.showMessage(res.message, 'error')
+      }
+    })
     const timer = setInterval(() => {
       setCountdown(prevCountdown => prevCountdown - 1)
       setCountdown(prevCountdown => {
@@ -55,6 +63,7 @@ export const Login: FC = () => {
       })
     }, send_time)
   }
+  const handleSubmit = () => {}
   return (
     <div
       className="fixed inset-0 m-auto z-50 w-[480px] h-[480px] bg-white border border-solid border-zinc-200 shadow-sm rounded-xl"
@@ -136,8 +145,12 @@ export const Login: FC = () => {
             />
           )
         }
-
-        <div className="w-full py-4 rounded-full bg-primary text-center text-white cursor-pointer hover:bg-opacity-95 duration-200">
+        <div
+          className="w-full py-4 rounded-full bg-primary text-center text-white cursor-pointer hover:bg-opacity-95 duration-200"
+          onClick={() => {
+            handleSubmit()
+          }}
+        >
           <span className="select-none">登录</span>
         </div>
       </Stack>

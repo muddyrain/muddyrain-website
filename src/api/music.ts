@@ -25,3 +25,9 @@ export const getSongDetailApi = async (ids: string | number): Promise<SongsItem>
  * 获取音乐 url
  */
 export const getSongUrlApi = async (id: string | number) => fetchMusic.get('/song/url?id=' + id)
+
+/**
+ * 发送验证码
+ */
+export const sendCaptchaApi = async (phone: string) =>
+  fetchMusic.get('/captcha/sent?phone=' + phone)
