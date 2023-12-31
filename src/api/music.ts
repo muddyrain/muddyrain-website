@@ -31,3 +31,9 @@ export const getSongUrlApi = async (id: string | number) => fetchMusic.get('/son
  */
 export const sendCaptchaApi = async (phone: string) =>
   fetchMusic.get('/captcha/sent?phone=' + phone)
+
+/**
+ * 手机号登录
+ */
+export const cellphoneLoginApi = async (phone: string, captcha: string) =>
+  fetchMusic.get(`/login/cellphone?phone=${phone}&captcha=${captcha}`)

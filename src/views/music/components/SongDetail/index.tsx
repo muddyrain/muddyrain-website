@@ -1,4 +1,4 @@
-import { useMusicStore } from '@/store/useMusicStore'
+import { useMusicStore } from '@/views/music/store/useMusicStore'
 import { FC } from 'react'
 import { Background } from './background'
 import { Stack } from '@mui/material'

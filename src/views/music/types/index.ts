@@ -32,3 +32,12 @@ export interface SongListItem {
   picUrl: string
   playCount: number
 }
+
+/**
+ * 用户信息类型
+ */
+export interface UserInfoType {
+  avatarUrl: string
+  nickname: string
+  userId: number
+}

@@ -3,16 +3,17 @@ import { Button, IconButton, Stack, TextField } from '@mui/material'
 import Image from 'next/image'
 import { FC, useEffect, useState } from 'react'
 import { LOGO } from '../../assets'
-import { useMusicStore } from '@/store/useMusicStore'
+import { useMusicStore } from '@/views/music/store/useMusicStore'
 import { gsap } from 'gsap'
 import { useMessage } from '@/hooks/useMessage'
-import { sendCaptchaApi } from '@/api/music'
+import { cellphoneLoginApi, sendCaptchaApi } from '@/api/music'
 
 const send_time = 50
 
 export const Login: FC = () => {
   const setShowLogin = useMusicStore(state => state.setShowLogin)
   const isShowLogin = useMusicStore(state => state.isShowLogin)
+  const setUserProfile = useMusicStore(state => state.setUserProfile)
   const message = useMessage()
   // 验证码倒计时
   const [countdown, setCountdown] = useState(60)
@@ -63,7 +64,29 @@ export const Login: FC = () => {
       })
     }, send_time)
   }
-  const handleSubmit = () => {}
+  const handleSubmit = () => {
+    if (state.userName === '') {
+      message.showMessage('请输入手机号', 'info')
+      return
+    }
+    if (state.captcha === '' && loginType === 'captcha') {
+      message.showMessage('请输入验证码', 'info')
+      return
+    }
+    if (state.password === '' && loginType === 'password') {
+      message.showMessage('请输入密码', 'info')
+      return
+    }
+    cellphoneLoginApi(state.userName, state.captcha).then(res => {
+      if (res.code === 200) {
+        setShowLogin(false)
+        setUserProfile(res.profile)
+        message.showMessage('登录成功', 'success')
+      } else {
+        message.showMessage(res.message, 'error')
+      }
+    })
+  }
   return (
     <div
       className="fixed inset-0 m-auto z-50 w-[480px] h-[480px] bg-white border border-solid border-zinc-200 shadow-sm rounded-xl"

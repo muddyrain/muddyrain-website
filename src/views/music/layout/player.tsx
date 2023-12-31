@@ -11,7 +11,7 @@ import {
   VolumeUp,
 } from '@mui/icons-material'
 import { useClickOutside } from '@/hooks/useClickOutside'
-import { useMusicStore } from '@/store/useMusicStore'
+import { useMusicStore } from '@/views/music/store/useMusicStore'
 import { PlayListToggleTrigger } from '@/constant/triggerIds'
 import { millisecondToTime } from '@/utils/time'
 import { errorImage } from '@/assets'

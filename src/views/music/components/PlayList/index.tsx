@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react'
 import { Button, Divider } from '@mui/material'
-import { useMusicStore } from '@/store/useMusicStore'
+import { useMusicStore } from '@/views/music/store/useMusicStore'
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { DATA_TRIGGER_KEY, PlayListToggleTrigger } from '@/constant/triggerIds'
 import { Title } from '../Title'

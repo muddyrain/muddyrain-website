@@ -1,4 +1,4 @@
-import { SongsItem } from '@/views/music/types'
+import { SongsItem, UserInfoType } from '@/views/music/types'
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 interface StoreProps {
@@ -28,6 +28,11 @@ interface StoreProps {
    */
   currentSongIndex: number
   setCurrentSongIndex: (index: StoreProps['currentSongIndex']) => void
+  /**
+   * 当前登录用户信息
+   */
+  userProfile: UserInfoType | null
+  setUserProfile: (userProfile: StoreProps['userProfile']) => void
 }
 export const useMusicStore = create(
   persist<StoreProps>(
@@ -42,6 +47,8 @@ export const useMusicStore = create(
       setCurrentSongList: songList => set({ currentSongList: songList }),
       currentSongIndex: -1,
       setCurrentSongIndex: index => set({ currentSongIndex: index }),
+      userProfile: null,
+      setUserProfile: userProfile => set({ userProfile }),
     }),
     {
       name: 'music-store',

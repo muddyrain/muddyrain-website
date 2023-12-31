@@ -6,7 +6,7 @@ import { SongsItem } from '@/views/music/types'
 import { SoundQualityOptions } from '@/views/music/constant'
 import { PlayArrow } from '@mui/icons-material'
 import Image from 'next/image'
-import { useMusicStore } from '@/store/useMusicStore'
+import { useMusicStore } from '@/views/music/store/useMusicStore'
 
 /**
  * 最新音乐

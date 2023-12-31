@@ -1,11 +1,15 @@
 import { FC, useState } from 'react'
 import { NotificationsNoneOutlined, NavigateBefore } from '@mui/icons-material'
-import { Avatar, Button, IconButton } from '@mui/material'
-import { Search } from './Search'
-import { useMusicStore } from '@/store/useMusicStore'
+import { IconButton } from '@mui/material'
+import { Search } from '../components/Search'
+import { BlockLoading } from '@/components'
+import { colors } from '@mui/material'
+import dynamic from 'next/dynamic'
+const HeaderAction = dynamic(() => import('./HeaderAction').then(e => e.HeaderAction), {
+  ssr: false,
+  loading: () => <BlockLoading size="small" color={colors['indigo']['400']} />,
+})
 export const Header: FC = () => {
-  const setShowLogin = useMusicStore(state => state.setShowLogin)
-  const isShowLogin = useMusicStore(state => state.isShowLogin)
   const [searchValue, setSearchValue] = useState('')
   const [inputFocus, setInputFocus] = useState(false)
   return (
@@ -36,15 +40,7 @@ export const Header: FC = () => {
           <IconButton color="primary">
             <NotificationsNoneOutlined className="text-xl text-zinc-600" />
           </IconButton>
-          <Button
-            className="flex items-center cursor-pointer"
-            onClick={() => {
-              setShowLogin(!isShowLogin)
-            }}
-          >
-            <Avatar className="w-8 h-8" />
-            <span className="text-zinc-700 ml-2">未登录</span>
-          </Button>
+          <HeaderAction />
         </div>
       </div>
     </>

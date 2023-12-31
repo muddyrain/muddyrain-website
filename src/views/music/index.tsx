@@ -4,11 +4,11 @@ import React, { Suspense, useMemo, useState } from 'react'
 import { Slider } from './components/slider'
 import { Player } from './layout'
 import { RouterList } from './router'
-import { Header } from './components/header'
+import { Header } from './layout/header'
 import { PlayList } from './components/PlayList'
 import { SongDetail } from './components/SongDetail'
 import { Login } from './components/Login'
-import { useMusicStore } from '@/store/useMusicStore'
+import { useMusicStore } from '@/views/music/store/useMusicStore'
 import { Loading } from '@/components'
 const NoLoad = React.lazy(() => import('./NoLoad').then(module => ({ default: module.NoLoad })))
 const MusicLoading = () => (
