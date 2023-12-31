@@ -69,10 +69,10 @@ export const PlayList: FC = () => {
                   )}
                   <span className="flex-[2] select-none">{item.name}</span>
                   <span className="flex-1 select-none truncate">
-                    {item.song?.artists?.map(item => item.name)}
+                    {item?.ar?.map(item => item.name)}
                   </span>
                   <span className="mx-2 select-none text-zinc-400">
-                    {millisecondToTime(item.song?.duration || 0)}
+                    {millisecondToTime(item?.dt || 0)}
                   </span>
                 </div>
               ))}

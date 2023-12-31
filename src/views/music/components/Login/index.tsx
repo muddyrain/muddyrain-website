@@ -6,7 +6,7 @@ import { LOGO } from '../../assets'
 import { useMusicStore } from '@/views/music/store/useMusicStore'
 import { gsap } from 'gsap'
 import { useMessage } from '@/hooks/useMessage'
-import { cellphoneLoginApi, sendCaptchaApi } from '@/api/music'
+import { cellphoneLoginApi, sendCaptchaApi } from '@/views/music/api/music'
 
 const send_time = 50
 
@@ -14,6 +14,7 @@ export const Login: FC = () => {
   const setShowLogin = useMusicStore(state => state.setShowLogin)
   const isShowLogin = useMusicStore(state => state.isShowLogin)
   const setUserProfile = useMusicStore(state => state.setUserProfile)
+  const setCookie = useMusicStore(state => state.setCookie)
   const message = useMessage()
   // 验证码倒计时
   const [countdown, setCountdown] = useState(60)
@@ -81,6 +82,7 @@ export const Login: FC = () => {
       if (res.code === 200) {
         setShowLogin(false)
         setUserProfile(res.profile)
+        setCookie(res.cookie)
         message.showMessage('登录成功', 'success')
       } else {
         message.showMessage(res.message, 'error')

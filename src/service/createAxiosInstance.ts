@@ -16,7 +16,13 @@ export class CreateAxiosInstance {
   private maps: IAxiosInstanceProps['maps']
   public fetch: AxiosInstance
   public notyf: Notyf | undefined
-  constructor({ baseURL, whiteList = [], codeList = {}, maps }: IAxiosInstanceProps) {
+  constructor({
+    baseURL,
+    whiteList = [],
+    codeList = {},
+    maps,
+    timeout = 60000,
+  }: IAxiosInstanceProps) {
     if (typeof document !== 'undefined') {
       this.notyf = new Notyf(NotyfOptions)
     }
@@ -25,7 +31,7 @@ export class CreateAxiosInstance {
     this.maps = maps
     this.fetch = axios.create({
       baseURL,
-      timeout: 60000,
+      timeout,
     })
     this.fetch.interceptors.request.use(
       config => {
@@ -51,6 +57,7 @@ export class CreateAxiosInstance {
       }
     )
 
+    const options = { codeList: this.codeList, maps: this.maps }
     this.fetch.interceptors.response.use(
       response => {
         NProgress.done()
@@ -60,17 +67,17 @@ export class CreateAxiosInstance {
         const result = response.data
         if (isWhite) {
           return result
-        } else if (result?.[maps?.code] === 200) {
-          return result?.[maps?.data] ?? {}
+        } else if (result?.[this.maps?.code] === 200) {
+          return result?.[this.maps?.data] ?? {}
         } else {
-          dealBusinessError(result || {}, { codeList, maps }, this.notyf)
+          dealBusinessError(result || {}, options, this.notyf)
           Promise.reject(result)
           return false
         }
       },
       error => {
         NProgress.done()
-        dealNetworkError(error?.response || {}, { codeList, maps }, this.notyf)
+        dealNetworkError(error?.response || {}, options, this.notyf)
         return Promise.reject(error)
       }
     )

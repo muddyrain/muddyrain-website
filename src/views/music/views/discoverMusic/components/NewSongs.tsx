@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react'
 import { Title } from './Title'
-import { getPersonalizedNewSongApi, getSongUrlApi } from '@/api/music'
+import { getPersonalizedNewSongApi, getSongDetailApi, getSongUrlApi } from '@/views/music/api/music'
 import { Grid } from '@mui/material'
-import { SongsItem } from '@/views/music/types'
+import { newSongsItem } from '@/views/music/types'
 import { SoundQualityOptions } from '@/views/music/constant'
 import { PlayArrow } from '@mui/icons-material'
 import Image from 'next/image'
@@ -12,7 +12,7 @@ import { useMusicStore } from '@/views/music/store/useMusicStore'
  * 最新音乐
  */
 export const NewSongs: FC = () => {
-  const [songs, setSongs] = useState<SongsItem[]>([])
+  const [songs, setSongs] = useState<newSongsItem[]>([])
   const setCurrentSongIndex = useMusicStore(state => state.setCurrentSongIndex)
   const setCurrentSongList = useMusicStore(state => state.setCurrentSongList)
   const currentSongList = useMusicStore(state => state.currentSongList)
@@ -21,16 +21,18 @@ export const NewSongs: FC = () => {
       setSongs(res.result || [])
     })
   }, [])
-  const handleClickItem = (song: SongsItem) => {
-    console.log('click item', song)
-    getSongUrlApi(song.id).then(res => {
-      const tmp = res.data?.[0]
-      if (tmp) {
-        const songItem = { ...song, url: tmp.url, type: tmp.type }
-        currentSongList.push(songItem)
-        setCurrentSongList([...currentSongList])
-        setCurrentSongIndex(currentSongList.length - 1)
-      }
+  const handleClickItem = (item: newSongsItem) => {
+    getSongDetailApi(item.id).then(res => {
+      const detail = res.songs[0]
+      getSongUrlApi(item.id).then(res => {
+        const tmp = res.data?.[0]
+        if (tmp) {
+          const songItem = { ...detail, picUrl: item.picUrl, url: tmp.url, type: tmp.type }
+          currentSongList.push(songItem)
+          setCurrentSongList([...currentSongList])
+          setCurrentSongIndex(currentSongList.length - 1)
+        }
+      })
     })
   }
   return (

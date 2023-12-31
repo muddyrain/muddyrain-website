@@ -5,19 +5,37 @@ import { FC, useEffect, useState } from 'react'
 import { Search } from '../../components/Search'
 import { ScrollView } from '@/components'
 import { errorImage } from '@/assets'
+import { getLikeListApi, getSongDetailApi } from '@/views/music/api/music'
+import { useMusicStore } from '../../store/useMusicStore'
+import { SongsItem } from '../../types'
+import { millisecondToTime } from '@/utils/time'
 
 export const MyMusic: FC = () => {
   const [searchIsFocus, setSearchIsFocus] = useState(false)
   const [searchValue, setSearchValue] = useState('')
+  const currentProfile = useMusicStore(state => state.userProfile)
+  const [list, setList] = useState<SongsItem[]>([])
   useEffect(() => {
     if (!searchValue) {
       setSearchIsFocus(false)
     }
   }, [searchValue])
+
+  useEffect(() => {
+    if (!currentProfile) return
+    getLikeListApi(currentProfile.userId).then(res => {
+      const ids = res.ids
+      if (ids.length > 0) {
+        getSongDetailApi(ids.join(',')).then(res => {
+          setList(res.songs)
+        })
+      }
+    })
+  }, [])
   return (
     <>
-      <div className="flex">
-        <div className="relative w-[200px] h-[200px] rounded-md overflow-hidden ">
+      <div className="flex ">
+        <div className="relative w-[200px] h-[200px] rounded-md overflow-hidden">
           <Image src={errorImage} alt="my-music" className="w-full h-full" />
           <div className="w-full h-full absolute top-0 left-0 bg-black/10">
             <div className="flex items-center justify-end mt-1 mr-1 text-yellow-50">
@@ -67,7 +85,7 @@ export const MyMusic: FC = () => {
           />
         </div>
       </div>
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden flex flex-col">
         <div className="w-full h-full flex flex-col">
           <Stack direction={'row'} spacing={1} className="py-2 px-4 flex items-center">
             <div className="w-16 relative flex justify-center">
@@ -89,7 +107,7 @@ export const MyMusic: FC = () => {
           <div className="flex-1 flex-col flex overflow-hidden">
             <ScrollView>
               <div className="w-full h-full">
-                {Array.from({ length: 100 }).map((_, index) => (
+                {list.map((item, index) => (
                   <Stack
                     direction={'row'}
                     key={index}
@@ -104,11 +122,24 @@ export const MyMusic: FC = () => {
                         {index + 1 < 10 ? '0' + (index + 1) : index + 1}
                       </span>
                     </div>
-                    <div className="flex-[1.5]">
-                      <span>多远都要在一起</span>
+                    <div className="flex-[1.5] flex items-center">
+                      <Image
+                        className="rounded-md"
+                        src={item.al.picUrl}
+                        width={40}
+                        height={40}
+                        alt={'album'}
+                        loading="lazy"
+                      />
+                      <div className="ml-1 flex flex-col">
+                        <span className="text-base">{item.name}</span>
+                        <span className="text-sm text-zinc-500">
+                          {item.ar.map(item => item.name)}
+                        </span>
+                      </div>
                     </div>
                     <div className="flex-[1]">
-                      <span>怪咖</span>
+                      <span>{item.al.name}</span>
                     </div>
                     <div className="w-24">
                       <IconButton>
@@ -116,7 +147,7 @@ export const MyMusic: FC = () => {
                       </IconButton>
                     </div>
                     <div className="w-40">
-                      <span>03:21</span>
+                      <span>{millisecondToTime(item.dt)}</span>
                     </div>
                   </Stack>
                 ))}

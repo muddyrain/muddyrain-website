@@ -1,5 +1,11 @@
 import { fetchMusic } from '@/service'
-import { SongListItem, SongsItem } from '@/views/music/types'
+import { SongsItem, newSongsItem } from '@/views/music/types'
+import { useMusicStore } from '../store/useMusicStore'
+
+const getCookie = () => {
+  const cookie = useMusicStore.getState().cookie
+  return cookie ? `${encodeURIComponent(cookie)}` : ''
+}
 
 /**
  * 获取轮播图
@@ -14,13 +20,14 @@ export const getPersonalizedApi = async (limit: number = 4) =>
 /**
  * 获取推荐最新音乐
  */
-export const getPersonalizedNewSongApi = async (): Promise<SongListItem> =>
+export const getPersonalizedNewSongApi = async (): Promise<{ result: newSongsItem[] }> =>
   fetchMusic.get('/personalized/newsong')
 /**
  * 获取歌曲详情
  */
-export const getSongDetailApi = async (ids: string | number): Promise<SongsItem> =>
+export const getSongDetailApi = async (ids: string | number): Promise<{ songs: SongsItem[] }> =>
   fetchMusic.get('/song/detail?ids=' + ids)
+
 /**
  * 获取音乐 url
  */
@@ -37,3 +44,10 @@ export const sendCaptchaApi = async (phone: string) =>
  */
 export const cellphoneLoginApi = async (phone: string, captcha: string) =>
   fetchMusic.get(`/login/cellphone?phone=${phone}&captcha=${captcha}`)
+
+/**
+ * 获取喜欢音乐列表
+ */
+export const getLikeListApi = async (uid: string | number) => {
+  return fetchMusic.get(`/likelist?uid=${uid}&cookie=${getCookie()}`)
+}

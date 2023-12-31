@@ -5,6 +5,26 @@ export interface ArtistsType {
   id: number
   name: string
 }
+/**
+ * 专辑类型
+ */
+export interface AlbumType {
+  id: number
+  name: string
+  picUrl: string
+}
+
+/**
+ * 新歌曲推荐歌曲类型
+ */
+export interface newSongsItem {
+  id: number
+  name: string
+  picUrl: string
+  type?: string
+  url?: string
+  song: SongsItem
+}
 
 /**
  * 歌曲类型
@@ -13,15 +33,14 @@ export interface SongsItem {
   id: number
   name: string
   picUrl: string
-  song: {
-    artists: ArtistsType[]
-    privilege: {
-      maxBrLevel: string
-    }
-    duration: number
+  duration: number
+  dt: number
+  privilege: {
+    maxBrLevel: string
   }
-  type?: string
-  url?: string
+  ar: ArtistsType[]
+  artists: ArtistsType[]
+  al: AlbumType
 }
 
 /**

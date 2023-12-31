@@ -33,6 +33,11 @@ interface StoreProps {
    */
   userProfile: UserInfoType | null
   setUserProfile: (userProfile: StoreProps['userProfile']) => void
+  /**
+   * cookie
+   */
+  cookie: string
+  setCookie: (cookie: StoreProps['cookie']) => void
 }
 export const useMusicStore = create(
   persist<StoreProps>(
@@ -49,6 +54,8 @@ export const useMusicStore = create(
       setCurrentSongIndex: index => set({ currentSongIndex: index }),
       userProfile: null,
       setUserProfile: userProfile => set({ userProfile }),
+      cookie: '',
+      setCookie: cookie => set({ cookie }),
     }),
     {
       name: 'music-store',

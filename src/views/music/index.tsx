@@ -46,7 +46,7 @@ export default function Music() {
             <div className="flex-1 p-6 bg-white/40 overflow-hidden flex flex-col relative">
               <Header />
               <div
-                className={`flex-1 overflow-hidden duration-300 ${
+                className={`flex-1 overflow-hidden duration-300 flex flex-col ${
                   currentSongIndex > -1 ? 'pb-24' : ''
                 }`}
               >

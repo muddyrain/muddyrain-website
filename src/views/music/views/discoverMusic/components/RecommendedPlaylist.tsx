@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import { Grid } from '@mui/material'
 import { PlayArrow, PlayArrowOutlined } from '@mui/icons-material'
-import { getPersonalizedApi } from '@/api/music'
+import { getPersonalizedApi } from '@/views/music/api/music'
 import { Title } from './index'
 import { SongListItem } from '@/views/music/types'
 import Image from 'next/image'
