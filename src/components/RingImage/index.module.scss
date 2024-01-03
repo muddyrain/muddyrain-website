@@ -1,0 +1,4 @@
+.container {
+  mask-image: radial-gradient(circle at center, transparent var(--ring-width), white var(--ring-width2));
+  -webkit-mask-image: radial-gradient(circle at center, transparent var(--ring-width), white var(--ring-width2));
+}

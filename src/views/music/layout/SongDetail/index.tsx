@@ -1,30 +1,43 @@
 import { useMusicStore } from '@/views/music/store/useMusicStore'
-import { FC } from 'react'
-import { Background } from './background'
+import { FC, useMemo } from 'react'
 import { Stack } from '@mui/material'
 import Image from 'next/image'
-import { CD_TEST, CD_BG } from '../../assets'
-
+import { CD_BG } from '../../assets'
 import 'swiper/css'
 import { Lyrics } from './lyrics'
-import { ScrollView } from '@/components'
+import { RingImage } from '@/components/RingImage'
+import { errorImage } from '@/assets'
 
 export const SongDetail: FC = () => {
   const { isShowSongDetail } = useMusicStore(state => ({
     ...state,
   }))
-
+  const currentSongIndex = useMusicStore(state => state.currentSongIndex)
+  const currentSongList = useMusicStore(state => state.currentSongList)
+  const currentSong = useMemo(() => {
+    return currentSongList[currentSongIndex]
+  }, [currentSongIndex, currentSongList])
+  const cover = useMemo(() => {
+    return currentSong?.al.picUrl ? currentSong?.al.picUrl + '?param=200y200' : errorImage
+  }, [currentSong])
   return (
     <div
-      className={`absolute overflow-hidden z-10 w-full h-full bg-indigo-200 duration-300 ${
+      className={`absolute overflow-hidden z-50 w-full h-full bg-zinc-700 duration-300 ${
         isShowSongDetail ? 'top-0' : 'top-[100%]'
       }`}
     >
-      <div className="w-full h-full absolute top-0 left-0 bg-white/50 drop-shadow-lg">
-        <Background />
-      </div>
-      <div className="w-full h-full flex flex-col absolute top-0 p-8 left-0 z-10 overflow-hidden">
-        <ScrollView className="w-full h-full">
+      <div className="w-full h-full flex  absolute top-0 p-8 left-0 z-10 overflow-hidden">
+        <div className="w-1/2 relative h-full">
+          <div className="absolute w-full h-full flex justify-center items-center">
+            <Image src={CD_BG} className="w-[460px] h-[460px] animate-spin absolute" alt="cd-bg" />
+            <RingImage
+              ringWidth={17}
+              className="w-56 overflow-hidden h-56 left-1/2 rounded-full top-1/2 translate-x-[-50%] translate-y-[-50%] absolute z-1"
+              src={cover + '?param=400y400'}
+            />
+          </div>
+        </div>
+        <div className="w-1/2 h-full overflow-hidden flex flex-col">
           <Stack direction={'row'} className="h-8 " alignItems={'center'} spacing={2}>
             <h1 className="text-zinc-600 cursor-pointer hover:text-zinc-400 duration-300">
               Young And Beautiful
@@ -47,33 +60,10 @@ export const SongDetail: FC = () => {
               </span>
             </Stack>
           </Stack>
-          <div className="w-full h-[480px] flex">
-            <div className="w-1/2 relative">
-              <Image
-                className="h-full w-[480px] rounded-sm object-contain absolute left-0 z-10"
-                alt="cd"
-                src={CD_TEST}
-              />
-              <div className="absolute left-[240px] top-[10px] h-full">
-                <Image
-                  src={CD_BG}
-                  className="w-[460px] h-[460px] animate-spin absolute"
-                  alt="cd-bg"
-                />
-                <div className="w-36 overflow-hidden h-36 left-1/2 rounded-full top-1/2 translate-x-[-50%] translate-y-[-50%] bg-blue-200 absolute z-1">
-                  <Image
-                    className="h-full w-full rounded-sm object-contain absolute left-0 z-10"
-                    alt="cd"
-                    src={CD_TEST}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="w-1/2">
-              <Lyrics />
-            </div>
+          <div className="flex-1 overflow-hidden">
+            <Lyrics />
           </div>
-        </ScrollView>
+        </div>
       </div>
     </div>
   )

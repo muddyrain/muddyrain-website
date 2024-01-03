@@ -27,11 +27,7 @@ const MLyrics: FC = () => {
           <Stack spacing={1} className="flex-1 overflow-auto">
             {lyrics?.map((item, index) => {
               if (item?.content) {
-                return (
-                  <div key={index} className="text-center">
-                    {item?.content}
-                  </div>
-                )
+                return <div key={index}>{item?.content}</div>
               }
             })}
           </Stack>

@@ -6,7 +6,7 @@ import { Player } from './layout'
 import { RouterList } from './router'
 import { Header } from './layout/header'
 import { PlayList } from './components/PlayList'
-import { SongDetail } from './components/SongDetail'
+import { SongDetail } from './layout/SongDetail'
 import { Login } from './components/Login'
 import { useMusicStore } from '@/views/music/store/useMusicStore'
 import { Loading } from '@/components'
@@ -53,10 +53,10 @@ export default function Music() {
                 <Suspense fallback={<MusicLoading />}>{<CurrentComponent />}</Suspense>
               </div>
             </div>
-            <SongDetail />
           </div>
           <Player />
           <PlayList />
+          <SongDetail />
         </div>
       </div>
     </>
