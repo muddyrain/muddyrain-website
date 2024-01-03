@@ -39,7 +39,7 @@ export const PlayList: FC = () => {
         ref={playListRef}
         className={`absolute ${
           isShowPlayList ? 'w-[420px]' : 'w-0'
-        } duration-300 top-0 right-0 h-full flex flex-col bg-white/90 drop-shadow-xl z-10`}
+        } duration-200 ease-linear top-0 right-0 h-full flex flex-col bg-white/90 drop-shadow-xl z-50`}
       >
         <div className="pt-4 px-4">
           <Title title="播放列表" />

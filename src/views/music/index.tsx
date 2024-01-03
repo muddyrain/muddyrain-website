@@ -52,11 +52,11 @@ export default function Music() {
               >
                 <Suspense fallback={<MusicLoading />}>{<CurrentComponent />}</Suspense>
               </div>
-              <PlayList />
             </div>
             <SongDetail />
           </div>
           <Player />
+          <PlayList />
         </div>
       </div>
     </>

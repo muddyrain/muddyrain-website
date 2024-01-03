@@ -16,6 +16,7 @@ import { PlayListToggleTrigger } from '@/constant/triggerIds'
 import { millisecondToTime } from '@/utils/time'
 import { errorImage } from '@/assets'
 import { NeteaseMusicPrefix } from '../constant'
+import { getSongUrlApi } from '../api/music'
 
 export const Player: FC = () => {
   const [volume, setVolume] = useState(10)
@@ -43,24 +44,54 @@ export const Player: FC = () => {
     audio.current?.pause()
     setPlayState('paused')
   }
+  // 获取歌曲url
+  const getSongUrl = (songId: number) => {
+    return new Promise<string>((resolve, reject) => {
+      if (songId) {
+        getSongUrlApi(songId).then(res => {
+          resolve(res.data?.[0]?.url)
+        })
+      } else {
+        reject()
+      }
+    })
+  }
+  const handlePrev = () => {
+    const prevIndex = currentSongIndex - 1
+    if (prevIndex < 0) {
+      setCurrentSongIndex(currentSongList.length - 1)
+    } else {
+      setCurrentSongIndex(prevIndex)
+    }
+  }
+  const handleNext = () => {
+    const nextIndex = currentSongIndex + 1
+    if (nextIndex >= currentSongList.length) {
+      setCurrentSongIndex(0)
+    } else {
+      setCurrentSongIndex(nextIndex)
+    }
+  }
   // 开始播放
   const startPlay = () => {
-    if (!audio.current) return
-    audio.current.src = currentSong?.url || ''
-    // 监听音频加载完成
-    audio.current.addEventListener('loadedmetadata', () => {
+    getSongUrl(currentSong?.id || 0).then(url => {
       if (!audio.current) return
-      audio.current.volume = volume / 100
-      audio.current.play().catch(() => {
-        stopPlay()
+      audio.current.src = url || ''
+      // 监听音频加载完成
+      audio.current.addEventListener('loadedmetadata', () => {
+        if (!audio.current) return
+        audio.current.volume = volume / 100
+        setMaxProgress(() => (currentSong?.dt ? currentSong.dt / 1e3 : 0))
+        audio.current.play().catch(() => {
+          stopPlay()
+        })
+        setPlayState('playing')
       })
-      setMaxProgress(audio.current.duration || 0)
-      setPlayState('playing')
-    })
-    // 监听音频加载失败
-    audio.current.addEventListener('error', () => {
-      if (!audio.current) return
-      audio.current.src = NeteaseMusicPrefix + currentSong?.id
+      // 监听音频加载失败
+      audio.current.addEventListener('error', () => {
+        if (!audio.current) return
+        audio.current.src = NeteaseMusicPrefix + currentSong?.id
+      })
     })
   }
   // 切换播放状态
@@ -123,6 +154,7 @@ export const Player: FC = () => {
   const currentDuration = useMemo(() => {
     return millisecondToTime(progress * 1000)
   }, [progress])
+
   return (
     <div
       className={`absolute bottom-0 z-50 duration-300 w-full bg-zinc-50 ${
@@ -149,7 +181,7 @@ export const Player: FC = () => {
             }}
           >
             <Image
-              src={currentSong?.picUrl || errorImage}
+              src={currentSong?.al.picUrl ? currentSong?.al.picUrl + '?param=75y75' : errorImage}
               alt="album"
               width={0}
               height={0}
@@ -179,7 +211,7 @@ export const Player: FC = () => {
             <div className="iconfont icon-like text-zinc-500 text-2xl w-8 h-8" />
           </IconButton>
           {/* 快退 */}
-          <IconButton color="primary" size="large">
+          <IconButton color="primary" size="large" onClick={handlePrev}>
             <div className="iconfont  pr-1 icon-ai-rew-left text-primary text-2xl w-8 h-8" />
           </IconButton>
           {/* 播放 */}
@@ -195,7 +227,7 @@ export const Player: FC = () => {
             </div>
           </IconButton>
           {/* 快进 */}
-          <IconButton color="primary" size="large">
+          <IconButton color="primary" size="large" onClick={handleNext}>
             <div className="iconfont pl-1 icon-ai-rew-right text-primary text-2xl w-8 h-8" />
           </IconButton>
           {/* 播放模式 */}

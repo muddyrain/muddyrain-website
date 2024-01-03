@@ -1,7 +1,7 @@
 import { Download, Favorite, PlayArrow } from '@mui/icons-material'
 import { Avatar, Button, IconButton, Stack } from '@mui/material'
 import Image from 'next/image'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { Search } from '../../components/Search'
 import { ScrollView } from '@/components'
 import { errorImage } from '@/assets'
@@ -9,11 +9,15 @@ import { getLikeListApi, getSongDetailApi } from '@/views/music/api/music'
 import { useMusicStore } from '../../store/useMusicStore'
 import { SongsItem } from '../../types'
 import { millisecondToTime } from '@/utils/time'
+import { LoadingBox } from '@/components/LoadingBox'
 
 export const MyMusic: FC = () => {
   const [searchIsFocus, setSearchIsFocus] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const currentProfile = useMusicStore(state => state.userProfile)
+  const [loading, setLoading] = useState(false)
+  const setCurrentSongList = useMusicStore(state => state.setCurrentSongList)
+  const setCurrentSongIndex = useMusicStore(state => state.setCurrentSongIndex)
   const [list, setList] = useState<SongsItem[]>([])
   useEffect(() => {
     if (!searchValue) {
@@ -22,21 +26,44 @@ export const MyMusic: FC = () => {
   }, [searchValue])
 
   useEffect(() => {
+    setLoading(true)
     if (!currentProfile) return
     getLikeListApi(currentProfile.userId).then(res => {
       const ids = res.ids
-      if (ids.length > 0) {
-        getSongDetailApi(ids.join(',')).then(res => {
-          setList(res.songs)
-        })
-      }
+      segmentedRequest(ids)
     })
   }, [])
+  const handleClickItem = (item: SongsItem) => {
+    console.log('handleClickItem')
+    setCurrentSongList(list)
+    setCurrentSongIndex(list.findIndex(c => c.id === item.id))
+  }
+  const segmentedRequest = (ids: number[]) => {
+    const chunk = 20
+    const total = Math.ceil(ids.length / chunk)
+    for (let i = 0; i < total; i++) {
+      const start = i * chunk
+      const end = start + chunk
+      const idChunk = ids.slice(start, end)
+      getSongDetailApi(idChunk.join(','))
+        .then(res => {
+          setList(list => [...list, ...res.songs])
+        })
+        .finally(() => {
+          if (i === 0) {
+            setLoading(false)
+          }
+        })
+    }
+  }
+  const TopCover = useMemo(() => {
+    return list?.[0]?.al.picUrl ? list?.[0]?.al.picUrl + '?param=200y200' : errorImage
+  }, [list])
   return (
     <>
       <div className="flex ">
         <div className="relative w-[200px] h-[200px] rounded-md overflow-hidden">
-          <Image src={errorImage} alt="my-music" className="w-full h-full" />
+          <Image src={TopCover} alt="my-music" className="w-full h-full" width={0} height={0} />
           <div className="w-full h-full absolute top-0 left-0 bg-black/10">
             <div className="flex items-center justify-end mt-1 mr-1 text-yellow-50">
               <PlayArrow />
@@ -44,7 +71,7 @@ export const MyMusic: FC = () => {
             </div>
           </div>
         </div>
-        <div className="ml-8 flex flex-col">
+        <div className="ml-4 flex flex-col">
           <div className="text-2xl font-bold text-zinc-600 mb-2">我的音乐</div>
           <Stack direction={'row'} alignItems={'center'} spacing={1}>
             <Avatar className="w-6 h-6" />
@@ -106,52 +133,58 @@ export const MyMusic: FC = () => {
           </Stack>
           <div className="flex-1 flex-col flex overflow-hidden">
             <ScrollView>
-              <div className="w-full h-full">
-                {list.map((item, index) => (
-                  <Stack
-                    direction={'row'}
-                    key={index}
-                    spacing={1}
-                    className="py-2 px-4 flex items-center text-sm cursor-pointer rounded-md hover:bg-zinc-100/20 group"
-                  >
-                    <div className="w-16 relative flex justify-center">
-                      <IconButton className="absolute top-1/2 translate-y-[-50%] duration-300 opacity-0 group-hover:opacity-100">
-                        <PlayArrow className="text-zinc-500" />
-                      </IconButton>
-                      <span className="group-hover:hidden">
-                        {index + 1 < 10 ? '0' + (index + 1) : index + 1}
-                      </span>
+              <LoadingBox className="w-full h-full" loading={loading}>
+                <div className="w-full h-full">
+                  {list.map((item, index) => (
+                    <div key={index} onDoubleClick={() => handleClickItem(item)}>
+                      <Stack
+                        direction={'row'}
+                        spacing={1}
+                        className="py-2 px-4 flex items-center text-sm cursor-pointer rounded-md hover:bg-zinc-100/20 group"
+                      >
+                        <div
+                          className="w-16 relative flex justify-center"
+                          onClick={() => handleClickItem(item)}
+                        >
+                          <IconButton className="absolute top-1/2 translate-y-[-50%] opacity-0 group-hover:opacity-100">
+                            <PlayArrow className="text-zinc-500" />
+                          </IconButton>
+                          <span className="group-hover:hidden">
+                            {index + 1 < 10 ? '0' + (index + 1) : index + 1}
+                          </span>
+                        </div>
+                        <div className="flex-[1.5] flex items-center">
+                          <Image
+                            className="rounded-md"
+                            src={item.al.picUrl + '?param=40y40'}
+                            width={40}
+                            height={40}
+                            alt={'album'}
+                            loading="lazy"
+                          />
+                          <div className="ml-1 flex flex-col">
+                            <span className="text-base">{item.name}</span>
+                            <span className="text-sm text-zinc-500">
+                              {item.ar.map(item => item.name)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex-[1]">
+                          <span>{item.al.name}</span>
+                        </div>
+                        <div className="w-24">
+                          <IconButton>
+                            <Favorite className="text-sm" color="error" />
+                          </IconButton>
+                        </div>
+                        <div className="w-40">
+                          <span>{millisecondToTime(item.dt)}</span>
+                        </div>
+                      </Stack>
                     </div>
-                    <div className="flex-[1.5] flex items-center">
-                      <Image
-                        className="rounded-md"
-                        src={item.al.picUrl}
-                        width={40}
-                        height={40}
-                        alt={'album'}
-                        loading="lazy"
-                      />
-                      <div className="ml-1 flex flex-col">
-                        <span className="text-base">{item.name}</span>
-                        <span className="text-sm text-zinc-500">
-                          {item.ar.map(item => item.name)}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex-[1]">
-                      <span>{item.al.name}</span>
-                    </div>
-                    <div className="w-24">
-                      <IconButton>
-                        <Favorite className="text-sm" color="error" />
-                      </IconButton>
-                    </div>
-                    <div className="w-40">
-                      <span>{millisecondToTime(item.dt)}</span>
-                    </div>
-                  </Stack>
-                ))}
-              </div>
+                  ))}
+                </div>
+              </LoadingBox>
             </ScrollView>
           </div>
         </div>
