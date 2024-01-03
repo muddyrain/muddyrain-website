@@ -118,7 +118,7 @@ export const Player: FC = () => {
     }
   }, [audio, currentSongIndex])
   const totalDuration = useMemo(() => {
-    return millisecondToTime(currentSong?.song?.duration || 0)
+    return millisecondToTime(currentSong?.dt || 0)
   }, [currentSong])
   const currentDuration = useMemo(() => {
     return millisecondToTime(progress * 1000)
@@ -163,7 +163,7 @@ export const Player: FC = () => {
             <div className="flex items-center">
               <span className="text-xl text-zinc-800 select-none text-md">{currentSong?.name}</span>
               <span className="text-zinc-400 select-none ml-2 text-sm">
-                - {currentSong?.song?.artists.map(item => item.name)}
+                - {currentSong?.ar.map(item => item.name)}
               </span>
             </div>
             <div className="text-zinc-400 select-none text-sm mt-2">

@@ -28,6 +28,10 @@ export const NewSongs: FC = () => {
         const tmp = res.data?.[0]
         if (tmp) {
           const songItem = { ...detail, picUrl: item.picUrl, url: tmp.url, type: tmp.type }
+          if (currentSongList.find(c => c.id === songItem.id)) {
+            setCurrentSongIndex(currentSongList.findIndex(c => c.id === songItem.id))
+            return
+          }
           currentSongList.push(songItem)
           setCurrentSongList([...currentSongList])
           setCurrentSongIndex(currentSongList.length - 1)

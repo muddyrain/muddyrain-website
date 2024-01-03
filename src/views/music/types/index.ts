@@ -41,6 +41,7 @@ export interface SongsItem {
   ar: ArtistsType[]
   artists: ArtistsType[]
   al: AlbumType
+  url: string
 }
 
 /**
