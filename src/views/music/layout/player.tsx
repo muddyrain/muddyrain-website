@@ -19,7 +19,10 @@ import { NeteaseMusicPrefix } from '../constant'
 import { getSongUrlApi } from '../api/music'
 import { usePlayerStore } from '../store/usePlayerStore'
 
-export const Player: FC = () => {
+interface PlayerProps {
+  theme?: 'light' | 'dark'
+}
+export const Player: FC<PlayerProps> = ({ theme = 'light' }) => {
   const [volume, setVolume] = useState(10)
   const [maxProgress, setMaxProgress] = useState(0)
   const [volumeVisible, setVolumeVisible] = useState(false)
@@ -139,7 +142,8 @@ export const Player: FC = () => {
     }
   }, [audio, currentSong])
   useEffect(() => {
-    setAudio(new Audio())
+    // setAudio(new Audio())
+
     // 进行其他的 DOM 操作或事件绑定
     return () => {
       audio?.pause()
@@ -162,25 +166,27 @@ export const Player: FC = () => {
   const currentDuration = useMemo(() => {
     return millisecondToTime(progress * 1000)
   }, [progress])
-
+  const isLightTheme = useMemo(() => {
+    return theme === 'light'
+  }, [theme])
   return (
     <div
-      className={`absolute bottom-0 z-50 duration-300 w-full bg-zinc-50 ${
-        currentSong ? 'h-24' : 'h-0 overflow-hidden'
-      }`}
+      className={`absolute bottom-0 z-50 duration-300 w-full  ${
+        isLightTheme ? 'bg-zinc-50' : 'bg-zinc-700'
+      } ${currentSong ? 'h-24' : 'h-0 overflow-hidden'}`}
     >
-      <div className={`p-2 h-full flex items-center justify-between`}>
-        <Slider
-          className="w-full absolute top-[-12px] left-0"
-          aria-label="Volume"
-          size="small"
-          max={maxProgress}
-          value={progress}
-          onChange={(_, value) => {
-            if (!audio) return
-            audio.currentTime = value as number
-          }}
-        />
+      <Slider
+        className="w-full absolute top-[-13px] left-0"
+        aria-label="Volume"
+        size="small"
+        max={maxProgress}
+        value={progress}
+        onChange={(_, value) => {
+          if (!audio) return
+          audio.currentTime = value as number
+        }}
+      />
+      <div className={`p-2 w-full absolute left-0 top-0 h-full flex items-center justify-between`}>
         <div className={`flex items-center`}>
           <div
             className={`cursor-pointer w-[75px] h-[75px] rounded-md overflow-hidden relative group`}
@@ -201,12 +207,26 @@ export const Player: FC = () => {
           </div>
           <div className="ml-2 flex flex-col">
             <div className="flex items-center">
-              <span className="text-xl text-zinc-800 select-none text-md">{currentSong?.name}</span>
-              <span className="text-zinc-400 select-none ml-2 text-sm">
+              <span
+                className={`text-xl  select-none text-md ${
+                  isLightTheme ? 'text-zinc-800' : 'text-zinc-100'
+                } `}
+              >
+                {currentSong?.name}
+              </span>
+              <span
+                className={` select-none ml-2 text-sm ${
+                  isLightTheme ? 'text-zinc-400' : 'text-zinc-300'
+                }`}
+              >
                 - {currentSong?.ar.map(item => item.name)}
               </span>
             </div>
-            <div className="text-zinc-400 select-none text-sm mt-2">
+            <div
+              className={`select-none text-sm mt-2 ${
+                isLightTheme ? 'text-zinc-400' : 'text-zinc-300'
+              }`}
+            >
               <span>{currentDuration}</span>
               <span>/</span>
               <span>{totalDuration}</span>

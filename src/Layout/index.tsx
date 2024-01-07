@@ -18,17 +18,19 @@ import { useLayoutStore } from '@/store/useLayoutStore'
 
 const FixedComponent = memo(() => {
   return (
-    <IconButton
-      className="fixed right-10 bottom-10 bg-primary z-50"
-      onClick={() => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth',
-        })
-      }}
-    >
-      <KeyboardArrowUpIcon className="text-white" />
-    </IconButton>
+    <div className="fixed right-10 bottom-10">
+      <IconButton
+        className="bg-primary z-50"
+        onClick={() => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          })
+        }}
+      >
+        <KeyboardArrowUpIcon className="text-white" />
+      </IconButton>
+    </div>
   )
 })
 FixedComponent.displayName = 'FixedComponent'

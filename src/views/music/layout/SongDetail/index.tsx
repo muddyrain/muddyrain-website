@@ -9,6 +9,7 @@ import { RingImage } from '@/components/RingImage'
 import { errorImage } from '@/assets'
 import { KeyboardArrowDownOutlined } from '@mui/icons-material'
 import { usePlayerStore } from '../../store/usePlayerStore'
+import { Player } from '../player'
 
 export const SongDetail: FC = () => {
   const isShowSongDetail = useMusicStore(state => state.isShowSongDetail)
@@ -25,11 +26,11 @@ export const SongDetail: FC = () => {
 
   return (
     <div
-      className={`absolute overflow-hidden z-50 w-full h-full bg-zinc-700 duration-300 ${
+      className={`absolute overflow-hidden z-50 w-full h-full flex flex-col bg-zinc-700 duration-300 ${
         isShowSongDetail ? 'top-0' : 'top-[100%]'
       }`}
     >
-      <div className="w-full h-full flex  absolute top-0 p-8 left-0 z-10 overflow-hidden">
+      <div className="w-full flex-1 flex p-8 z-10 overflow-hidden">
         <Button
           className="absolute left-2 top-2 border-zinc-200 text-zinc-100 min-w-fit w-8 h-8 px-2"
           onClick={() => {
@@ -84,6 +85,7 @@ export const SongDetail: FC = () => {
           </div>
         </div>
       </div>
+      <Player theme="dark" />
     </div>
   )
 }
