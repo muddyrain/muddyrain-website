@@ -146,12 +146,16 @@ export const MyMusic: FC = () => {
                           className="w-16 relative flex justify-center"
                           onClick={() => handleClickItem(item)}
                         >
-                          <IconButton className="absolute top-1/2 translate-y-[-50%] opacity-0 group-hover:opacity-100">
-                            <PlayArrow className="text-zinc-500" />
-                          </IconButton>
-                          <span className="group-hover:hidden">
-                            {index + 1 < 10 ? '0' + (index + 1) : index + 1}
-                          </span>
+                          <div className="absolute top-1/2 translate-y-[-50%]">
+                            <div className="hidden group-hover:block">
+                              <IconButton>
+                                <PlayArrow className="text-zinc-500" />
+                              </IconButton>
+                            </div>
+                            <span className="group-hover:hidden">
+                              {index + 1 < 10 ? '0' + (index + 1) : index + 1}
+                            </span>
+                          </div>
                         </div>
                         <div className="flex-[1.5] flex items-center">
                           <Image
