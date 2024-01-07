@@ -30,13 +30,17 @@ export const SongDetail: FC = () => {
         isShowSongDetail ? 'top-0' : 'top-[100%]'
       }`}
     >
-      <div className="w-full flex-1 flex p-8 z-10 overflow-hidden">
+      <div
+        className="w-full flex p-8 z-10 overflow-hidden"
+        style={{
+          height: 'calc(100% - 6rem)',
+        }}
+      >
         <Button
           className="absolute left-2 top-2 border-zinc-200 text-zinc-100 min-w-fit w-8 h-8 px-2"
           onClick={() => {
             setShowSongDetail(false)
           }}
-          color="inherit"
           variant="outlined"
         >
           <KeyboardArrowDownOutlined />
