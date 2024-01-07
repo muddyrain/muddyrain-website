@@ -6,6 +6,7 @@ import { getLyricApi } from '../../api/music'
 import { SongsItem } from '../../types'
 import { useMusicStore } from '../../store/useMusicStore'
 import { millisecondToTime } from '@/utils/time'
+import { usePlayerStore } from '../../store/usePlayerStore'
 export type LyricsType = {
   key?: string
   lineNumber: number
@@ -25,7 +26,7 @@ const MLyrics: FC<{
     setLyrics(parse(res?.lrc?.lyric) as LyricsType)
   }
   const isShowSongDetail = useMusicStore(state => state.isShowSongDetail)
-  const progress = useMusicStore(state => state.progress)
+  const progress = usePlayerStore(state => state.progress)
   useEffect(() => {
     if (currentSong) {
       getLyricApiData()
