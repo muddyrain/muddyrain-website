@@ -38,24 +38,10 @@ interface StoreProps {
    */
   cookie: string
   setCookie: (cookie: StoreProps['cookie']) => void
-  /**
-   * progress
-   */
-  progress: number
-  setProgress: (progress: StoreProps['progress']) => void
-  /**
-   * 播放模式
-   */
-  playState: 'playing' | 'paused'
-  setPlayState: (playMode: StoreProps['playState']) => void
 }
 export const useMusicStore = create(
   persist<StoreProps>(
     set => ({
-      playState: 'paused',
-      setPlayState: playMode => set({ playState: playMode }),
-      progress: 0,
-      setProgress: progress => set({ progress }),
       isShowPlayList: false,
       setShowPlayList: isShow => set({ isShowPlayList: isShow }),
       isShowLogin: false,

@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { FC, useEffect, useMemo, useRef, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { IconButton, Slider } from '@mui/material'
 import {
   Pause,
@@ -17,19 +17,21 @@ import { millisecondToTime } from '@/utils/time'
 import { errorImage } from '@/assets'
 import { NeteaseMusicPrefix } from '../constant'
 import { getSongUrlApi } from '../api/music'
+import { usePlayerStore } from '../store/usePlayerStore'
 
 export const Player: FC = () => {
   const [volume, setVolume] = useState(10)
   const [maxProgress, setMaxProgress] = useState(0)
   const [volumeVisible, setVolumeVisible] = useState(false)
-  const progress = useMusicStore(state => state.progress)
-  const setProgress = useMusicStore(state => state.setProgress)
+  const progress = usePlayerStore(state => state.progress)
+  const setProgress = usePlayerStore(state => state.setProgress)
+  const audio = usePlayerStore(state => state.audio)
+  const setAudio = usePlayerStore(state => state.setAudio)
   const currentSongIndex = useMusicStore(state => state.currentSongIndex)
   const setCurrentSongIndex = useMusicStore(state => state.setCurrentSongIndex)
   const currentSongList = useMusicStore(state => state.currentSongList)
-  const playState = useMusicStore(state => state.playState)
-  const setPlayState = useMusicStore(state => state.setPlayState)
-  const audio = useRef<HTMLAudioElement | null>(null)
+  const playState = usePlayerStore(state => state.playState)
+  const setPlayState = usePlayerStore(state => state.setPlayState)
   const volumeRef = useClickOutside(() => {
     setVolumeVisible(false)
   })
@@ -43,7 +45,7 @@ export const Player: FC = () => {
   }, [currentSongIndex, currentSongList])
   // 停止播放
   const stopPlay = () => {
-    audio.current?.pause()
+    audio?.pause()
     setPlayState('paused')
   }
   // 获取歌曲url
@@ -77,22 +79,22 @@ export const Player: FC = () => {
   // 开始播放
   const startPlay = () => {
     getSongUrl(currentSong?.id || 0).then(url => {
-      if (!audio.current) return
-      audio.current.src = url || ''
+      if (!audio) return
+      audio.src = url || ''
       // 监听音频加载完成
-      audio.current.addEventListener('loadedmetadata', () => {
-        if (!audio.current) return
-        audio.current.volume = volume / 100
+      audio.addEventListener('loadedmetadata', () => {
+        if (!audio) return
+        audio.volume = volume / 100
         setMaxProgress(() => (currentSong?.dt ? currentSong.dt / 1e3 : 0))
-        audio.current.play().catch(() => {
+        audio.play().catch(() => {
           stopPlay()
         })
         setPlayState('playing')
       })
       // 监听音频加载失败
-      audio.current.addEventListener('error', () => {
-        if (!audio.current) return
-        audio.current.src = NeteaseMusicPrefix + currentSong?.id
+      audio.addEventListener('error', () => {
+        if (!audio) return
+        audio.src = NeteaseMusicPrefix + currentSong?.id
       })
     })
   }
@@ -101,27 +103,27 @@ export const Player: FC = () => {
     if (playState === 'playing') {
       stopPlay()
     } else {
-      audio.current?.play()
+      audio?.play()
       setPlayState('playing')
     }
   }
   useEffect(() => {
-    if (!audio.current) return
-    audio.current.currentTime = 0
+    if (!audio) return
+    audio.currentTime = 0
     startPlay()
   }, [currentSong])
   useEffect(() => {
-    if (!audio.current) return
-    audio.current.volume = volume / 100
+    if (!audio) return
+    audio.volume = volume / 100
   }, [volume, audio])
   // 监听音频播放进度
   const handleWatchProgress = () => {
-    if (!audio.current) return
-    setProgress(audio.current.currentTime)
+    if (!audio) return
+    setProgress(audio.currentTime)
   }
   // 音频播放结束
   const handleAudioEnded = () => {
-    if (!audio.current) return
+    if (!audio) return
     const nextIndex = currentSongIndex + 1
     if (nextIndex >= currentSongList.length) {
       stopPlay()
@@ -130,24 +132,28 @@ export const Player: FC = () => {
     setCurrentSongIndex(nextIndex)
   }
   useEffect(() => {
-    audio.current = new Audio()
-    if (currentSong) {
-      startPlay()
+    if (audio) {
+      if (currentSong) {
+        startPlay()
+      }
     }
+  }, [audio, currentSong])
+  useEffect(() => {
+    setAudio(new Audio())
     // 进行其他的 DOM 操作或事件绑定
     return () => {
-      audio.current?.pause()
-      audio.current = null
+      audio?.pause()
+      setAudio(null)
     }
   }, [])
   useEffect(() => {
-    if (audio.current) {
-      audio.current.addEventListener('timeupdate', handleWatchProgress)
-      audio.current.addEventListener('ended', handleAudioEnded)
+    if (audio) {
+      audio.addEventListener('timeupdate', handleWatchProgress)
+      audio.addEventListener('ended', handleAudioEnded)
     }
     return () => {
-      audio.current?.removeEventListener('timeupdate', handleWatchProgress)
-      audio.current?.removeEventListener('ended', handleAudioEnded)
+      audio?.removeEventListener('timeupdate', handleWatchProgress)
+      audio?.removeEventListener('ended', handleAudioEnded)
     }
   }, [audio, currentSongIndex])
   const totalDuration = useMemo(() => {
@@ -171,8 +177,8 @@ export const Player: FC = () => {
           max={maxProgress}
           value={progress}
           onChange={(_, value) => {
-            if (!audio.current) return
-            audio.current.currentTime = value as number
+            if (!audio) return
+            audio.currentTime = value as number
           }}
         />
         <div className={`flex items-center`}>

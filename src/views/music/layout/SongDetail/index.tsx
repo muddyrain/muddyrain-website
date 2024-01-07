@@ -8,13 +8,14 @@ import { Lyrics } from './lyrics'
 import { RingImage } from '@/components/RingImage'
 import { errorImage } from '@/assets'
 import { KeyboardArrowDownOutlined } from '@mui/icons-material'
+import { usePlayerStore } from '../../store/usePlayerStore'
 
 export const SongDetail: FC = () => {
   const isShowSongDetail = useMusicStore(state => state.isShowSongDetail)
   const setShowSongDetail = useMusicStore(state => state.setShowSongDetail)
   const currentSongIndex = useMusicStore(state => state.currentSongIndex)
   const currentSongList = useMusicStore(state => state.currentSongList)
-  const playState = useMusicStore(state => state.playState)
+  const playState = usePlayerStore(state => state.playState)
   const currentSong = useMemo(() => {
     return currentSongList[currentSongIndex]
   }, [currentSongIndex, currentSongList])
