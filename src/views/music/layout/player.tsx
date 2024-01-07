@@ -20,17 +20,19 @@ import { getSongUrlApi } from '../api/music'
 
 export const Player: FC = () => {
   const [volume, setVolume] = useState(10)
-  const [progress, setProgress] = useState(0)
   const [maxProgress, setMaxProgress] = useState(0)
   const [volumeVisible, setVolumeVisible] = useState(false)
+  const progress = useMusicStore(state => state.progress)
+  const setProgress = useMusicStore(state => state.setProgress)
   const currentSongIndex = useMusicStore(state => state.currentSongIndex)
   const setCurrentSongIndex = useMusicStore(state => state.setCurrentSongIndex)
   const currentSongList = useMusicStore(state => state.currentSongList)
+  const playState = useMusicStore(state => state.playState)
+  const setPlayState = useMusicStore(state => state.setPlayState)
   const audio = useRef<HTMLAudioElement | null>(null)
   const volumeRef = useClickOutside(() => {
     setVolumeVisible(false)
   })
-  const [playState, setPlayState] = useState<'playing' | 'paused'>('paused')
   const { setShowPlayList, isShowPlayList, isShowSongDetail, setShowSongDetail } = useMusicStore(
     state => ({
       ...state,

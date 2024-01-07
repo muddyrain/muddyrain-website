@@ -1,7 +1,11 @@
 import { Stack } from '@mui/material'
-import { FC, memo, useEffect, useState } from 'react'
+import { FC, memo, useEffect, useMemo, useRef, useState } from 'react'
 import { parse } from 'clrc'
 import { ScrollView } from '@/components'
+import { getLyricApi } from '../../api/music'
+import { SongsItem } from '../../types'
+import { useMusicStore } from '../../store/useMusicStore'
+import { millisecondToTime } from '@/utils/time'
 export type LyricsType = {
   key?: string
   lineNumber: number
@@ -11,23 +15,67 @@ export type LyricsType = {
   startMillisecond?: number
   value?: string
 }[]
-const MLyrics: FC = () => {
+const MLyrics: FC<{
+  currentSong: SongsItem
+}> = ({ currentSong }) => {
   const [lyrics, setLyrics] = useState<LyricsType>()
+  const highlightRef = useRef<HTMLDivElement>(null)
+  const getLyricApiData = async () => {
+    const res = await getLyricApi(currentSong?.id)
+    setLyrics(parse(res?.lrc?.lyric) as LyricsType)
+  }
+  const isShowSongDetail = useMusicStore(state => state.isShowSongDetail)
+  const progress = useMusicStore(state => state.progress)
   useEffect(() => {
-    fetch('/1.lrc')
-      .then(res => res.text())
-      .then(res => {
-        setLyrics(parse(res) as LyricsType)
+    if (currentSong) {
+      getLyricApiData()
+    }
+  }, [currentSong])
+  const currentLineIndex = useMemo(() => {
+    if (lyrics) {
+      const index = lyrics.findIndex(item => {
+        if (item?.startMillisecond) {
+          return item?.startMillisecond / 1000 > progress
+        }
       })
-  }, [])
+      if (isShowSongDetail) {
+        highlightRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        })
+      }
+      return index > 0 ? index - 1 : 0
+    }
+  }, [progress, lyrics, currentSong, isShowSongDetail])
   return (
     <div className="w-full h-full">
       <Stack spacing={2} className="flex flex-col h-full">
-        <ScrollView>
+        <ScrollView
+          options={{
+            scrollbars: {
+              autoHide: 'scroll',
+              clickScroll: false,
+              autoHideSuspend: true,
+              visibility: 'hidden',
+              dragScroll: true,
+            },
+          }}
+        >
           <Stack spacing={1} className="flex-1 overflow-auto">
             {lyrics?.map((item, index) => {
               if (item?.content) {
-                return <div key={index}>{item?.content}</div>
+                return (
+                  <div
+                    key={index}
+                    ref={index === currentLineIndex ? highlightRef : null}
+                    className={`duration-300 flex pr-8 justify-between py-2 ${
+                      currentLineIndex === index ? 'text-zinc-50 text-xl' : 'text-zinc-400'
+                    }`}
+                  >
+                    <span>{item?.content}</span>
+                    <span>{millisecondToTime(item?.startMillisecond || 0)}</span>
+                  </div>
+                )
               }
             })}
           </Stack>

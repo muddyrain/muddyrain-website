@@ -52,3 +52,10 @@ export const cellphoneLoginApi = async (phone: string, captcha: string) =>
 export const getLikeListApi = async (uid: string | number) => {
   return fetchMusic.get(`/likelist?uid=${uid}&cookie=${getCookie()}`)
 }
+
+/**
+ * 获取歌词
+ */
+export const getLyricApi = async (id: string | number) => {
+  return fetchMusic.get(`/lyric?id=${id}`)
+}
