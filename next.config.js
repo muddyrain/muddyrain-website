@@ -11,6 +11,7 @@ const nextConfig = {
   reactStrictMode: false,
   pageExtensions: ['mdx', 'md', 'jsx', 'js', 'tsx', 'ts'],
   trailingSlash: true,
+  output: 'export',
 }
 
 module.exports = nextConfig
