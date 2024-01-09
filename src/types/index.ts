@@ -1,5 +1,3 @@
-import { WebSocketInstance } from '@/hooks/useWebsocket'
-
 export type THEME_TYPES =
   | 'juejin'
   | 'github'
@@ -40,10 +38,6 @@ export enum RecentActivityTypeEnum {
   login = 1,
   // 发布文章
   publishArticle = 2,
-}
-
-export interface PageComponentProps extends WebSocketInstance {
-  accountInfo: UserType
 }
 
 export interface CommonType {

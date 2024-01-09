@@ -14,9 +14,9 @@ export const Comment: FC<{
 }> = ({ children, isSimple, comment, onSubmit, article }) => {
   const setCurrentCommentId = useArticleStore(state => state.setCurrentCommentId)
   const currentCommentId = useArticleStore(state => state.currentCommentId)
-  const authorName = comment?.user?.nikeName || comment?.user?.userName || '匿名用户'
+  const authorName = comment?.user?.nickName || comment?.user?.userName || '匿名用户'
   const replyAuthorName =
-    comment?.replyToReply?.user?.nikeName || comment?.replyToReply?.user?.userName || '匿名用户'
+    comment?.replyToReply?.user?.nickName || comment?.replyToReply?.user?.userName || '匿名用户'
   let title = ''
   if (comment?.reply_to_reply_id) {
     title = authorName + ' 回复 ' + replyAuthorName

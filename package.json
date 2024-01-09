@@ -10,6 +10,7 @@
     "format": "npx prettier --write \"src/**/*.+(cjs|js|ts|jsx|tsx)\"",
     "prepare": "husky install"
   },
+  "license": "UNLICENSED",
   "dependencies": {
     "@types/node": "20.4.1",
     "@types/react": "18.2.14",
