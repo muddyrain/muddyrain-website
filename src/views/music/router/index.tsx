@@ -1,7 +1,14 @@
 import { Album, Favorite, Group, MusicNote, MusicVideo, Radio } from '@mui/icons-material'
-import { lazy } from 'react'
+import { FC, LazyExoticComponent, lazy } from 'react'
 
-export const RouterList = [
+interface RouterProps {
+  name: string
+  url: string
+  icon: JSX.Element
+  needLogin?: boolean
+  component: LazyExoticComponent<FC>
+}
+export const RouterList: RouterProps[] = [
   {
     name: '发现音乐',
     url: 'discover-music',
@@ -38,6 +45,7 @@ export const RouterList = [
     name: '我的音乐',
     url: 'my-music',
     icon: <Favorite />,
+    needLogin: true,
     component: lazy(() => import('../views/MyMusic').then(module => ({ default: module.MyMusic }))),
   },
 ]

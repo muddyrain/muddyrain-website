@@ -7,6 +7,7 @@ import { Stack } from '@mui/material'
 import { FC, useEffect, useRef, useState } from 'react'
 import { RouterList } from '../router'
 import { ScrollView } from '@/components'
+import { useMusicStore } from '../store/useMusicStore'
 
 export const Slider: FC<{
   onChange: (url: string) => void
@@ -16,6 +17,7 @@ export const Slider: FC<{
     y: 0,
     height: 0,
   })
+  const userProfile = useMusicStore(state => state.userProfile)
   const [currentIndex, setCurrentIndex] = useState(0)
   useEffect(() => {
     onChange(RouterList[0].url)
@@ -50,21 +52,24 @@ export const Slider: FC<{
         </span>
         <ScrollView>
           <div ref={menuRef}>
-            {RouterList.map((menu, index) => (
-              <div
-                key={index}
-                onClick={() => {
-                  setCurrentIndex(index)
-                  onChange(menu.url)
-                }}
-                className={`flex relative duration-300 hover:bg-primary/5 overflow-hidden cursor-pointer items-center py-4 pl-8 ${
-                  index === currentIndex ? 'text-primary bg-primary/5' : 'text-zinc-500'
-                }`}
-              >
-                {menu.icon}
-                <span className="ml-2 select-none">{menu.name}</span>
-              </div>
-            ))}
+            {RouterList.map((menu, index) => {
+              if (menu.needLogin && !userProfile) return null
+              return (
+                <div
+                  key={index}
+                  onClick={() => {
+                    setCurrentIndex(index)
+                    onChange(menu.url)
+                  }}
+                  className={`flex relative duration-300 hover:bg-primary/5 overflow-hidden cursor-pointer items-center py-4 pl-8 ${
+                    index === currentIndex ? 'text-primary bg-primary/5' : 'text-zinc-500'
+                  }`}
+                >
+                  {menu.icon}
+                  <span className="ml-2 select-none">{menu.name}</span>
+                </div>
+              )
+            })}
           </div>
 
           <div
