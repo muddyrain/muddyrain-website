@@ -31,13 +31,14 @@ export const Player: FC<PlayerProps> = ({ theme = 'light' }) => {
   const progress = usePlayerStore(state => state.progress)
   const setProgress = usePlayerStore(state => state.setProgress)
   const audio = usePlayerStore(state => state.audio)
-  const setAudio = usePlayerStore(state => state.setAudio)
   const currentSongThemeColor = useMusicStore(state => state.currentSongThemeColor)
   const currentSongIndex = useMusicStore(state => state.currentSongIndex)
   const setCurrentSongIndex = useMusicStore(state => state.setCurrentSongIndex)
   const currentSongList = useMusicStore(state => state.currentSongList)
   const playState = usePlayerStore(state => state.playState)
   const setPlayState = usePlayerStore(state => state.setPlayState)
+  const shouldAutoPlay = useMusicStore(state => state.shouldAutoPlay)
+  const setShouldAutoPlay = useMusicStore(state => state.setShouldAutoPlay)
   const volumeRef = useClickOutside(() => {
     setVolumeVisible(false)
   })
@@ -106,6 +107,7 @@ export const Player: FC<PlayerProps> = ({ theme = 'light' }) => {
   }
   // 切换播放状态
   const changePlayState = () => {
+    setShouldAutoPlay(true)
     if (playState === 'playing') {
       stopPlay()
     } else {
@@ -116,8 +118,13 @@ export const Player: FC<PlayerProps> = ({ theme = 'light' }) => {
   useEffect(() => {
     if (!audio) return
     audio.currentTime = 0
-    startPlay()
-  }, [currentSong])
+    shouldAutoPlay && startPlay()
+    return () => {
+      stopPlay()
+      setShouldAutoPlay(false)
+    }
+  }, [currentSong, audio, shouldAutoPlay])
+
   useEffect(() => {
     if (!audio) return
     audio.volume = volume / 100
@@ -137,21 +144,7 @@ export const Player: FC<PlayerProps> = ({ theme = 'light' }) => {
     }
     setCurrentSongIndex(nextIndex)
   }
-  useEffect(() => {
-    if (audio) {
-      if (currentSong) {
-        startPlay()
-      }
-    }
-  }, [audio, currentSong])
-  useEffect(() => {
-    // setAudio(new Audio())
-    // 进行其他的 DOM 操作或事件绑定
-    return () => {
-      audio?.pause()
-      setAudio(null)
-    }
-  }, [])
+
   useEffect(() => {
     if (audio) {
       audio.addEventListener('timeupdate', handleWatchProgress)
@@ -172,6 +165,7 @@ export const Player: FC<PlayerProps> = ({ theme = 'light' }) => {
     return theme === 'light'
   }, [theme])
   const { darkBackgroundColor } = useColor(currentSongThemeColor)
+
   return (
     <div
       className={`absolute bottom-0 z-50 duration-300 w-full  ${

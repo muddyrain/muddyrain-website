@@ -45,11 +45,18 @@ interface StoreProps {
    */
   currentSongThemeColor: RGBColor
   setCurrentSongThemeColor: (color: StoreProps['currentSongThemeColor']) => void
+  /**
+   * 是否可以自动播放
+   */
+  shouldAutoPlay: boolean
+  setShouldAutoPlay: (shouldAutoPlay: StoreProps['shouldAutoPlay']) => void
 }
 
 export const useMusicStore = create(
   persist<StoreProps>(
     set => ({
+      shouldAutoPlay: false,
+      setShouldAutoPlay: shouldAutoPlay => set({ shouldAutoPlay }),
       isShowPlayList: false,
       setShowPlayList: isShow => set({ isShowPlayList: isShow }),
       isShowLogin: false,
