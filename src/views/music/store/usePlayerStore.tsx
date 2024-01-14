@@ -21,6 +21,6 @@ export const usePlayerStore = create<StoreProps>(set => ({
   setPlayState: playMode => set({ playState: playMode }),
   progress: 0,
   setProgress: progress => set({ progress }),
-  audio: new Audio(),
+  audio: null,
   setAudio: audio => set({ audio }),
 }))

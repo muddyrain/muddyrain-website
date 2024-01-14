@@ -5,9 +5,10 @@ import { Assistant as AssistantIcon, Star as StarIcon } from '@mui/icons-materia
 import { useEffect, useState } from 'react'
 import { ArticleTagOptions as _ArticleTagOptions } from '@/constant'
 import { getArticleListApi } from '@/api'
-import { ArticleType, PageComponentProps } from '@/types'
+import { ArticleType } from '@/types'
 import { Empty } from '@/components/Empty'
 import { LoadingBox } from '@/components/LoadingBox'
+import { useUserStore } from '@/store/useUserStore'
 const ArticleTagOptions = [
   {
     label: '关注',
@@ -21,10 +22,11 @@ const ArticleTagOptions = [
   },
   ..._ArticleTagOptions,
 ]
-export default function Page({ accountInfo }: PageComponentProps) {
+export default function Page() {
   const [currentTag, setCurrentTag] = useState(-1)
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
+  const accountInfo = useUserStore(state => state.accountInfo)
   const [articleList, setArticleList] = useState<ArticleType[]>([])
   const [loading, setLoading] = useState(false)
   const getArticleList = () => {

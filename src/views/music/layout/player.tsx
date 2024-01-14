@@ -143,7 +143,6 @@ export const Player: FC<PlayerProps> = ({ theme = 'light' }) => {
   }, [audio, currentSong])
   useEffect(() => {
     // setAudio(new Audio())
-
     // 进行其他的 DOM 操作或事件绑定
     return () => {
       audio?.pause()

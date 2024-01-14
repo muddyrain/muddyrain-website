@@ -1,6 +1,6 @@
 import { winterBg1 } from '@/assets'
 import Image from 'next/image'
-import React, { Suspense, useMemo, useState } from 'react'
+import React, { Suspense, useEffect, useMemo, useState } from 'react'
 import { Slider } from './components/slider'
 import { Player } from './layout'
 import { RouterList } from './router'
@@ -10,6 +10,7 @@ import { SongDetail } from './layout/SongDetail'
 import { Login } from './components/Login'
 import { useMusicStore } from '@/views/music/store/useMusicStore'
 import { Loading } from '@/components'
+import { usePlayerStore } from './store/usePlayerStore'
 const NoLoad = React.lazy(() => import('./NoLoad').then(module => ({ default: module.NoLoad })))
 const MusicLoading = () => (
   <div className="w-full h-full flex justify-center items-center">
@@ -24,6 +25,13 @@ export default function Music() {
     const component = RouterList.find(item => item.url === currentPage)?.component || NoLoad
     return component
   }, [currentPage])
+  const [audio, setAudio] = usePlayerStore(state => [state.audio, state.setAudio])
+
+  useEffect(() => {
+    if (!audio && window) {
+      setAudio(new window.Audio())
+    }
+  }, [audio])
   return (
     <>
       {isShowLogin && <Login />}

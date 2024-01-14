@@ -22,7 +22,7 @@
     "sourceType": "module"
   },
   "rules": {
-    "react-refresh/only-export-components": 1,
+    "react-refresh/only-export-components": 0,
     "react/react-in-jsx-scope": 0,
     // 禁止检测 ! 断言
     "@typescript-eslint/no-non-null-assertion": 0,

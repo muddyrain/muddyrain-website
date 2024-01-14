@@ -27,7 +27,7 @@ export const NewSongs: FC = () => {
       getSongUrlApi(item.id).then(res => {
         const tmp = res.data?.[0]
         if (tmp) {
-          const songItem = { ...detail, picUrl: item.picUrl, url: tmp.url, type: tmp.type }
+          const songItem = { ...detail, picUrl: item.picUrl, url: tmp.url }
           if (currentSongList.find(c => c.id === songItem.id)) {
             setCurrentSongIndex(currentSongList.findIndex(c => c.id === songItem.id))
             return
