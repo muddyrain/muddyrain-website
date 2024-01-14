@@ -1,7 +1,7 @@
 import React from 'react'
 import { createPortal } from 'react-dom'
 import { CSSTransition } from 'react-transition-group'
-import styles from './index.module.scss' // 导入样式
+import styles from '@/styles/transition.scss' // 导入样式
 
 interface MaskProps {
   open?: boolean
