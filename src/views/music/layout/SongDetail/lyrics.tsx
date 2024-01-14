@@ -7,6 +7,7 @@ import { SongsItem } from '../../types'
 import { useMusicStore } from '../../store/useMusicStore'
 import { millisecondToTime } from '@/utils/time'
 import { usePlayerStore } from '../../store/usePlayerStore'
+
 export type LyricsType = {
   key?: string
   lineNumber: number
@@ -39,6 +40,7 @@ const MLyrics: FC<{
           return item?.startMillisecond / 1000 > progress
         }
       })
+      // 如果歌曲详情页展示，就滚动到当前歌词
       if (isShowSongDetail) {
         highlightRef.current?.scrollIntoView({
           behavior: 'smooth',
@@ -69,9 +71,12 @@ const MLyrics: FC<{
                   <div
                     key={index}
                     ref={index === currentLineIndex ? highlightRef : null}
-                    className={`duration-300 flex pr-8 justify-between py-2 ${
+                    className={`flex pr-8 justify-between py-2 ${
                       currentLineIndex === index ? 'text-zinc-50 text-xl' : 'text-zinc-400'
                     }`}
+                    style={{
+                      transition: 'color font-size 0.3s ease-in-out',
+                    }}
                   >
                     <span>{item?.content}</span>
                     <span>{millisecondToTime(item?.startMillisecond || 0)}</span>
