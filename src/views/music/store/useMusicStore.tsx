@@ -1,6 +1,8 @@
 import { SongsItem, UserInfoType } from '@/views/music/types'
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { RGBColor } from '@/types'
+
 interface StoreProps {
   /**
    * 是否显示播放列表
@@ -38,7 +40,13 @@ interface StoreProps {
    */
   cookie: string
   setCookie: (cookie: StoreProps['cookie']) => void
+  /**
+   * 当前歌曲的主题色
+   */
+  currentSongThemeColor: RGBColor
+  setCurrentSongThemeColor: (color: StoreProps['currentSongThemeColor']) => void
 }
+
 export const useMusicStore = create(
   persist<StoreProps>(
     set => ({
@@ -56,6 +64,8 @@ export const useMusicStore = create(
       setUserProfile: userProfile => set({ userProfile }),
       cookie: '',
       setCookie: cookie => set({ cookie }),
+      currentSongThemeColor: [0, 0, 0],
+      setCurrentSongThemeColor: color => set({ currentSongThemeColor: color }),
     }),
     {
       name: 'music-store',

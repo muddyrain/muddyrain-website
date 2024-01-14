@@ -51,6 +51,7 @@ export function debounce<T extends (...args: any[]) => any>(
     }, delay)
   }
 }
+
 type DeepKeys<T, Prefix extends string = ''> = T extends object
   ? {
       [K in keyof T]-?: K extends string
@@ -58,6 +59,7 @@ type DeepKeys<T, Prefix extends string = ''> = T extends object
         : never
     }[keyof T]
   : ''
+
 export function getProperty<T, K extends DeepKeys<T> | (keyof T & string)>(obj: T, property: K) {
   const keys: string[] = property.split('.')
   let value: any = obj

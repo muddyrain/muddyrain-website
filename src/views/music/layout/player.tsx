@@ -18,10 +18,12 @@ import { errorImage } from '@/assets'
 import { NeteaseMusicPrefix } from '../constant'
 import { getSongUrlApi } from '../api/music'
 import { usePlayerStore } from '../store/usePlayerStore'
+import { useColor } from '@/hooks/useDarkenColor'
 
 interface PlayerProps {
   theme?: 'light' | 'dark'
 }
+
 export const Player: FC<PlayerProps> = ({ theme = 'light' }) => {
   const [volume, setVolume] = useState(10)
   const [maxProgress, setMaxProgress] = useState(0)
@@ -30,6 +32,7 @@ export const Player: FC<PlayerProps> = ({ theme = 'light' }) => {
   const setProgress = usePlayerStore(state => state.setProgress)
   const audio = usePlayerStore(state => state.audio)
   const setAudio = usePlayerStore(state => state.setAudio)
+  const currentSongThemeColor = useMusicStore(state => state.currentSongThemeColor)
   const currentSongIndex = useMusicStore(state => state.currentSongIndex)
   const setCurrentSongIndex = useMusicStore(state => state.setCurrentSongIndex)
   const currentSongList = useMusicStore(state => state.currentSongList)
@@ -168,10 +171,11 @@ export const Player: FC<PlayerProps> = ({ theme = 'light' }) => {
   const isLightTheme = useMemo(() => {
     return theme === 'light'
   }, [theme])
+  const { darkBackgroundColor } = useColor(currentSongThemeColor)
   return (
     <div
       className={`absolute bottom-0 z-50 duration-300 w-full  ${
-        isLightTheme ? 'bg-zinc-50' : 'bg-zinc-700'
+        isLightTheme ? 'bg-zinc-50' : darkBackgroundColor
       } ${currentSong ? 'h-24' : 'h-0 overflow-hidden'}`}
     >
       <Slider

@@ -72,7 +72,7 @@ const MLyrics: FC<{
                     key={index}
                     ref={index === currentLineIndex ? highlightRef : null}
                     className={`flex pr-8 justify-between py-2 ${
-                      currentLineIndex === index ? 'text-zinc-50 text-xl' : 'text-zinc-400'
+                      currentLineIndex === index ? 'text-white text-xl' : 'text-zinc-300'
                     }`}
                     style={{
                       transition: 'color font-size 0.3s ease-in-out',

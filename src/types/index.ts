@@ -44,6 +44,7 @@ export interface CommonType {
   formatted_create_time: string
   formatted_update_time: string
 }
+
 /**
  * 信息类型
  */
@@ -52,8 +53,10 @@ export interface ChatType extends CommonType {
   sender_id: string
   receiver_id: string
   content: string
+
   [key: string]: any
 }
+
 /**
  * 用户类型
  */
@@ -79,8 +82,10 @@ export interface RecentActivityType extends CommonType {
   content: string
   user: UserType
   type: RecentActivityTypeEnum
+
   [key: string]: any
 }
+
 /**
  * 文章类型
  */
@@ -97,6 +102,7 @@ export interface ArticleType extends CommonType {
   commentCount: number
   isLike: boolean
   isComment: boolean
+
   [key: string]: any
 }
 
@@ -112,6 +118,7 @@ export interface CommentType extends CommonType {
   reply_to_reply_id: number | string
   replyToReply?: CommentType
   children: CommentType[]
+
   [key: string]: any
 }
 
@@ -152,5 +159,11 @@ export interface srcType {
   portrait: string
   small: string
   tiny: string
+
   [key: string]: string
 }
+
+/**
+ * RGB 颜色类型
+ */
+export type RGBColor = [number, number, number]
