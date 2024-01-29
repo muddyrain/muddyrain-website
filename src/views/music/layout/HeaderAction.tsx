@@ -1,13 +1,50 @@
 import { Avatar, Button } from '@mui/material'
-import { FC, useState } from 'react'
+import { FC, ReactNode, useState } from 'react'
 import { useMusicStore } from '../store/useMusicStore'
 import { CSSTransition } from 'react-transition-group'
 import '@/styles/transition.scss'
-import { AssignmentOutlined } from '@mui/icons-material'
+import { AssignmentOutlined, Logout, NavigateNext } from '@mui/icons-material'
+import { Headset, Level, LinkOne, SettingOne, ShoppingBag, Vip } from '@icon-park/react'
 
 const UserMenu: FC<{
   open?: boolean
 }> = ({ open }) => {
+  type ListItem = {
+    label: string
+    extra?: string
+    link?: string
+    icon?: ReactNode
+  }
+  const TopList: ListItem[] = [
+    {
+      label: '我的会员',
+      extra: '2024.09.20到期',
+      link: '',
+      icon: <Vip theme="outline" className={'h-5'} size={20} />,
+    },
+    {
+      label: '等级',
+      icon: <Level theme="outline" className={'h-5'} size={20} />,
+    },
+    {
+      label: '商城',
+      icon: <ShoppingBag theme="outline" className={'h-5'} size={20} />,
+    },
+  ]
+  const bottomList: ListItem[] = [
+    {
+      label: '个人信息设置',
+      icon: <SettingOne theme="outline" className={'h-5'} size={20} />,
+    },
+    {
+      label: '绑定社交账号',
+      icon: <LinkOne theme="outline" className={'h-5'} size={20} />,
+    },
+    {
+      label: '我的客服',
+      icon: <Headset theme="outline" className={'h-5'} size={20} />,
+    },
+  ]
   return (
     <CSSTransition in={open} timeout={300} classNames={'fade'} unmountOnExit>
       <div className="absolute shadow-lg w-[375px] bg-white z-20 right-2 rounded-md">
@@ -34,7 +71,47 @@ const UserMenu: FC<{
               <span>签到</span>
             </Button>
           </div>
-          <div className="h-[1px] w-full bg-zinc-100 my-4"></div>
+          <div className="h-[1px] w-full bg-zinc-100 mt-4"></div>
+        </div>
+        <div className="my-2">
+          {TopList.map((item, index) => (
+            <div
+              className="py-2 px-4 hover:bg-zinc-100 duration-300 flex items-center justify-between cursor-pointer text-zinc-600"
+              key={index}
+            >
+              <div className="flex items-center">
+                {item.icon}
+                <span className="ml-2">{item.label}</span>
+              </div>
+              <span>
+                <NavigateNext />
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="h-[1px] w-full bg-zinc-100"></div>
+        <div className="my-2">
+          {bottomList.map((item, index) => (
+            <div
+              className="py-2 px-4 hover:bg-zinc-100 duration-300 flex items-center justify-between cursor-pointer text-zinc-600"
+              key={index}
+            >
+              <div className="flex items-center">
+                {item.icon}
+                <span className="ml-1">{item.label}</span>
+              </div>
+              <span>
+                <NavigateNext />
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="h-[1px] w-full bg-zinc-100"></div>
+        <div className="p-4 duration-300 hover:text-red-600 flex items-center justify-between cursor-pointer text-zinc-600">
+          <div className="flex items-center">
+            <Logout />
+            <span className="ml-1">退出登录</span>
+          </div>
         </div>
       </div>
     </CSSTransition>

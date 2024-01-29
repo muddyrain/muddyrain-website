@@ -43,7 +43,7 @@
     "@commitlint/config-conventional": "^17.6.6",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@icon-park/svg": "^1.4.2",
+    "@icon-park/react": "^1.4.2",
     "@mui/icons-material": "^5.14.1",
     "@mui/lab": "5.0.0-alpha.148",
     "@mui/material": "^5.14.2",
